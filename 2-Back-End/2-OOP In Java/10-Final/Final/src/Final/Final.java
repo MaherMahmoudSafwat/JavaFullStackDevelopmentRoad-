@@ -9,36 +9,36 @@ public class Final {
 }
 
 class A {
-    final int Num1 = 5; // Final instance variable Num1 is initialized at declaration, can't be changed after this.
-    final int Num2; // Final instance variable Num2, but needs to be initialized in the constructor or an initializer block.
-    final int Num3; // Final instance variable Num3, initialized in the constructor.
-    final static int Num4; // Final static variable Num4, needs to be initialized in a static block or at declaration.
-    final int Num5; // Final instance variable Num5, initialized in the constructor.
-    final int Num6; // Final instance variable Num6, initialized in the constructor.
-    int Num7; // Non-final instance variable, can be reassigned.
+    final int NUM1 = 5; // Final instance variable NUM1 is initialized at declaration, can't be changed after this.
+    final int NUM2; // Final instance variable NUM2, but needs to be initialized in the constructor or an initializer block.
+    final int NUM3; // Final instance variable NUM3, initialized in the constructor.
+    final static int NUM4; // Final static variable NUM4, needs to be initialized in a static block or at declaration.
+    final int NUM5; // Final instance variable NUM5, initialized in the constructor.
+    final int NUM6; // Final instance variable NUM6, initialized in the constructor.
+    int NUM7; // Non-final instance variable, can be reassigned.
 
     {
-        Num2 = 5; // Instance initializer block. Initializes Num2. Since Num2 is final, it can only be assigned once.
+        NUM2 = 5; // Instance initializer block. Initializes NUM2. Since NUM2 is final, it can only be assigned once.
     }
 
     static {
-        Num4 = 5; // Static initializer block. Initializes Num4. Static final variables can only be initialized here or at declaration.
+        NUM4 = 5; // Static initializer block. Initializes NUM4. Static final variables can only be initialized here or at declaration.
     }
 
-    A(int Num3) {
-        this.Num3 = Num3; // Initializes Num3 with the constructor parameter. This is necessary for final variables.
-        Num5 = 0; // Initializes Num5. It must be initialized inside the constructor because it's final.
-        Num6 = 0; // Initializes Num6. Like Num5, must be initialized inside the constructor because it's final.
+    A(int NUM3) {
+        this.NUM3 = NUM3; // Initializes NUM3 with the constructor parameter. This is necessary for final variables.
+        NUM5 = 0; // Initializes NUM5. It must be initialized inside the constructor because it's final.
+        NUM6 = 0; // Initializes NUM6. Like NUM5, must be initialized inside the constructor because it's final.
     }
 
     // Final parameter
     A(final int n1, int n2) {
         // n1 = 9; // This is not allowed. n1 is a final parameter and cannot be reassigned.
-        this.Num3 = 0; // Initializes Num3. Final parameters can be used but cannot be changed.
-        Num7 = n2; // Initializes Num7. Since Num7 is not final, it can be reassigned.
-        Num7 = 0; // Reassigns Num7 (allowed, not final).
-        Num5 = n1; // Initializes Num5 with the final parameter n1. Once assigned, it cannot be changed.
-        Num6 = n2; // Initializes Num6 with the n2 parameter. Final variables need to be assigned only once.
+        this.NUM3 = 0; // Initializes NUM3. Final parameters can be used but cannot be changed.
+        NUM7 = n2; // Initializes NUM7. Since NUM7 is not final, it can be reassigned.
+        NUM7 = 0; // Reassigns NUM7 (allowed, not final).
+        NUM5 = n1; // Initializes NUM5 with the final parameter n1. Once assigned, it cannot be changed.
+        NUM6 = n2; // Initializes NUM6 with the n2 parameter. Final variables need to be assigned only once.
     }
 
     // Final methods can't be overridden.
@@ -49,8 +49,8 @@ class A {
 
 // Final class can't be inherited.
 final class B extends A {
-    B(int Num1) {
-        super(Num1); // Calls the superclass (A) constructor to initialize Num3.
+    B(int NUM1) {
+        super(NUM1); // Calls the superclass (A) constructor to initialize NUM3.
     }
     /*
      * @Override public void display() {
