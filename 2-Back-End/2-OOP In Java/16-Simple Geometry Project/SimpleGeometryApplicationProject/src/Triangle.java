@@ -33,12 +33,12 @@ public class Triangle implements Shapes{
     }
     public double CalculateAreaOfTriangleUsingSidesOnly()
     {
-        double Perimeter = (Side1+Side2+Side3)/3;
-        return Math.sqrt(Perimeter*(Perimeter-Side1)*(Perimeter-Side2)*(Perimeter*Side3));
+        double Perimeter = (Side1+Side2+Side3)/2;
+        return Math.sqrt(Perimeter*(Perimeter-Side1)*(Perimeter-Side2)*(Perimeter-Side3));
     }
     public double CalculateAreaOfTriangleUsingAnglesOnly()
     {
-        return ((double)1/2)*(Side1)*(Side2)*(Math.sin(AngleOfTriangle));
+        return 0.5 * Side1 * Side2 * Math.sin(Math.toRadians(AngleOfTriangle));
     }
     public double CalculatePerimeterOfTriangle()
     {
