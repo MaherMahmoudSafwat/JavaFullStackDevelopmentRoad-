@@ -19,18 +19,29 @@ public class Triangle implements Shapes{
     }
     @Override
     public void CalculateShapesArea(ArrayList<String> Widgets) {
-
+     this.Side1=Double.parseDouble(Widgets.get(0));
+     this.Side2=Double.parseDouble(Widgets.get(1));
+     this.Side3=Double.parseDouble(Widgets.get(2));
     }
-    public
-    public double CalculateAreaOfRhombus() {
-        return (D1 * D2) / 2;
+    @Override
+    public void CalculateTrignometricAngles(ArrayList<String>Widgets)
+    {
+        this.Side1=Double.parseDouble(Widgets.get(0));
+        this.Side2=Double.parseDouble(Widgets.get(1));
+        this.Side3=Double.parseDouble(Widgets.get(2));
+        this.AngleOfTriangle=Integer.parseInt(Widgets.get(3));
     }
-
-    public double CalculateDiagnolOfRhombus() {
-        return Math.sqrt(Math.pow(4 * A, 2) + D1);
+    public double CalculateAreaOfTriangleUsingSidesOnly()
+    {
+        double Perimeter = (Side1+Side2+Side3)/3;
+        return Math.sqrt(Perimeter*(Perimeter-Side1)*(Perimeter-Side2)*(Perimeter*Side3));
     }
-
-    public double CalculatePerimeterOfRhombus() {
-        return A * 4;
+    public double CalculateAreaOfTriangleUsingAnglesOnly()
+    {
+        return ((double)1/2)*(Side1)*(Side2)*(Math.sin(AngleOfTriangle));
+    }
+    public double CalculatePerimeterOfTriangle()
+    {
+        return Side1+Side2+Side3;
     }
 }
