@@ -1,0 +1,9 @@
+97
+ABC.TXT
+true
+195.999
+Å97
+ABC.TXT
+true
+195.999
+ÅA
