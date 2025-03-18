@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
         Button BTN2 = new Button("B2");
         Button BTN3 = new Button("B3");
 
-        HBox Box = new HBox(30);
+        HBox Box = new HBox(30,45);
         /*
         Box.getChildren().add(BTN1);
         Box.getChildren().add(BTN2);
