@@ -16,8 +16,7 @@ public class Main extends Application {
 
         // Set the initial scene
         stage.setScene(MainProjectPage);
-
-        stage.setWidth(700);
+        stage.setWidth(1500);
         stage.setHeight(777);
         // Show the window
         stage.show();
