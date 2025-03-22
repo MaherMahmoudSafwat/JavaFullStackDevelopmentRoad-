@@ -80,8 +80,11 @@ public class UserStatusOptionsScreen {
         LBL1 = new Label("User\nStatus ");
         LBL2 = new Label("Welcome to the hospital full project\n\t  Please select your status");
         RDR1 = new RadioButton("Admin Staff User.");
+        RDR1.setFont(new Font("verdena",30));
         RDR2 = new RadioButton("Patient.");
+        RDR2.setFont(new Font("verdena",30));
         RDR3 = new RadioButton("Doctor.");
+        RDR3.setFont(new Font("verdena",30));
         Box = new VBox();
         TGP = new ToggleGroup();
         BtnToGoNext = new Button("Next");

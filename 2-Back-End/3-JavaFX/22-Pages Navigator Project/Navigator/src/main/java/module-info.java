@@ -11,6 +11,7 @@ module com.example.navigator {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.desktop;
+    requires java.management;
 
     opens com.example.navigator to javafx.fxml;
     exports com.example.navigator;

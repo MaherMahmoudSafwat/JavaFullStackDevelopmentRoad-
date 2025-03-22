@@ -139,7 +139,7 @@ public class SignInAdmin {
     private void HandleNextButton(Stage stage) {
         BtnToGoNext.setOnAction(e -> {
             if (AdminPasswordBusinessLogic.IsAdminPasswordCorrect(Txt1.getText())) {
-                Scene scene = AdminMainMenuScreen.Login(stage);
+                Scene scene = AdminMainMenuScreen.AdminMainMenu(stage);
                 stage.setScene(scene);
             } else {
                 Message.setText("Invalid password, Please try again.");
