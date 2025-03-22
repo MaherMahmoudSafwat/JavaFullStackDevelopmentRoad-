@@ -1,4 +1,4 @@
-package com.example.fullhosiptalproject;
+package com.example.navigator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

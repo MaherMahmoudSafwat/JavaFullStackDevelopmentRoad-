@@ -1,4 +1,4 @@
-module com.example.fullhosiptalproject {
+module com.example.navigator {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -12,6 +12,6 @@ module com.example.fullhosiptalproject {
     requires com.almasb.fxgl.all;
     requires java.desktop;
 
-    opens com.example.fullhosiptalproject to javafx.fxml;
-    exports com.example.fullhosiptalproject;
+    opens com.example.navigator to javafx.fxml;
+    exports com.example.navigator;
 }
