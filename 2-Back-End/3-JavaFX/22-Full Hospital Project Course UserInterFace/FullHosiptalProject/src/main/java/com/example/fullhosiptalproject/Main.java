@@ -9,15 +9,16 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         // Set the initial scene to the first screen
-        Scene MainProjectPage = WelcomePageMainMenu.WelcomePageMenu(stage);
+        Scene welcomeScene = WelcomePageMainMenu.WelcomePageMenu(stage);
 
         // Set the title for the window
         stage.setTitle("Hospital Full Project");
 
         // Set the initial scene
-        stage.setScene(MainProjectPage);
+        stage.setScene(welcomeScene);
         stage.setWidth(1500);
         stage.setHeight(777);
+
         // Show the window
         stage.show();
     }
@@ -26,4 +27,3 @@ public class Main extends Application {
         launch(args);
     }
 }
-
