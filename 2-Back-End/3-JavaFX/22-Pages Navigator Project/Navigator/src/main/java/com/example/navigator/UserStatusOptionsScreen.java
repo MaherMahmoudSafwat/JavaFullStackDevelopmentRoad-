@@ -13,17 +13,24 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class UserStatusOptionsScreen {
-    private static final Label LBL1 = new Label("User\nStatus ");
-    private static final Label LBL2 = new Label("Welcome to the hospital full project\n\t  Please select our status");
-    private static final RadioButton RDR1 = new RadioButton("Admin Staff User.");
-    private static final RadioButton RDR2 = new RadioButton("Patient.");
-    private static final RadioButton RDR3 = new RadioButton("Doctor.");
-    private static final VBox Box = new VBox();
-    private static final ToggleGroup TGP = new ToggleGroup();
-    private static final Button BtnToGoNext = new Button("Next");
-    private static final Label Message = new Label("");
+    // Remove static variables for UI components
+    private Label LBL1;
+    private Label LBL2;
+    private RadioButton RDR1;
+    private RadioButton RDR2;
+    private RadioButton RDR3;
+    private VBox Box;
+    private ToggleGroup TGP;
+    private Button BtnToGoNext;
+    private Label Message;
 
     public static Scene Login(Stage stage) {
+        // Create a new instance of UserStatusOptionsScreen
+        UserStatusOptionsScreen userStatusOptionsScreen = new UserStatusOptionsScreen();
+        return userStatusOptionsScreen.createScene(stage);
+    }
+
+    private Scene createScene(Stage stage) {
         // Initialize UI components
         InitializeUIComponents();
 
@@ -40,7 +47,7 @@ public class UserStatusOptionsScreen {
         // Set up P2 (right pane with VBox)
         P2.getChildren().add(Box);
 
-        // Set up P3 (main container for P1, P2, and the button)
+        // Set up P3 (main container for P1 and P2)
         P3.getChildren().addAll(P1, P2, BtnToGoNext);
 
         // Create AnchorPane and add P3 to it
@@ -68,13 +75,24 @@ public class UserStatusOptionsScreen {
         return new Scene(root, 1200, 800); // Set the scene size
     }
 
-    private static void InitializeUIComponents() {
+    private void InitializeUIComponents() {
+        // Initialize UI components as instance variables
+        LBL1 = new Label("User\nStatus ");
+        LBL2 = new Label("Welcome to the hospital full project\n\t  Please select your status");
+        RDR1 = new RadioButton("Admin Staff User.");
+        RDR2 = new RadioButton("Patient.");
+        RDR3 = new RadioButton("Doctor.");
+        Box = new VBox();
+        TGP = new ToggleGroup();
+        BtnToGoNext = new Button("Next");
+        Message = new Label("");
+
         HandleLabelsText();
         HandleElementsInsideTheVBox();
         HandleNextButton();
     }
 
-    private static void HandleLabelsText() {
+    private void HandleLabelsText() {
         LBL1.setFont(new Font("Verdana", 50));
         LBL1.setTextFill(Color.rgb(0, 0, 0)); // Equivalent to Color.BLACK
         LBL1.setTranslateX(50);
@@ -86,31 +104,24 @@ public class UserStatusOptionsScreen {
         Message.setTextFill(Color.RED);
     }
 
-    private static void HandleElementsInsideTheVBox() {
-        RDR1.setPrefSize(300, 50);
-        RDR1.setStyle("-fx-font-size: 15px; -fx-padding: 10px;");
-        RDR1.setToggleGroup(TGP);
+    private void HandleElementsInsideTheVBox() {
+        // Clear the VBox before adding new children
+        Box.getChildren().clear();
 
-        RDR2.setPrefSize(300, 50);
-        RDR2.setStyle("-fx-font-size: 15px; -fx-padding: 10px;");
-        RDR2.setToggleGroup(TGP);
-
-        RDR3.setPrefSize(300, 50);
-        RDR3.setStyle("-fx-font-size: 15px; -fx-padding: 10px;");
-        RDR3.setToggleGroup(TGP);
-
+        // Add the children to the VBox
         Box.getChildren().addAll(LBL2, RDR1, RDR2, RDR3, Message);
         Box.setTranslateX(650);
         Box.setTranslateY(100);
+        Box.setSpacing(30);
     }
 
-    private static void HandleNextButton() {
+    private void HandleNextButton() {
         BtnToGoNext.setPrefSize(200, 50);
         BtnToGoNext.setTranslateX(1111);
         BtnToGoNext.setTranslateY(555);
     }
 
-    private static void HandleButtonAction(Stage stage) {
+    private void HandleButtonAction(Stage stage) {
         BtnToGoNext.setOnAction(e -> {
             if (RDR1.isSelected()) {
                 Scene scene = SignInAdmin.AdminLoginScreen(stage);
