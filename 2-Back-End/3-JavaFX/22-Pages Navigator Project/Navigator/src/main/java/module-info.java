@@ -12,6 +12,7 @@ module com.example.navigator {
     requires com.almasb.fxgl.all;
     requires java.desktop;
     requires java.management;
+    requires com.fasterxml.jackson.annotation;
 
     opens com.example.navigator to javafx.fxml;
     exports com.example.navigator;
