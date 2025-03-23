@@ -9,11 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.lang.management.MemoryUsage;
-
-
-public class ChangeAdminPasswordMenu
-{
+public class ChangeAdminPasswordMenu {
     private Button BtnGoToBackScreen = new Button("Back");
     private Button BtnToChange = new Button("Change");
     private Label LBL1 = new Label("Please Change your admin password.");
@@ -30,14 +26,13 @@ public class ChangeAdminPasswordMenu
         P1.setPrefSize(300, 700);
         P1.setStyle("-fx-background-color: LimeGreen");
     }
-    public static Scene AdminChangePasswordMenuScreen(Stage stage)
-    {
+
+    public static Scene AdminChangePasswordMenuScreen(Stage stage) {
         ChangeAdminPasswordMenu CAPM = new ChangeAdminPasswordMenu();
         return CAPM.CreateSceneScreen(stage);
     }
-    private Scene CreateSceneScreen(Stage stage)
-    {
 
+    private Scene CreateSceneScreen(Stage stage) {
         HandleUIComponents();
         // Create panes
         Pane P2 = new Pane();
@@ -49,7 +44,7 @@ public class ChangeAdminPasswordMenu
         P2.getChildren().add(Box);
 
         // Set up P3 (main container for P1, P2, and the button)
-        P3.getChildren().addAll(P1, P2, BtnGoToBackScreen,BtnToChange);
+        P3.getChildren().addAll(P1, P2, BtnGoToBackScreen, BtnToChange);
 
         // Create AnchorPane and add P3 to it
         AnchorPane root = new AnchorPane();
@@ -73,14 +68,15 @@ public class ChangeAdminPasswordMenu
         // Create the scene and return it
         return new Scene(root, 1200, 800); // Set the scene size
     }
-    private void HandleUIComponents()
-    {
+
+    private void HandleUIComponents() {
         HandleLabelsCustom();
         HandleButtonsScreen();
+        HandleTextFieldCustoms();
         HandleVBoxElements();
     }
-    private void HandleButtonsScreen()
-    {
+
+    private void HandleButtonsScreen() {
         BtnGoToBackScreen.setPrefSize(200, 50);
         BtnGoToBackScreen.setTranslateX(450);
         BtnGoToBackScreen.setTranslateY(555);
@@ -88,39 +84,43 @@ public class ChangeAdminPasswordMenu
         BtnToChange.setTranslateX(1111);
         BtnToChange.setTranslateY(555);
     }
-    private void HandleLabelsCustom()
-    {
-        LBL1.setFont(new Font("verdena",30));
+
+    private void HandleLabelsCustom() {
+        LBL1.setFont(new Font("Verdana", 30));
         LBL1.setTextFill(Color.BLACK);
-        Message.setFont(new Font("verdena",30));
+        Message.setFont(new Font("Verdana", 30));
         Message.setTextFill(Color.GREEN);
-        LBL2.setFont(new Font("Verdena",30));
+        LBL2.setFont(new Font("Verdana", 30));
         LBL2.setTranslateX(50);
         LBL2.setTranslateY(250);
     }
+
     private void HandleTextFieldCustoms() {
-        Txt1.setMaxWidth(700);
-        Txt1.setMaxHeight(950);
-        Txt1.setScaleY(1.5);
-        Txt1.setFont(new Font("Verdana", 15));
+        Txt1.setPrefSize(500, 60); // Increased size of the TextField
+        Txt1.setFont(new Font("Verdana", 30)); // Increased font size
     }
-    private void HandleVBoxElements()
-    {
-        Box.getChildren().addAll(LBL1,Txt1,Message);
+
+    private void HandleVBoxElements() {
+        Box.getChildren().addAll(LBL1, Txt1, Message);
         Box.setTranslateX(650);
         Box.setTranslateY(100);
         Box.setSpacing(30);
     }
-    private void HandleButtonsAction(Stage stage)
-    {
-        BtnGoToBackScreen.setOnAction(e->
-        {
+
+    private void HandleButtonsAction(Stage stage) {
+        BtnGoToBackScreen.setOnAction(e -> {
             Scene scene = AdminMainMenuScreen.AdminMainMenu(stage);
             stage.setScene(scene);
         });
-        BtnToChange.setOnAction(e->
-        {
-           Message.setText("Password has been changed successfully.");
+        BtnToChange.setOnAction(e -> {
+            if (Txt1.getText().isEmpty()) {
+                Message.setTextFill(Color.RED);
+                Message.setText("Password can't be empty.");
+            } else {
+                AdminPasswordBusinessLogic.ChangeAdminPassword(Txt1.getText());
+                Message.setTextFill(Color.GREEN);
+                Message.setText("Password has been changed successfully.");
+            }
         });
     }
 }

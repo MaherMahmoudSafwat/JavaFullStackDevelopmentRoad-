@@ -111,10 +111,8 @@ public class SignInAdmin {
     }
 
     private void HandleTextFieldCustoms() {
-        Txt1.setMaxWidth(700);
-        Txt1.setMaxHeight(950);
-        Txt1.setScaleY(1.5);
-        Txt1.setFont(new Font("Verdana", 15));
+        Txt1.setPrefSize(500, 60); // Increased size of the TextField
+        Txt1.setFont(new Font("Verdana", 30)); // Increased font size
     }
 
     private void HandleVBoxElements() {
