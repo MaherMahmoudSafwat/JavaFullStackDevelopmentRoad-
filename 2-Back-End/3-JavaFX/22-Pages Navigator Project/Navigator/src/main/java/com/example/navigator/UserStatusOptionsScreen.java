@@ -13,7 +13,17 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class UserStatusOptionsScreen {
-    // Remove static variables for UI components
+    // Static variable to store the green pane
+    private static Pane greenPane;
+
+    // Static block to initialize the green pane
+    static {
+        greenPane = new Pane();
+        greenPane.setPrefSize(300, 700);
+        greenPane.setStyle("-fx-background-color: LimeGreen");
+    }
+
+    // Other instance variables
     private Label LBL1;
     private Label LBL2;
     private RadioButton RDR1;
@@ -35,20 +45,18 @@ public class UserStatusOptionsScreen {
         InitializeUIComponents();
 
         // Create panes
-        Pane P1 = new Pane();
         Pane P2 = new Pane();
         Pane P3 = new Pane();
 
-        // Set up P1 (left pane)
-        P1.setPrefSize(300, 700);
-        P1.setStyle("-fx-background-color: LimeGreen");
-        P1.getChildren().add(LBL1);
+        // Clear and reuse the green pane
+        greenPane.getChildren().clear();
+        greenPane.getChildren().add(LBL1);
 
         // Set up P2 (right pane with VBox)
         P2.getChildren().add(Box);
 
         // Set up P3 (main container for P1 and P2)
-        P3.getChildren().addAll(P1, P2, BtnToGoNext);
+        P3.getChildren().addAll(greenPane, P2, BtnToGoNext);
 
         // Create AnchorPane and add P3 to it
         AnchorPane root = new AnchorPane();
@@ -61,11 +69,11 @@ public class UserStatusOptionsScreen {
         AnchorPane.setRightAnchor(P3, 0.0);
 
         // Bind P1's width and height to P3's width and height
-        P1.prefWidthProperty().bind(P3.widthProperty().multiply(0.3)); // Adjust multiplier as needed
-        P1.prefHeightProperty().bind(P3.heightProperty());
+        greenPane.prefWidthProperty().bind(P3.widthProperty().multiply(0.25)); // 30% of P3's width
+        greenPane.prefHeightProperty().bind(P3.heightProperty());
 
         // Bind P2's width and height to P3's width and height
-        P2.prefWidthProperty().bind(P3.widthProperty().multiply(0.7)); // Adjust multiplier as needed
+        P2.prefWidthProperty().bind(P3.widthProperty().multiply(0.7)); // 70% of P3's width
         P2.prefHeightProperty().bind(P3.heightProperty());
 
         // Set up button action
@@ -80,11 +88,11 @@ public class UserStatusOptionsScreen {
         LBL1 = new Label("User\nStatus ");
         LBL2 = new Label("Welcome to the hospital full project\n\t  Please select your status");
         RDR1 = new RadioButton("Admin Staff User.");
-        RDR1.setFont(new Font("verdena",30));
+        RDR1.setFont(new Font("Verdana", 30));
         RDR2 = new RadioButton("Patient.");
-        RDR2.setFont(new Font("verdena",30));
+        RDR2.setFont(new Font("Verdana", 30));
         RDR3 = new RadioButton("Doctor.");
-        RDR3.setFont(new Font("verdena",30));
+        RDR3.setFont(new Font("Verdana", 30));
         Box = new VBox();
         TGP = new ToggleGroup();
         BtnToGoNext = new Button("Next");
@@ -104,6 +112,7 @@ public class UserStatusOptionsScreen {
         LBL2.setFont(new Font("Verdana", 30));
         LBL2.setTextFill(Color.rgb(0, 0, 0)); // Equivalent to Color.BLACK
 
+        Message.setFont(new Font("Verdena",30));
         Message.setTextFill(Color.RED);
     }
 

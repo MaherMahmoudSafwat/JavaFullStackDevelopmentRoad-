@@ -12,7 +12,17 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class SignInAdmin {
-    // Remove static variables for UI components
+    // Static variable to store the green pane
+    private static Pane greenPane;
+
+    // Static block to initialize the green pane
+    static {
+        greenPane = new Pane();
+        greenPane.setPrefSize(300, 700);
+        greenPane.setStyle("-fx-background-color: LimeGreen");
+    }
+
+    // Other instance variables
     private Label LBL1;
     private Label LBL2;
     private TextField Txt1;
@@ -32,20 +42,18 @@ public class SignInAdmin {
         InitializeUIComponents();
 
         // Create panes
-        Pane P1 = new Pane();
         Pane P2 = new Pane();
         Pane P3 = new Pane();
 
-        // Set up P1 (left pane)
-        P1.setPrefSize(300, 700);
-        P1.setStyle("-fx-background-color: LimeGreen");
-        P1.getChildren().add(LBL2);
+        // Add the label to the green pane
+        greenPane.getChildren().clear(); // Clear previous children
+        greenPane.getChildren().add(LBL2);
 
         // Set up P2 (right pane with VBox and buttons)
         P2.getChildren().addAll(Box, BtnToGoBack, BtnToGoNext);
 
         // Set up P3 (main container for P1 and P2)
-        P3.getChildren().addAll(P1, P2);
+        P3.getChildren().addAll(greenPane, P2);
 
         // Create AnchorPane and add P3 to it
         AnchorPane root = new AnchorPane();
@@ -58,8 +66,8 @@ public class SignInAdmin {
         AnchorPane.setRightAnchor(P3, 0.0);
 
         // Bind P1's width and height to P3's width and height
-        P1.prefWidthProperty().bind(P3.widthProperty().multiply(0.25)); // 25% of P3's width
-        P1.prefHeightProperty().bind(P3.heightProperty());
+        greenPane.prefWidthProperty().bind(P3.widthProperty().multiply(0.25)); // 25% of P3's width
+        greenPane.prefHeightProperty().bind(P3.heightProperty());
 
         // Bind P2's width and height to P3's width and height
         P2.prefWidthProperty().bind(P3.widthProperty().multiply(0.7)); // 70% of P3's width

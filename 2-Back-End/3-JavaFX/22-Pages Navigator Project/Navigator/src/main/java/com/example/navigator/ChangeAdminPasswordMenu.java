@@ -1,10 +1,7 @@
 package com.example.navigator;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -15,42 +12,44 @@ import javafx.stage.Stage;
 import java.lang.management.MemoryUsage;
 
 
-public class AdminMainMenuScreen
+public class ChangeAdminPasswordMenu
 {
-
     private Button BtnGoToBackScreen = new Button("Back");
-    private Button BtnGoToNextScreen = new Button("Next");
-    private Label LBL1 = new Label("Please select one of the following:");
-    private Label LBL2 = new Label("Admin Main\n  Menu");
+    private Button BtnToChange = new Button("Change");
+    private Label LBL1 = new Label("Please Change your admin password.");
+    private Label LBL2 = new Label("Change admin \n password");
     private Label Message = new Label("");
-    private RadioButton RDR1 = new RadioButton("1-Change Admin Password.");
-    private RadioButton RDR2 = new RadioButton("2-Show All Signed In Users");
-    private ToggleGroup TGP = new ToggleGroup();
+    private TextField Txt1 = new TextField("");
     private VBox Box = new VBox();
-    public static Scene AdminMainMenu(Stage stage)
+
+    private static Pane P1;
+
+    // Static block to initialize the green pane
+    static {
+        P1 = new Pane();
+        P1.setPrefSize(300, 700);
+        P1.setStyle("-fx-background-color: LimeGreen");
+    }
+    public static Scene AdminChangePasswordMenuScreen(Stage stage)
     {
-        AdminMainMenuScreen AMMS = new AdminMainMenuScreen();
-        return AMMS.CreateSceneScreen(stage);
+        ChangeAdminPasswordMenu CAPM = new ChangeAdminPasswordMenu();
+        return CAPM.CreateSceneScreen(stage);
     }
     private Scene CreateSceneScreen(Stage stage)
     {
 
         HandleUIComponents();
         // Create panes
-        Pane P1 = new Pane();
         Pane P2 = new Pane();
         Pane P3 = new Pane();
 
-        // Set up P1 (left pane)
-        P1.setPrefSize(300, 700);
-        P1.setStyle("-fx-background-color: LimeGreen");
         P1.getChildren().add(LBL2);
 
         //Set up P2 (right pane with VBox)
         P2.getChildren().add(Box);
 
         // Set up P3 (main container for P1, P2, and the button)
-        P3.getChildren().addAll(P1, P2, BtnGoToBackScreen,BtnGoToNextScreen);
+        P3.getChildren().addAll(P1, P2, BtnGoToBackScreen,BtnToChange);
 
         // Create AnchorPane and add P3 to it
         AnchorPane root = new AnchorPane();
@@ -78,7 +77,6 @@ public class AdminMainMenuScreen
     {
         HandleLabelsCustom();
         HandleButtonsScreen();
-        HandleRadioButtons();
         HandleVBoxElements();
     }
     private void HandleButtonsScreen()
@@ -86,30 +84,29 @@ public class AdminMainMenuScreen
         BtnGoToBackScreen.setPrefSize(200, 50);
         BtnGoToBackScreen.setTranslateX(450);
         BtnGoToBackScreen.setTranslateY(555);
-        BtnGoToNextScreen.setPrefSize(200, 50);
-        BtnGoToNextScreen.setTranslateX(1111);
-        BtnGoToNextScreen.setTranslateY(555);
+        BtnToChange.setPrefSize(200, 50);
+        BtnToChange.setTranslateX(1111);
+        BtnToChange.setTranslateY(555);
     }
     private void HandleLabelsCustom()
     {
         LBL1.setFont(new Font("verdena",30));
         LBL1.setTextFill(Color.BLACK);
         Message.setFont(new Font("verdena",30));
-        Message.setTextFill(Color.RED);
+        Message.setTextFill(Color.GREEN);
         LBL2.setFont(new Font("Verdena",30));
         LBL2.setTranslateX(50);
         LBL2.setTranslateY(250);
     }
-    private void HandleRadioButtons()
-    {
-        RDR1.setFont(new Font("verdena",30));
-        RDR1.setToggleGroup(TGP);
-        RDR2.setFont(new Font("verdena",30));
-        RDR2.setToggleGroup(TGP);
+    private void HandleTextFieldCustoms() {
+        Txt1.setMaxWidth(700);
+        Txt1.setMaxHeight(950);
+        Txt1.setScaleY(1.5);
+        Txt1.setFont(new Font("Verdana", 15));
     }
     private void HandleVBoxElements()
     {
-        Box.getChildren().addAll(LBL1,RDR1,RDR2,Message);
+        Box.getChildren().addAll(LBL1,Txt1,Message);
         Box.setTranslateX(650);
         Box.setTranslateY(100);
         Box.setSpacing(30);
@@ -118,20 +115,12 @@ public class AdminMainMenuScreen
     {
         BtnGoToBackScreen.setOnAction(e->
         {
-            Scene scene = SignInAdmin.AdminLoginScreen(stage);
+            Scene scene = AdminMainMenuScreen.AdminMainMenu(stage);
             stage.setScene(scene);
         });
-        BtnGoToNextScreen.setOnAction(e -> {
-            if (RDR1.isSelected()) {
-                Scene scene = ChangeAdminPasswordMenu.AdminChangePasswordMenuScreen(stage);
-                stage.setScene(scene);
-            } else if (RDR2.isSelected()) {
-                Scene scene = PatientLoginScreen.Login(stage);
-                stage.setScene(scene);
-            }
-            else {
-                Message.setText("Please choose one");
-            }
+        BtnToChange.setOnAction(e->
+        {
+           Message.setText("Password has been changed successfully.");
         });
     }
 }
