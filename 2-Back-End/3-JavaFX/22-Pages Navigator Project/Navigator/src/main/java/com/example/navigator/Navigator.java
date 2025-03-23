@@ -15,7 +15,7 @@ public class Navigator extends Application {
         stage.setWidth(1357);
         stage.setHeight(700);
         stage.setScene(scene);
-        stage.show();
+        stage.show(); 
     }
 
     public static void main(String[] args) {

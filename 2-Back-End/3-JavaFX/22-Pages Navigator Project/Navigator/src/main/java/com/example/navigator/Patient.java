@@ -23,6 +23,14 @@ public class Patient extends Person
         return FirstName + " " + LastName;
     }
 
+    public void setAge(int age) {
+        Age = age;
+    }
+
+    public int getAge() {
+        return Age;
+    }
+
     public void setGender(Gender gender) {
         this.gender = gender;
     }
@@ -30,5 +38,13 @@ public class Patient extends Person
     public Gender getGender() {
         return gender;
     }
-    
+
+
+    public void setDiseases(String diseases) {
+        Diseases = diseases;
+    }
+
+    public String getDiseases() {
+        return Diseases;
+    }
 }

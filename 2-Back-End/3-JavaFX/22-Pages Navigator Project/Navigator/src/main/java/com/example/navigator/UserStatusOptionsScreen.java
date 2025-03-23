@@ -139,7 +139,7 @@ public class UserStatusOptionsScreen {
                 Scene scene = SignInAdmin.AdminLoginScreen(stage);
                 stage.setScene(scene);
             } else if (RDR2.isSelected()) {
-                Scene scene = PatientLoginScreen.Login(stage);
+                Scene scene = PatientLoginScreen.PatientLoginMenu(stage);
                 stage.setScene(scene);
             } else if (RDR3.isSelected()) {
                 Scene scene = DoctorLoginScreen.Login(stage);
