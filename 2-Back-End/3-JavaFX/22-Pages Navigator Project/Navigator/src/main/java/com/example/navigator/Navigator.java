@@ -1,7 +1,6 @@
 package com.example.navigator;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -15,7 +14,7 @@ public class Navigator extends Application {
         stage.setWidth(1357);
         stage.setHeight(700);
         stage.setScene(scene);
-        stage.show(); 
+        stage.show();
     }
 
     public static void main(String[] args) {

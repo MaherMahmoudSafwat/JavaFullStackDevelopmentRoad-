@@ -30,7 +30,7 @@ public class UserStatusOptionsScreen {
     private RadioButton RDR2;
     private RadioButton RDR3;
     private VBox Box;
-    private ToggleGroup TGP;
+    private ToggleGroup TGP = new ToggleGroup();
     private Button BtnToGoNext;
     private Label Message;
 
@@ -89,12 +89,14 @@ public class UserStatusOptionsScreen {
         LBL2 = new Label("Welcome to the hospital full project\n\t  Please select your status");
         RDR1 = new RadioButton("Admin Staff User.");
         RDR1.setFont(new Font("Verdana", 30));
+        RDR1.setToggleGroup(TGP);
         RDR2 = new RadioButton("Patient.");
         RDR2.setFont(new Font("Verdana", 30));
+        RDR2.setToggleGroup(TGP);
         RDR3 = new RadioButton("Doctor.");
         RDR3.setFont(new Font("Verdana", 30));
+        RDR3.setToggleGroup(TGP);
         Box = new VBox();
-        TGP = new ToggleGroup();
         BtnToGoNext = new Button("Next");
         Message = new Label("");
 

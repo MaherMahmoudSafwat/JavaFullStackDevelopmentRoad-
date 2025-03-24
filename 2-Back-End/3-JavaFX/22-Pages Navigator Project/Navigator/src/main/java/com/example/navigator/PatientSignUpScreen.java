@@ -12,7 +12,6 @@ public class PatientSignUpScreen implements SignUp {
     private Button BtnToCreateANewAccount = new Button("Create");
     private TextField Txt1 = new TextField();
     private TextField Txt2 = new TextField();
-    private TextField Txt3 = new TextField();
     private TextField Txt4 = new TextField();
     private TextField Txt5 = new TextField();
     private TextField Txt6 = new TextField();
@@ -22,13 +21,21 @@ public class PatientSignUpScreen implements SignUp {
     private Label LBL1 = new Label("Patient SignUp Page.");
     private Label MSG = new Label("Sign Up");
     private Label LBL2 = new Label("Please enter your first name.");
+    private Label MSG1 = new Label("");
     private Label LBL3 = new Label("Please enter your last name.");
+    private Label MSG2 = new Label("");
     private Label LBL4 = new Label("Please enter your email.");
+    private Label MSG4 = new Label("");
     private Label LBL5 = new Label("Please enter your password");
+    private Label MSG5 = new Label("");
     private Label LBL6 = new Label("Please enter your PhoneNumber");
+    private Label MSG6 = new Label("");
     private Label LBL7 = new Label("Please enter your Age");
+    private Label MSG7 = new Label("");
     private Label LBL8 = new Label("Please select your gender.");
-    private Label LBL9 = new Label("Please enter your Diseases.");
+    private Label MSG8 = new Label("");
+    private Label LBL9 = new Label("Please enter your diseases");
+    private Label MSG9 = new Label("");
     private Label Message = new Label("");
 
     private static Pane P1;
@@ -57,9 +64,9 @@ public class PatientSignUpScreen implements SignUp {
 
         // Center content with scrolling
         VBox contentBox = new VBox(10);
-        contentBox.getChildren().addAll(MSG, LBL2, Txt1, LBL3, Txt2, LBL4, Txt4,
-                LBL5, Txt5, LBL6, Txt6, LBL7, Txt7,
-                LBL8, Genders, LBL9, Txt8, Message);
+        contentBox.getChildren().addAll(MSG, LBL2, Txt1, MSG1, LBL3, Txt2, MSG2, LBL4, Txt4, MSG4,
+                LBL5, Txt5, MSG5, LBL6, Txt6, MSG6, LBL7, Txt7, MSG7, LBL8, Genders, LBL9, Txt8, MSG8,
+                Message);
         contentBox.setStyle("-fx-padding: 20;");
 
         ScrollPane scrollPane = new ScrollPane(contentBox);
@@ -112,6 +119,20 @@ public class PatientSignUpScreen implements SignUp {
         LBL8.setFont(labelFont);
         LBL9.setFont(labelFont);
 
+        MSG1.setFont(new Font("verdena",15));
+        MSG1.setTextFill(Color.RED);
+        MSG2.setFont(new Font("verdena",15));
+        MSG2.setTextFill(Color.RED);
+        MSG4.setFont(new Font("verdena",15));
+        MSG4.setTextFill(Color.RED);
+        MSG5.setFont(new Font("verdena",15));
+        MSG5.setTextFill(Color.RED);
+        MSG6.setFont(new Font("verdena",15));
+        MSG6.setTextFill(Color.RED);
+        MSG7.setFont(new Font("verdena",15));
+        MSG7.setTextFill(Color.RED);
+        MSG8.setFont(new Font("verdena",15));
+        MSG8.setTextFill(Color.RED);
         Message.setFont(new Font("Verdana", 30));
     }
 
@@ -119,7 +140,6 @@ public class PatientSignUpScreen implements SignUp {
         Font textFont = new Font("Verdana", 15);
         Txt1.setFont(textFont);
         Txt2.setFont(textFont);
-        Txt3.setFont(textFont);
         Txt4.setFont(textFont);
         Txt5.setFont(textFont);
         Txt6.setFont(textFont);
@@ -128,7 +148,6 @@ public class PatientSignUpScreen implements SignUp {
 
         Txt1.setMaxWidth(350);
         Txt2.setMaxWidth(350);
-        Txt3.setMaxWidth(350);
         Txt4.setMaxWidth(350);
         Txt5.setMaxWidth(350);
         Txt6.setMaxWidth(350);
@@ -138,7 +157,7 @@ public class PatientSignUpScreen implements SignUp {
 
     private void HandleComboBoxSize() {
         Genders.setMaxWidth(350);
-        Genders.getItems().addAll("1-Male","2-Female");
+        Genders.getItems().addAll("Male","Female");
     }
 
     private void HandleButtonsAction(Stage stage) {
@@ -146,12 +165,69 @@ public class PatientSignUpScreen implements SignUp {
             Scene scene = PatientLoginScreen.PatientLoginMenu(stage);
             stage.setScene(scene);
         });
-        BtnToCreateANewAccount.setOnAction(e->
-        {
-            if(Txt1.getText().isEmpty())
-            {
-                Message.setText("This field is required");
-                VBox
+
+        BtnToCreateANewAccount.setOnAction(e -> {
+            // Clear all error messages first
+            MSG1.setText("");
+            MSG2.setText("");
+            MSG4.setText("");
+            MSG5.setText("");
+            MSG6.setText("");
+            MSG7.setText("");
+            MSG8.setText("");
+            Message.setText(""); // Clear success message too
+
+            boolean allFieldsValid = true;
+
+            // Validate all fields
+            if(Txt1.getText().isEmpty()) {
+                MSG1.setText("Please enter your first name.");
+                allFieldsValid = false;
+            }
+            if(Txt2.getText().isEmpty()) {
+                MSG2.setText("Please enter your last name.");
+                allFieldsValid = false;
+            }
+            if(Txt4.getText().isEmpty()) {
+                MSG4.setText("Please enter your email.");
+                allFieldsValid = false;
+            }
+            if(Txt5.getText().isEmpty()) {
+                MSG5.setText("Please enter your password.");
+                allFieldsValid = false;
+            }
+            if(Txt6.getText().isEmpty()) {
+                MSG6.setText("Please enter your phone number.");
+                allFieldsValid = false;
+            }
+            if(Txt7.getText().isEmpty()) {
+                MSG7.setText("Please enter your age.");
+                allFieldsValid = false;
+            }
+            if(Genders.getValue() == null) {
+                MSG8.setText("Please select your gender.");
+                allFieldsValid = false;
+            }
+            if(Txt8.getText().isEmpty()) {
+                MSG9.setText("Please enter your diseases.");
+                allFieldsValid = false;
+            }
+
+            if(allFieldsValid) {
+                Patient P = new Patient(
+                        Txt1.getText(),
+                        Txt2.getText(),
+                        Utility.GenerateRandomID_ForPatients(),
+                        Txt4.getText(),
+                        Txt5.getText(),
+                        Txt6.getText(),
+                        Integer.parseInt(Txt7.getText()),
+                        Genders.getValue(),
+                        Txt8.getText()
+                );
+                P.CreateNewAccount();
+                Message.setText("Account has been created successfully.");
+                Message.setTextFill(Color.GREEN);
             }
         });
     }

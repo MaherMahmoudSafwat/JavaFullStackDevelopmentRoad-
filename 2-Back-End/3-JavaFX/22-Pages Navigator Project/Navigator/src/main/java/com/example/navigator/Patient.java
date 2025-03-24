@@ -15,19 +15,19 @@ public class Patient extends Person
     Gender gender = Gender.MALE;
     private String Diseases;
     Patient(String FirstName,String LastName,int ID,String Email,String Password,String PhoneNumber,
-            String FullName,int Age,Gender Gender,String Diseases)
+            int Age,String GDR,String Diseases)
     {
         super(FirstName,LastName,ID,Email,Password,PhoneNumber);
         FullName = FirstName+ " " + LastName;
         this.Age = Age;
-        this.gender = Gender;
+        this.gender = Gender.valueOf(GDR.toUpperCase());
         this.Diseases = Diseases;
     }
 
     private String ConvertPatientDataAsIntoString(Patient Data)
     {
         String PatientAccountData="";
-        PatientAccountData+=String.valueOf(Data.getID());
+        PatientAccountData+=String.valueOf(Data.getID())+",";
         PatientAccountData+=Data.getFullName()+",";
         PatientAccountData+=Data.getEmail()+",";
         PatientAccountData+=Data.getPassword()+",";
