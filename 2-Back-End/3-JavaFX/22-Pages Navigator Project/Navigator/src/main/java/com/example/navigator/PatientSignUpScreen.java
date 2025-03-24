@@ -1,11 +1,8 @@
 package com.example.navigator;
 
 import javafx.scene.Scene;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -21,7 +18,7 @@ public class PatientSignUpScreen implements SignUp {
     private TextField Txt6 = new TextField();
     private TextField Txt7 = new TextField();
     private ComboBox<String> Genders = new ComboBox<>();
-    private TextField Txt8 = new TextField(); // TextField for Diseases
+    private TextField Txt8 = new TextField();
     private Label LBL1 = new Label("Patient SignUp Page.");
     private Label MSG = new Label("Sign Up");
     private Label LBL2 = new Label("Please enter your first name.");
@@ -33,11 +30,9 @@ public class PatientSignUpScreen implements SignUp {
     private Label LBL8 = new Label("Please select your gender.");
     private Label LBL9 = new Label("Please enter your Diseases.");
     private Label Message = new Label("");
-    private VBox Box = new VBox();
 
     private static Pane P1;
 
-    // Static block to initialize the green pane
     static {
         P1 = new Pane();
         P1.setPrefSize(300, 700);
@@ -52,127 +47,112 @@ public class PatientSignUpScreen implements SignUp {
     public Scene UserSignUpAccount(Stage stage) {
         HandleUIComponents();
 
-        // Create panes
-        Pane P2 = new VBox(); // Use VBox for the content area
-        Pane P3 = new Pane();
+        // Main layout container
+        BorderPane mainPane = new BorderPane();
 
+        // Left green pane with proper padding
+        VBox leftPane = new VBox(P1);
+        leftPane.setStyle("-fx-padding: 20;");
+        mainPane.setLeft(leftPane);
+
+        // Center content with scrolling
+        VBox contentBox = new VBox(10);
+        contentBox.getChildren().addAll(MSG, LBL2, Txt1, LBL3, Txt2, LBL4, Txt4,
+                LBL5, Txt5, LBL6, Txt6, LBL7, Txt7,
+                LBL8, Genders, LBL9, Txt8, Message);
+        contentBox.setStyle("-fx-padding: 20;");
+
+        ScrollPane scrollPane = new ScrollPane(contentBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        // Bottom buttons
+        HBox buttonBox = new HBox(20, BtnGoToBackScreen, BtnToCreateANewAccount);
+        buttonBox.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+        // Combine scroll and buttons in VBox
+        VBox centerBox = new VBox(scrollPane, buttonBox);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        mainPane.setCenter(centerBox);
+
+        // Set preferred sizes
+        BtnGoToBackScreen.setPrefSize(200, 50);
+        BtnToCreateANewAccount.setPrefSize(200, 50);
+
+        // Ensure green pane content is visible
+        LBL1.setFont(new Font("Verdana", 24)); // Slightly smaller font
+        LBL1.setTextFill(Color.BLACK);
+        LBL1.setLayoutX(20);
+        LBL1.setLayoutY(250);
         P1.getChildren().add(LBL1);
 
-        // Set up P2 (right pane with VBox)
-        P2.getChildren().add(Box);
-
-        // Create ScrollPane and add P2 to it
-        ScrollPane SLP = new ScrollPane(P2);
-        SLP.setFitToWidth(true); // Ensure the content fits the width
-        SLP.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show vertical scrollbar
-
-        // Set up P3 (main container for P1, P2, and the buttons)
-        P3.getChildren().addAll(P1, SLP, BtnGoToBackScreen, BtnToCreateANewAccount);
-
-        // Create AnchorPane and add P3 to it
-        AnchorPane root = new AnchorPane();
-        root.getChildren().add(P3);
-
-        // Bind P3's size to the root AnchorPane's size
-        AnchorPane.setTopAnchor(P3, 0.0);
-        AnchorPane.setBottomAnchor(P3, 0.0);
-        AnchorPane.setLeftAnchor(P3, 0.0);
-        AnchorPane.setRightAnchor(P3, 0.0);
-
-        // Bind P1's width and height to P3's width and height
-        P1.prefWidthProperty().bind(P3.widthProperty().multiply(0.25)); // Green pane takes 25% of the width
-        P1.prefHeightProperty().bind(P3.heightProperty());
-
-        // Bind P2's width and height to P3's width and height
-        P2.prefWidthProperty().bind(P3.widthProperty().multiply(0.75)); // Content area takes 75% of the width
-        P2.prefHeightProperty().bind(P3.heightProperty());
-
-        // Position the buttons at the bottom
-        AnchorPane.setBottomAnchor(BtnGoToBackScreen, 20.0);
-        AnchorPane.setLeftAnchor(BtnGoToBackScreen, 350.0); // Positioned on the left side of the content area
-        AnchorPane.setBottomAnchor(BtnToCreateANewAccount, 20.0);
-        AnchorPane.setRightAnchor(BtnToCreateANewAccount, 20.0); // Positioned on the right side of the content area
-
         HandleButtonsAction(stage);
-
-        // Create the scene and return it
-        return new Scene(root, 1200, 800); // Set the scene size
+        return new Scene(mainPane, 1200, 800);
     }
 
     private void HandleUIComponents() {
         HandleLabelsCustom();
-        HandleButtonsScreen();
         HandleTextFieldCustoms();
         HandleComboBoxSize();
-        HandleVBoxElements();
-    }
-
-    private void HandleButtonsScreen() {
-        BtnGoToBackScreen.setPrefSize(200, 50);
-        BtnToCreateANewAccount.setPrefSize(200, 50);
     }
 
     private void HandleLabelsCustom() {
-        LBL1.setFont(new Font("Verdana", 30));
-        LBL1.setTextFill(Color.BLACK);
-        LBL1.setTranslateX(50);
-        LBL1.setTranslateY(250);
-        MSG.setFont(new Font("Verdena", 15));
+        MSG.setFont(new Font("Verdana", 15));
         MSG.setTextFill(Color.BLACK);
-        LBL2.setFont(new Font("Verdana", 15));
-        LBL2.setTextFill(Color.BLACK);
-        LBL3.setFont(new Font("Verdana", 15));
-        LBL3.setTextFill(Color.BLACK);
-        LBL4.setFont(new Font("Verdana", 15));
-        LBL4.setTextFill(Color.BLACK);
-        LBL5.setFont(new Font("Verdana", 15));
-        LBL5.setTextFill(Color.BLACK);
-        LBL6.setFont(new Font("Verdana", 15));
-        LBL6.setTextFill(Color.BLACK);
-        LBL7.setFont(new Font("Verdana", 15));
-        LBL7.setTextFill(Color.BLACK);
-        LBL8.setFont(new Font("Verdana", 15));
-        LBL8.setTextFill(Color.BLACK);
-        LBL9.setFont(new Font("Verdana", 15));
-        LBL9.setTextFill(Color.BLACK);
+
+        Font labelFont = new Font("Verdana", 15);
+        LBL2.setFont(labelFont);
+        LBL3.setFont(labelFont);
+        LBL4.setFont(labelFont);
+        LBL5.setFont(labelFont);
+        LBL6.setFont(labelFont);
+        LBL7.setFont(labelFont);
+        LBL8.setFont(labelFont);
+        LBL9.setFont(labelFont);
+
         Message.setFont(new Font("Verdana", 30));
     }
 
     private void HandleTextFieldCustoms() {
-        Txt1.setPrefSize(350, 35); // Increased size of the TextField
-        Txt1.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt2.setPrefSize(350, 35); // Increased size of the TextField
-        Txt2.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt3.setPrefSize(350, 35); // Increased size of the TextField
-        Txt3.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt4.setPrefSize(350, 35); // Increased size of the TextField
-        Txt4.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt5.setPrefSize(350, 35); // Increased size of the TextField
-        Txt5.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt6.setPrefSize(350, 35); // Increased size of the TextField
-        Txt6.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt7.setPrefSize(350, 35); // Increased size of the TextField
-        Txt7.setFont(new Font("Verdana", 15)); // Increased font size
-        Txt8.setPrefSize(350, 35); // Increased size of the TextField
-        Txt8.setFont(new Font("Verdana", 15)); // Increased font size
+        Font textFont = new Font("Verdana", 15);
+        Txt1.setFont(textFont);
+        Txt2.setFont(textFont);
+        Txt3.setFont(textFont);
+        Txt4.setFont(textFont);
+        Txt5.setFont(textFont);
+        Txt6.setFont(textFont);
+        Txt7.setFont(textFont);
+        Txt8.setFont(textFont);
+
+        Txt1.setMaxWidth(350);
+        Txt2.setMaxWidth(350);
+        Txt3.setMaxWidth(350);
+        Txt4.setMaxWidth(350);
+        Txt5.setMaxWidth(350);
+        Txt6.setMaxWidth(350);
+        Txt7.setMaxWidth(350);
+        Txt8.setMaxWidth(350);
     }
 
     private void HandleComboBoxSize() {
-        Genders.setPrefSize(350, 35);
-    }
-
-    private void HandleVBoxElements() {
-        Box.getChildren().addAll(MSG, LBL2, Txt1, LBL3, Txt2, LBL4, Txt4, LBL5, Txt5,
-                LBL6, Txt6, LBL7, Txt7, LBL8, Genders, LBL9, Txt8, Message);
-        Box.setTranslateX(50); // Adjust the X position of the content
-        Box.setTranslateY(50); // Adjust the Y position of the content
-        Box.setSpacing(20); // Spacing between elements
+        Genders.setMaxWidth(350);
+        Genders.getItems().addAll("1-Male","2-Female");
     }
 
     private void HandleButtonsAction(Stage stage) {
         BtnGoToBackScreen.setOnAction(e -> {
             Scene scene = PatientLoginScreen.PatientLoginMenu(stage);
             stage.setScene(scene);
+        });
+        BtnToCreateANewAccount.setOnAction(e->
+        {
+            if(Txt1.getText().isEmpty())
+            {
+                Message.setText("This field is required");
+                VBox
+            }
         });
     }
 }

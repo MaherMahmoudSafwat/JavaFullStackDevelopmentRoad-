@@ -84,7 +84,7 @@ public class PatientLoginScreen
 
         private void HandleButtonsScreen() {
         BtnGoToBackScreen.setPrefSize(200, 50);
-        BtnGoToBackScreen.setTranslateX(450);
+        BtnGoToBackScreen.setTranslateX(475);
         BtnGoToBackScreen.setTranslateY(555);
         BtnToGoNextScreen.setPrefSize(200, 50);
         BtnToGoNextScreen.setTranslateX(1111);
