@@ -104,6 +104,12 @@ public class PatientLoginScreen
         private void HandleLabelsCustom() {
         LBL1.setFont(new Font("Verdana", 30));
         LBL1.setTextFill(Color.BLACK);
+        LBL1.setTranslateX(50);
+        LBL1.setTranslateY(250);
+        LBL2.setFont(new Font("Verdana", 30));
+        LBL2.setTextFill(Color.BLACK);
+        LBL3.setFont(new Font("Verdana", 30));
+        LBL3.setTextFill(Color.BLACK);
         Message.setFont(new Font("Verdana", 30));
     }
 
@@ -115,7 +121,7 @@ public class PatientLoginScreen
     }
 
         private void HandleVBoxElements() {
-        Box.getChildren().addAll(LBL1, Txt1, Txt2,BtnToGoSignUp,Message);
+        Box.getChildren().addAll(LBL2, Txt1,LBL3, Txt2,BtnToGoSignUp,Message);
         Box.setTranslateX(650);
         Box.setTranslateY(100);
         Box.setSpacing(30);
@@ -130,11 +136,15 @@ public class PatientLoginScreen
             if (Txt1.getText().isEmpty()) {
                 Message.setTextFill(Color.RED);
                 Message.setText("Invalid email or password");
-            } else {
-                AdminPasswordBusinessLogic.ChangeAdminPassword(Txt1.getText());
-                Message.setTextFill(Color.GREEN);
-                Message.setText("Password has been changed successfully.");
             }
+            else
+            {
+            }
+        });
+        BtnToGoSignUp.setOnAction(e->
+        {
+            Scene scene = PatientSignUpScreen.PatientLoginMenu(stage);
+            stage.setScene(scene);
         });
     }
 }
