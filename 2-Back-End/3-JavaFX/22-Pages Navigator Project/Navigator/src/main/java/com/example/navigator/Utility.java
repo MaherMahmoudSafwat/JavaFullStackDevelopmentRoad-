@@ -29,7 +29,8 @@ public final class Utility
         int Length = Data.size()-1;
         while(Length >= 0)
         {
-            if(ID==Integer.valueOf(Data.getFirst()))
+            String S = Data.get(Length);
+            if(ID==Integer.parseInt(S.substring(0,S.indexOf(","))))
             {
                 ID = RDM.nextInt(500,10500);
                 Length = Data.size()-1;
@@ -59,7 +60,8 @@ public final class Utility
         int Length = Data.size()-1;
         while(Length >= 0)
         {
-            if(ID==Integer.parseInt(Data.get(Length)))
+            String S = Data.get(Length);
+            if(ID==Integer.parseInt(S.substring(0,S.indexOf(","))))
             {
                 ID = RDM.nextInt(500,10500);
                 Length = Data.size()-1;

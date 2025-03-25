@@ -2,25 +2,33 @@ package com.example.navigator;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Patient extends Person
 {
     private enum Gender {MALE,FEMALE};
     private String FullName;
     private int Age;
-    Gender gender = Gender.MALE;
+    Gender gender;
     private String Diseases;
-    Patient(String FirstName,String LastName,int ID,String Email,String Password,String PhoneNumber,
+    private static File F = new File("C:\\Users\\Maher\\Desktop\\JavaFullStackDevelopmentRoad-\\2-Back-End\\3-JavaFX\\22-Pages Navigator Project" +
+            "\\Navigator\\PatientsAccountsFiles.txt");
+    Patient(int ID,String FirstName,String LastName, String Email,String Password,String PhoneNumber,
             int Age,String GDR,String Diseases)
     {
         super(FirstName,LastName,ID,Email,Password,PhoneNumber);
         FullName = FirstName+ " " + LastName;
         this.Age = Age;
-        this.gender = Gender.valueOf(GDR.toUpperCase());
+        if(GDR.equals("Male"))
+        {
+            this.gender = Gender.MALE;
+        }
+        else
+        {
+            this.gender = Gender.FEMALE;
+        }
         this.Diseases = Diseases;
     }
 
@@ -36,6 +44,15 @@ public class Patient extends Person
         PatientAccountData+=Data.getGender()+",";
         PatientAccountData+=Data.getDiseases();
         return PatientAccountData;
+    }
+
+    private static Patient ConvertStringIntoPatientObject(String Data)
+    {
+        String [] AllPatientsData = Data.split(",");
+        String [] FullName = AllPatientsData[1].split(" ");
+        return new Patient(Integer.parseInt(AllPatientsData[0]),FullName[0],FullName[1],
+                AllPatientsData[2],AllPatientsData[3],AllPatientsData[4],Integer.parseInt(AllPatientsData[5]),
+                AllPatientsData[6],AllPatientsData[7]);
     }
     public String getFullName() {
         return FirstName + " " + LastName;
@@ -68,8 +85,6 @@ public class Patient extends Person
 
     public void CreateNewAccount()
     {
-        File F = new File("C:\\Users\\Maher\\Desktop\\JavaFullStackDevelopmentRoad-\\2-Back-End\\3-JavaFX\\22-Pages Navigator Project" +
-                "\\Navigator\\PatientsAccountsFiles.txt");
         String S = ConvertPatientDataAsIntoString(this);
         try {
             FileWriter FW = new FileWriter(F,true);
@@ -81,5 +96,29 @@ public class Patient extends Person
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    private static ArrayList<Patient>GetAllPatientsData()
+    {
+        ArrayList<Patient> P = new ArrayList<>();
+        try {
+            Scanner Scan = new Scanner(F);
+            while(Scan.hasNextLine())
+            {
+                P.add(ConvertStringIntoPatientObject(Scan.nextLine()));
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return P;
+    }
+    public static Boolean IsPatientUserAlreadyExists(String Email, String Password)
+    {
+        ArrayList<Patient> P = GetAllPatientsData();
+        for(int i = 0; i<P.size();i++)
+        {
+            if(P.get(i).Email.equals(Email) && P.get(i).Password.equals(Password))
+                return true;
+        }
+        return false;
     }
 }

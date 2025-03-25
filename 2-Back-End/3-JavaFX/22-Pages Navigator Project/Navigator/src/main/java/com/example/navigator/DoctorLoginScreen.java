@@ -138,8 +138,10 @@ public class DoctorLoginScreen
                 Message.setTextFill(Color.RED);
                 Message.setText("Invalid email or password");
             }
-            else
+            else if(!Doctor.IsDoctorUserAlreadyExists(Txt1.getText(),Txt2.getText()))
             {
+                Message.setTextFill(Color.RED);
+                Message.setText("Invalid email or password");
             }
         });
         BtnToGoSignUp.setOnAction(e->

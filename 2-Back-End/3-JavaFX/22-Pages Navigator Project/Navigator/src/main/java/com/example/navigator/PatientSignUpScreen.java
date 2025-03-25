@@ -181,43 +181,43 @@ public class PatientSignUpScreen implements SignUp {
 
             // Validate all fields
             if(Txt1.getText().isEmpty()) {
-                MSG1.setText("Please enter your first name.");
+                MSG1.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt2.getText().isEmpty()) {
-                MSG2.setText("Please enter your last name.");
+                MSG2.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt4.getText().isEmpty()) {
-                MSG4.setText("Please enter your email.");
+                MSG4.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt5.getText().isEmpty()) {
-                MSG5.setText("Please enter your password.");
+                MSG5.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt6.getText().isEmpty()) {
-                MSG6.setText("Please enter your phone number.");
+                MSG6.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt7.getText().isEmpty()) {
-                MSG7.setText("Please enter your age.");
+                MSG7.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Genders.getValue() == null) {
-                MSG8.setText("Please select your gender.");
+                MSG8.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
             if(Txt8.getText().isEmpty()) {
-                MSG9.setText("Please enter your diseases.");
+                MSG9.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
 
             if(allFieldsValid) {
                 Patient P = new Patient(
+                        Utility.GenerateRandomID_ForPatients(),
                         Txt1.getText(),
                         Txt2.getText(),
-                        Utility.GenerateRandomID_ForPatients(),
                         Txt4.getText(),
                         Txt5.getText(),
                         Txt6.getText(),
