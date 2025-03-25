@@ -6,15 +6,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class ShowAllSignedUpUsers {
+public class ShowAllSignedUpDoctorUsers {
     public static Scene ShowAllUsers(Stage stage) {
-        ShowAllSignedUpUsers SASUS = new ShowAllSignedUpUsers();
+        com.example.navigator.ShowAllSignedUpPatientUsers SASUS = new com.example.navigator.ShowAllSignedUpPatientUsers();
         return SASUS.CreateNewScene(stage);
     }
 
@@ -42,7 +41,7 @@ public class ShowAllSignedUpUsers {
         TableColumn<String[], String> PhoneNumberPatientColumn = new TableColumn<>("PhoneNumber");
         PhoneNumberPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
 
-        TableColumn<String[], String> AgePatientColumn = new TableColumn<>("Age");
+        TableColumn<String[], String> AgePatientColumn = new TableColumn<>("Specialization");
         AgePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
 
         TableColumn<String[], String> GenderPatientColumn = new TableColumn<>("Gender");
@@ -56,12 +55,12 @@ public class ShowAllSignedUpUsers {
                 GenderPatientColumn, DiseasesPatientColumn);
 
         // Load data from file
-        ArrayList<String> Data = Patient.GetAllPatientsStringFromFile();
+        ArrayList<String> Data = Doctor.GetAllDoctorsStringFromFile();
 
         // Add data to TableView
-        for(String patientData : Data) {
+        for (String patientData : Data) {
             String[] patientFields = patientData.split(",");
-            if(patientFields.length >= 8) { // Ensure we have all fields
+            if (patientFields.length >= 8) { // Ensure we have all fields
                 PatientDataList.add(patientFields);
             }
         }

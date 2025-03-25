@@ -103,4 +103,19 @@ public class Doctor extends Person
         }
         return false;
     }
+
+    public static ArrayList<String>GetAllDoctorsStringFromFile()
+    {
+        ArrayList<String> DoctorsDataList = new ArrayList<String>();
+        try {
+            Scanner Scan = new Scanner(F);
+            while(Scan.hasNextLine())
+            {
+                DoctorsDataList.add(Scan.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return DoctorsDataList;
+    }
 }

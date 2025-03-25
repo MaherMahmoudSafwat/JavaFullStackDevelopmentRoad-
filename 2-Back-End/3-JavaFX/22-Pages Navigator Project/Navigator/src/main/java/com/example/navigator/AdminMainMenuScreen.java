@@ -24,7 +24,8 @@ public class AdminMainMenuScreen
     private Label LBL2 = new Label("Admin Main\n  Menu");
     private Label Message = new Label("");
     private RadioButton RDR1 = new RadioButton("1-Change Admin Password.");
-    private RadioButton RDR2 = new RadioButton("2-Show All Signed In Users");
+    private RadioButton RDR2 = new RadioButton("2-Show All Patient Signed In Users");
+    private RadioButton RDR3 = new RadioButton("3-Show All Doctors Signed In Users");
     private ToggleGroup TGP = new ToggleGroup();
     private VBox Box = new VBox();
     public static Scene AdminMainMenu(Stage stage)
@@ -106,10 +107,12 @@ public class AdminMainMenuScreen
         RDR1.setToggleGroup(TGP);
         RDR2.setFont(new Font("verdena",30));
         RDR2.setToggleGroup(TGP);
+        RDR3.setFont(new Font("verdena",30));
+        RDR3.setToggleGroup(TGP);
     }
     private void HandleVBoxElements()
     {
-        Box.getChildren().addAll(LBL1,RDR1,RDR2,Message);
+        Box.getChildren().addAll(LBL1,RDR1,RDR2,RDR3,Message);
         Box.setTranslateX(650);
         Box.setTranslateY(100);
         Box.setSpacing(30);
@@ -126,7 +129,12 @@ public class AdminMainMenuScreen
                 Scene scene = ChangeAdminPasswordMenu.AdminChangePasswordMenuScreen(stage);
                 stage.setScene(scene);
             } else if (RDR2.isSelected()) {
-                Scene scene = ShowAllSignedUpUsers.ShowAllUsers(stage);
+                Scene scene = ShowAllSignedUpPatientUsers.ShowAllUsers(stage);
+                stage.setScene(scene);
+            }
+            else if(RDR3.isSelected())
+            {
+                Scene scene = ShowAllSignedUpDoctorUsers.ShowAllUsers(stage);
                 stage.setScene(scene);
             }
             else {
