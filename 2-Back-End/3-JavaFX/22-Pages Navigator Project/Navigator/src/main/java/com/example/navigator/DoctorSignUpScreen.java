@@ -174,6 +174,11 @@ public class DoctorSignUpScreen implements SignUp {
                 MSG4.setText("Please enter a value to these field.");
                 allFieldsValid = false;
             }
+            if(Doctor.IsDoctorEmailAlreadyExists(Txt4.getText()))
+            {
+                MSG4.setText("This email is already exists.");
+                allFieldsValid = false;
+            }
             if (Txt5.getText().isEmpty()) {
                 MSG5.setText("Please enter a value to these field.");
                 allFieldsValid = false;

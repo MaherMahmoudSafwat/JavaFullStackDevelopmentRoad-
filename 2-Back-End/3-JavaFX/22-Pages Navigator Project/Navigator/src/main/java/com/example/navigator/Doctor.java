@@ -93,4 +93,14 @@ public class Doctor extends Person
         }
         return false;
     }
+    public static Boolean IsDoctorEmailAlreadyExists(String Email)
+    {
+        ArrayList<Doctor> D = GetAllPatientsData();
+        for(int i = 0; i<D.size();i++)
+        {
+            if(D.get(i).Email.equals(Email))
+                return true;
+        }
+        return false;
+    }
 }

@@ -74,7 +74,6 @@ public class Patient extends Person
         return gender;
     }
 
-
     public void setDiseases(String diseases) {
         Diseases = diseases;
     }
@@ -117,6 +116,17 @@ public class Patient extends Person
         for(int i = 0; i<P.size();i++)
         {
             if(P.get(i).Email.equals(Email) && P.get(i).Password.equals(Password))
+                return true;
+        }
+        return false;
+    }
+
+    public static Boolean IsPatientEmailAlreadyExists(String Email)
+    {
+        ArrayList<Patient> P = GetAllPatientsData();
+        for(int i = 0; i<P.size();i++)
+        {
+            if(P.get(i).Email.equals(Email))
                 return true;
         }
         return false;
