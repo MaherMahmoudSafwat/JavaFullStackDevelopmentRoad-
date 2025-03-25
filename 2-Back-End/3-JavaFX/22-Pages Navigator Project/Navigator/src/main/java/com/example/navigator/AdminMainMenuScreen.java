@@ -126,7 +126,7 @@ public class AdminMainMenuScreen
                 Scene scene = ChangeAdminPasswordMenu.AdminChangePasswordMenuScreen(stage);
                 stage.setScene(scene);
             } else if (RDR2.isSelected()) {
-                Scene scene = PatientLoginScreen.PatientLoginMenu(stage);
+                Scene scene = ShowAllSignedUpUsers.ShowAllUsers(stage);
                 stage.setScene(scene);
             }
             else {

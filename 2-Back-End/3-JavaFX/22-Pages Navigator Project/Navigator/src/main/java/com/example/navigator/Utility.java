@@ -56,7 +56,7 @@ public final class Utility
             throw new RuntimeException(e);
         }
         Random RDM = new Random();
-        ID = RDM.nextInt(500,10500);
+        ID = RDM.nextInt(0,500);
         int Length = Data.size()-1;
         while(Length >= 0)
         {

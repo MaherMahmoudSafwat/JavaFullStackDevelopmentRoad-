@@ -145,7 +145,7 @@ public class DoctorSignUpScreen implements SignUp {
 
     private void HandleButtonsAction(Stage stage) {
         BtnGoToBackScreen.setOnAction(e -> {
-            Scene scene = PatientLoginScreen.PatientLoginMenu(stage);
+            Scene scene = DoctorLoginScreen.Login(stage);
             stage.setScene(scene);
         });
 

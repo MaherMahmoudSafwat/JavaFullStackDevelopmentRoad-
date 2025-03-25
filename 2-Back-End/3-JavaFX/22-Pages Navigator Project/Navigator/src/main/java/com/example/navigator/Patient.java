@@ -96,7 +96,7 @@ public class Patient extends Person
             throw new RuntimeException(e);
         }
     }
-    private static ArrayList<Patient>GetAllPatientsData()
+    public static ArrayList<Patient>GetAllPatientsData()
     {
         ArrayList<Patient> P = new ArrayList<>();
         try {
@@ -110,6 +110,7 @@ public class Patient extends Person
         }
         return P;
     }
+
     public static Boolean IsPatientUserAlreadyExists(String Email, String Password)
     {
         ArrayList<Patient> P = GetAllPatientsData();
@@ -131,4 +132,20 @@ public class Patient extends Person
         }
         return false;
     }
+
+    public static ArrayList<String>GetAllPatientsStringFromFile()
+    {
+        ArrayList<String> PatientsDataList = new ArrayList<String>();
+        try {
+            Scanner Scan = new Scanner(F);
+            while(Scan.hasNextLine())
+            {
+                PatientsDataList.add(Scan.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return PatientsDataList;
+    }
+
 }
