@@ -34,7 +34,7 @@ public class Doctor extends Person
     {
         String [] AllDoctorsData = Data.split(",");
         String [] FullName = AllDoctorsData[1].split(" ");
-        return new Doctor(Integer.parseInt(AllDoctorsData[0]),FullName[0],FullName[1],
+        return new Doctor(Integer.parseInt(AllDoctorsData[0]),FullName[0],(FullName.length==1)?"":FullName[1],
                 AllDoctorsData[2],AllDoctorsData[3],AllDoctorsData[4], AllDoctorsData[5]);
     }
     public void setFullName(String fullName) {
