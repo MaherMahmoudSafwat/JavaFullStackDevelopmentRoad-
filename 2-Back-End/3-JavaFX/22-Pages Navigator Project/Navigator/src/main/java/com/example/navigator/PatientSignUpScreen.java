@@ -182,7 +182,7 @@ public class PatientSignUpScreen implements SignUp {
             // Validate all fields
             if(Txt1.getText().isEmpty()) {
                 MSG1.setText("Please enter a value to these field.");
-                allFieldsValid = false;
+                allFieldsValid = false; 
             }
             if(Txt2.getText().isEmpty()) {
                 MSG2.setText("Please enter a value to these field.");

@@ -26,7 +26,7 @@ public class DoctorMainMenu
     private RadioButton RDR3 = new RadioButton("3-Appointments.");
     private ToggleGroup TGP = new ToggleGroup();
     private VBox Box = new VBox();
-    public static Scene AdminMainMenu(Stage stage)
+    public static Scene DoctorMainMenu(Stage stage)
     {
         DoctorMainMenu DMM = new DoctorMainMenu();
         return DMM.CreateSceneScreen(stage);

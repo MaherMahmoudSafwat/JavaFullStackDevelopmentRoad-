@@ -27,9 +27,9 @@ public class PatientMainMenu
     private RadioButton RDR4 = new RadioButton("4-Get An Appointment.");
     private ToggleGroup TGP = new ToggleGroup();
     private VBox Box = new VBox();
-    public static Scene AdminMainMenu(Stage stage)
+    public static Scene PatientMainMenu(Stage stage)
     {
-        DoctorMainMenu PMM = new DoctorMainMenu();
+        PatientMainMenu PMM = new PatientMainMenu();
         return PMM.CreateSceneScreen(stage);
     }
     private Scene CreateSceneScreen(Stage stage)

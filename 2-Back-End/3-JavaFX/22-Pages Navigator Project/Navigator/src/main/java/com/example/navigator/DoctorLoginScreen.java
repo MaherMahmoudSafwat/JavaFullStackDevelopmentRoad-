@@ -143,6 +143,11 @@ public class DoctorLoginScreen
                 Message.setTextFill(Color.RED);
                 Message.setText("Invalid email or password");
             }
+            else
+            {
+                Scene scene = DoctorMainMenu.DoctorMainMenu(stage);
+                stage.setScene(scene);
+            }
         });
         BtnToGoSignUp.setOnAction(e->
         {

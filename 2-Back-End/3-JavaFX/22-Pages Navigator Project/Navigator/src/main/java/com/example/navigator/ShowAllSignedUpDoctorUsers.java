@@ -45,22 +45,26 @@ public class ShowAllSignedUpDoctorUsers {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); // Auto-resize columns
 
         // Columns setup
-        TableColumn<String[], String> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
+        TableColumn<String[], String> IdDoctorColumn = new TableColumn<>("ID");
+        IdDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
 
-        TableColumn<String[], String> nameColumn = new TableColumn<>("Full Name");
-        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
+        TableColumn<String[], String> NameDoctorColumn = new TableColumn<>("Full Name");
+        NameDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
 
-        TableColumn<String[], String> emailColumn = new TableColumn<>("Email");
-        emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
+        TableColumn<String[], String> EmailDoctorColumn = new TableColumn<>("Email");
+        EmailDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
 
-        TableColumn<String[], String> phoneColumn = new TableColumn<>("Phone");
-        phoneColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
+        TableColumn<String[], String> PasswordDoctorColumn = new TableColumn<>("Password");
+        PasswordDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
 
-        TableColumn<String[], String> specializationColumn = new TableColumn<>("Specialization");
-        specializationColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
+        TableColumn<String[], String> PhoneDoctorColumn = new TableColumn<>("Phone");
+        PhoneDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
 
-        table.getColumns().addAll(idColumn, nameColumn, emailColumn, phoneColumn, specializationColumn);
+        TableColumn<String[], String> SpecializationDoctorColumn = new TableColumn<>("Specialization");
+        SpecializationDoctorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
+
+        table.getColumns().addAll(IdDoctorColumn, NameDoctorColumn, EmailDoctorColumn,
+                PasswordDoctorColumn, PhoneDoctorColumn, SpecializationDoctorColumn);
         table.setPrefHeight(500); // Leave space for button
 
         return table;

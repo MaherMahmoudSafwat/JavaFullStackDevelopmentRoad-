@@ -45,29 +45,32 @@ public class ShowAllSignedUpPatientUsers {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Columns setup
-        TableColumn<String[], String> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
+        TableColumn<String[], String> IdPatientColumn = new TableColumn<>("ID");
+        IdPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
 
-        TableColumn<String[], String> nameColumn = new TableColumn<>("Full Name");
-        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
+        TableColumn<String[], String> NamePatientColumn = new TableColumn<>("Full Name");
+        NamePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
 
-        TableColumn<String[], String> emailColumn = new TableColumn<>("Email");
-        emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
+        TableColumn<String[], String> EmailPatientColumn = new TableColumn<>("Email");
+        EmailPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
 
-        TableColumn<String[], String> phoneColumn = new TableColumn<>("Phone");
-        phoneColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
+        TableColumn<String[], String> PasswordPatientColumn = new TableColumn<>("Password");
+        PasswordPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[3]));
 
-        TableColumn<String[], String> ageColumn = new TableColumn<>("Age");
-        ageColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
+        TableColumn<String[], String> PhonePatientColumn = new TableColumn<>("Phone");
+        PhonePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
 
-        TableColumn<String[], String> genderColumn = new TableColumn<>("Gender");
-        genderColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[6]));
+        TableColumn<String[], String> AgePatientColumn = new TableColumn<>("Age");
+        AgePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
 
-        TableColumn<String[], String> diseasesColumn = new TableColumn<>("Diseases");
-        diseasesColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[7]));
+        TableColumn<String[], String> GenderPatientColumn = new TableColumn<>("Gender");
+        GenderPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[6]));
 
-        table.getColumns().addAll(idColumn, nameColumn, emailColumn,
-                phoneColumn, ageColumn, genderColumn, diseasesColumn);
+        TableColumn<String[], String> DiseasesPatientColumn = new TableColumn<>("Diseases");
+        DiseasesPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[7]));
+
+        table.getColumns().addAll(IdPatientColumn, NamePatientColumn, EmailPatientColumn,PasswordPatientColumn,
+                PhonePatientColumn, AgePatientColumn, GenderPatientColumn, DiseasesPatientColumn);
         table.setPrefHeight(550);
 
         return table;
