@@ -3,7 +3,10 @@ package com.example.navigator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
@@ -12,60 +15,74 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class ShowAllSignedUpDoctorUsers {
+    private final Button btnBack = new Button("Back");
+
     public static Scene ShowAllUsers(Stage stage) {
-        com.example.navigator.ShowAllSignedUpPatientUsers SASUS = new com.example.navigator.ShowAllSignedUpPatientUsers();
-        return SASUS.CreateNewScene(stage);
+        return new ShowAllSignedUpDoctorUsers().createScene(stage);
     }
 
-    private Scene CreateNewScene(Stage stage) {
-        VBox Box = new VBox();
+    private Scene createScene(Stage stage) {
+        // Main layout with spacing and padding
+        VBox root = new VBox(20);
+        root.setAlignment(Pos.TOP_CENTER);
+        root.setPadding(new Insets(20));
 
-        // Create TableView with raw String data
-        TableView<String[]> PTV = new TableView<>();
-        ObservableList<String[]> PatientDataList = FXCollections.observableArrayList();
-        PTV.setItems(PatientDataList);
+        // Table setup
+        TableView<String[]> table = createDoctorTableView();
+        loadDoctorData(table); // Load data into the table
 
-        // Create columns with custom cell value factories
-        TableColumn<String[], String> IDPatientColumn = new TableColumn<>("ID");
-        IDPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
+        // Button setup
+        setupBackButton(stage);
 
-        TableColumn<String[], String> NamePatientColumn = new TableColumn<>("FullName");
-        NamePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
+        // Add components to layout
+        root.getChildren().addAll(table, btnBack);
 
-        TableColumn<String[], String> EmailPatientColumn = new TableColumn<>("Email");
-        EmailPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
+        return new Scene(root, 800, 600);
+    }
 
-        TableColumn<String[], String> PasswordPatientColumn = new TableColumn<>("Password");
-        PasswordPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[3]));
+    private TableView<String[]> createDoctorTableView() {
+        TableView<String[]> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); // Auto-resize columns
 
-        TableColumn<String[], String> PhoneNumberPatientColumn = new TableColumn<>("PhoneNumber");
-        PhoneNumberPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
+        // Columns setup
+        TableColumn<String[], String> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[0]));
 
-        TableColumn<String[], String> AgePatientColumn = new TableColumn<>("Specialization");
-        AgePatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
+        TableColumn<String[], String> nameColumn = new TableColumn<>("Full Name");
+        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[1]));
 
-        TableColumn<String[], String> GenderPatientColumn = new TableColumn<>("Gender");
-        GenderPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[6]));
+        TableColumn<String[], String> emailColumn = new TableColumn<>("Email");
+        emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[2]));
 
-        TableColumn<String[], String> DiseasesPatientColumn = new TableColumn<>("Diseases");
-        DiseasesPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[7]));
+        TableColumn<String[], String> phoneColumn = new TableColumn<>("Phone");
+        phoneColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[4]));
 
-        PTV.getColumns().addAll(IDPatientColumn, NamePatientColumn, EmailPatientColumn,
-                PasswordPatientColumn, PhoneNumberPatientColumn, AgePatientColumn,
-                GenderPatientColumn, DiseasesPatientColumn);
+        TableColumn<String[], String> specializationColumn = new TableColumn<>("Specialization");
+        specializationColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()[5]));
 
-        // Load data from file
-        ArrayList<String> Data = Doctor.GetAllDoctorsStringFromFile();
+        table.getColumns().addAll(idColumn, nameColumn, emailColumn, phoneColumn, specializationColumn);
+        table.setPrefHeight(500); // Leave space for button
 
-        // Add data to TableView
-        for (String patientData : Data) {
-            String[] patientFields = patientData.split(",");
-            if (patientFields.length >= 8) { // Ensure we have all fields
-                PatientDataList.add(patientFields);
+        return table;
+    }
+
+    private void loadDoctorData(TableView<String[]> table) {
+        ObservableList<String[]> data = FXCollections.observableArrayList();
+        ArrayList<String> fileData = Doctor.GetAllDoctorsStringFromFile();
+
+        for (String record : fileData) {
+            String[] fields = record.split(",");
+            if (fields.length >= 6) { // Ensure correct number of fields
+                data.add(fields);
             }
         }
 
-        Box.getChildren().add(PTV);
-        return new Scene(Box, 800, 600); // Set preferred size
+        table.setItems(data);
+    }
+
+    private void setupBackButton(Stage stage) {
+        btnBack.setPrefSize(200, 40);
+        btnBack.setStyle("-fx-font-size: 14px; -fx-background-color: #2196F3; -fx-text-fill: white;");
+        btnBack.setOnAction(e -> stage.setScene(AdminMainMenuScreen.AdminMainMenu(stage)));
     }
 }
