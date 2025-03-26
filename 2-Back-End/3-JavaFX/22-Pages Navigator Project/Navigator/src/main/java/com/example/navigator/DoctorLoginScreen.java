@@ -145,6 +145,7 @@ public class DoctorLoginScreen
             }
             else
             {
+                Utility.LoginUsersEmail = Txt1.getText();
                 Scene scene = DoctorMainMenu.DoctorMainMenu(stage);
                 stage.setScene(scene);
             }

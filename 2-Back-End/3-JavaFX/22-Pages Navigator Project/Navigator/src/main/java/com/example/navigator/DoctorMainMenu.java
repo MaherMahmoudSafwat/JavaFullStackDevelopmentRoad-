@@ -119,14 +119,17 @@ public class DoctorMainMenu
     {
         BtnGoToBackScreen.setOnAction(e->
         {
-            Scene scene = SignInAdmin.AdminLoginScreen(stage);
+            Scene scene = UserStatusOptionsScreen.Login(stage);
             stage.setScene(scene);
         });
         BtnGoToNextScreen.setOnAction(e -> {
-            if (RDR1.isSelected()) {
-                Scene scene = ChangeAdminPasswordMenu.AdminChangePasswordMenuScreen(stage);
-                stage.setScene(scene);
-            } else if (RDR2.isSelected()) {
+            if (RDR1.isSelected())
+            {
+               Scene scene = UpdateDoctorPersonalInfo.Login(stage);
+               stage.setScene(scene);
+            }
+            else if (RDR2.isSelected())
+            {
                 Scene scene = ShowAllSignedUpPatientUsers.ShowAllUsers(stage);
                 stage.setScene(scene);
             }

@@ -55,8 +55,6 @@ public class Doctor extends Person
     }
     public void CreateNewAccount()
     {
-        File F = new File("C:\\Users\\Maher\\Desktop\\JavaFullStackDevelopmentRoad-\\2-Back-End\\3-JavaFX" +
-                "\\22-Pages Navigator Project\\Navigator\\DoctorsAccountsFiles.txt");
         String S = ConvertDoctorDataAsIntoString(this);
         try {
             FileWriter FW = new FileWriter(F,true);
@@ -69,7 +67,7 @@ public class Doctor extends Person
             throw new RuntimeException(e);
         }
     }
-    private static ArrayList<Doctor> GetAllPatientsData()
+    private static ArrayList<Doctor> GetAllDoctorsData()
     {
         ArrayList<Doctor> D = new ArrayList<>();
         try {
@@ -85,7 +83,7 @@ public class Doctor extends Person
     }
     public static Boolean IsDoctorUserAlreadyExists(String Email, String Password)
     {
-        ArrayList<Doctor> D = GetAllPatientsData();
+        ArrayList<Doctor> D = GetAllDoctorsData();
         for(int i = 0; i<D.size();i++)
         {
             if(D.get(i).Email.equals(Email) && D.get(i).Password.equals(Password))
@@ -95,7 +93,7 @@ public class Doctor extends Person
     }
     public static Boolean IsDoctorEmailAlreadyExists(String Email)
     {
-        ArrayList<Doctor> D = GetAllPatientsData();
+        ArrayList<Doctor> D = GetAllDoctorsData();
         for(int i = 0; i<D.size();i++)
         {
             if(D.get(i).Email.equals(Email))
@@ -117,5 +115,43 @@ public class Doctor extends Person
             throw new RuntimeException(e);
         }
         return DoctorsDataList;
+    }
+
+    public static Doctor GetDoctorData(String Email)
+    {
+        ArrayList<Doctor>Doctors = GetAllDoctorsData();
+        for(Doctor DoctorDataList : Doctors)
+        {
+            if(DoctorDataList.getEmail().equals(Email))
+            {
+                return DoctorDataList;
+            }
+        }
+        return new Doctor(0,"","","","","","");
+    }
+    public void UpdateDoctorData()
+    {
+        ArrayList<Doctor>Doctors = GetAllDoctorsData();
+        try {
+            FileWriter FW = new FileWriter(F);
+            PrintWriter PWT = new PrintWriter(FW);
+            for(Doctor D:Doctors)
+            {
+                if(D.ID==this.ID)
+                {
+                    PWT.println(ConvertDoctorDataAsIntoString(this));
+                    PWT.flush();
+                }
+                else
+                {
+                    PWT.println(ConvertDoctorDataAsIntoString(D));
+                    PWT.flush();
+                }
+            }
+            PWT.close();
+            FW.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

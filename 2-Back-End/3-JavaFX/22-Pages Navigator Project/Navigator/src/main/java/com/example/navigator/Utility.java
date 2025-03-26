@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public final class Utility
 {
+    public static String LoginUsersEmail = "";
     public static int GenerateRandomID_ForPatients()
     {
         int ID=0;
