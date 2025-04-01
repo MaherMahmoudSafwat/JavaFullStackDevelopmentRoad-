@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0b97da9f-1716-4b03-a91e-f39ad799889b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../22-Hospital Basic Project/FullHospitalBasicProject/src/main/java/MainScreenApp/MainScreenApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../22-Hospital Basic Project/FullHospitalBasicProject/src/main/java/MainScreenApp/UserStatusTypes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../22-Hospital Basic Project/FullHospitalBasicProject/src/main/java/MainScreenApp/WelcomePageScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../22-Hospital Basic Project/FullHospitalBasicProject/src/main/resources/Images/ElTawoonHospitalLogo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../27-TableView in JavaFx/TableViewInJavaFx/src/main/java/com/example/tableviewinjavafx/Account.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/thesearchbarfilterintableview/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/AdminPasswordFile.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/DoctorsAccountsFiles.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/PatientsAccountsFiles.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/AdminMainMenuScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/AdminPasswordBusinessLogic.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/ChangeAdminPasswordMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/Doctor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/DoctorLoginScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/DoctorMainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/DoctorSignUpScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/Navigator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/Patient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/PatientLoginScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/PatientMainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/PatientSignUpScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/ShowAllSignedUpDoctorUsers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/ShowAllSignedUpPatientUsers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/SignInAdmin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/SignUp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/UpdateDoctorPersonalInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/UserStatusOptionsScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/com/example/navigator/Utility.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../22-Pages Navigator Project/Navigator/src/main/resources/com/example/navigator/hello-view.fxml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2v4mwBiGUHSqmZ7cNwHh5Wys14C" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.thesearchbarfilterintableview" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b97da9f-1716-4b03-a91e-f39ad799889b" name="Changes" comment="" />
+      <created>1743412959428</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1743412959428</updated>
+    </task>
+    <servers />
+  </component>
+</project>
