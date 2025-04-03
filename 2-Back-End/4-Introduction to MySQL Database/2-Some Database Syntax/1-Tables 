@@ -1,0 +1,79 @@
+
+1. CREATE DATABASE Products;
+
+Explanation:
+
+    This command is used to create a new database named Products in the MySQL server.
+
+    If the database Products already exists, this command will result in an error.
+
+SQL Command:
+
+CREATE DATABASE Products;
+
+2. DROP DATABASE Products;
+
+Explanation:
+
+    This command is used to delete an existing database named Products from the MySQL server.
+
+    It will permanently remove the Products database, including all of its tables and data.
+
+    This action is irreversible, so it's important to use it carefully.
+
+SQL Command:
+
+DROP DATABASE Products;
+
+3. SHOW DATABASES;
+
+Explanation:
+
+    This command lists all the databases that are available on the MySQL server.
+
+    It will display the names of all databases currently created.
+
+SQL Command:
+
+SHOW DATABASES;
+
+4. CREATE DATABASE IF NOT EXISTS Prices;
+
+Explanation:
+
+    This command creates a new database named Prices only if it does not already exist.
+
+    If the Prices database already exists, the command will do nothing and will not throw an error.
+
+SQL Command:
+
+CREATE DATABASE IF NOT EXISTS Prices;
+
+5. DROP DATABASE IF EXISTS Prices;
+
+Explanation:
+
+    This command will attempt to delete the database named Prices only if it exists.
+
+    If the Prices database exists, it will be dropped (deleted), including all its data.
+
+    If the Prices database does not exist, it will do nothing and will not throw an error.
+
+SQL Command:
+
+DROP DATABASE IF EXISTS Prices;
+
+Summary:
+
+    CREATE DATABASE: Creates a new database.
+
+    DROP DATABASE: Deletes a database permanently.
+
+    SHOW DATABASES: Lists all databases on the server.
+
+    CREATE DATABASE IF NOT EXISTS: Creates a database only if it doesn't already exist.
+
+    DROP DATABASE IF EXISTS: Drops (deletes) a database only if it exists.
+
+These are common SQL commands used to manage databases in MySQL. Always be cautious when using DROP DATABASE, as it permanently removes all the data inside the database.
+
