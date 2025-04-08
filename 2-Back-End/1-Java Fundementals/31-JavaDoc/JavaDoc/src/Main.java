@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Main {
     public static void main(String[] args)
     {
-        //You can also open the documentations through the command line Javadocs -d docs TheFileName.java that is found in src. 
+        //You can also open the documentations through the command line Javadocs -d docs TheFileName.java that is found in src.
         System.out.println(AddTwoNumber(1,2));
         Person P = new Person();
     }
