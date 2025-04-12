@@ -44,7 +44,7 @@ public class Main {
 
         // Object demonstration
         Object z = 5;  // Auto-boxing: int to Integer, then upcast to Object
-        System.out.println(X == (int)z);  // Unboxing and comparison: true
+        System.out.println(X == (int) z);  // Unboxing and comparison: true
 
         // Boxing and unboxing demonstration
         int Y = 10;          // Primitive int
@@ -53,3 +53,4 @@ public class Main {
 
     }
 }
+
