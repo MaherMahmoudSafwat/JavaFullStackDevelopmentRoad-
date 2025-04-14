@@ -1,0 +1,235 @@
+1-
++-------------+       (0,N) CONTAINS (1,1)       +-------------+
+|    WARD     |─────────────────────────────────>|   PATIENT   |
++-------------+                                  +-------------+
+| PK: ward_name|       (M,N) OPERATES            | PK: pat_id  |
+|    type      |<────────────────────────────────|    name     |
+|    beds      |                                  |    dob      |
++-------------+                                  |    admission|
+       ▲                                         +-------------+
+       |                                                 |
+       |                                                 |
+       |                                         +------------------+
+       └─────────────────────────────────────────|  OPERATION_TYPE  |
+                                                 +------------------+
+                                                 | PK: op_code     |
+                                                 |     op_name     |
+                                                 +------------------+
+
+2-
++-----------+       (0,2) WORKS_IN (1,N)       +-------------+
+| Employee  |─────────────────────────────────>| Department  |
++-----------+                                  +-------------+
+| PK: emp_id|       (1,N) HAS_PHONE            | PK: dept_id |
+|   name    |<─────────────────────────────────|    name     |
+|   ...     |                                  |     ...     |
++-----------+                                  +-------------+
+                                                     |
+                                                     | (1,1)
+                                                     ↓
+                                              +-------------+
+                                              |    Phone    |
+                                              +-------------+
+                                              | PK: number  |
+                                              | FK: dept_id |
+                                              +-------------+
+
+3-
++-------------+       (1,1) TEACHES (1,N)       +-----------+
+| Instructor  |────────────────────────────────>|  Course   |
++-------------+                                 +-----------+
+| PK: instr_id|       (1,N) USES (0,N)          | PK: crs_id|
+|    name     |<────────────────────────────────|   title   |
++-------------+                                 +-----------+
+                                                      |
+                                                      |
+                                                      ↓
+                                               +-----------+
+                                               |   Text    |
+                                               +-----------+
+                                               | PK: txt_id|
+                                               |   title   |
+                                               +-----------+
+4-
++-----------+       +---------------+       +-----------+
+|   TEAM    |───┬─>| PLAYER_TEAM   |<──┬──|  PLAYER   |
++-----------+   |   +---------------+   |   +-----------+
+| PK: team_id|   |   FK: team_id    |   |   | PK: player_id|
+|   name     |   |   FK: player_id  |   |   |   name      |
+|   total_players|   +---------------+   |   |   age       |
++-----------+                           |   |   address   |
+    |                                   |   |   phone     |
+    | (1,N)                             |   +-----------+
+    |                                   |
+    v                                   |
++-----------+       +---------------+   |
+|   GAME    |<─────| PARTICIPATION |───┘
++-----------+       +---------------+
+| PK: game_id|      | PK: game_id   |
+|   date     |      | PK: player_id |
+|   home_team(FK)   | FK: position_id|
+|   away_team(FK)   |   minutes     |
+|   result   |      +---------------+
++-----------+
+        ^
+        |
++-----------+ 
+| POSITION  |
++-----------+
+| PK: pos_id|
+|   name    |
++-----------+
+5-
+Entities:
+
+    DEPARTMENT (DepartmentID, Name, Location)
+
+    EQUIPMENT (EquipmentID, Name, Type, Status)
+
+    REPAIRING_REQUEST (RequestID, DateReceived, Description, EquipmentID)
+
+    OPERATING_COMMAND (CommandID, RequestID, DepartmentID, CommandDetails, CommandDate)
+
+Relationships with Cardinality Ratios:
+
+    EQUIPMENT (1) —— (0..N) REPAIRING_REQUEST
+
+        One equipment can have many repairing requests. Each request is for one equipment.
+
+    REPAIRING_REQUEST (1) —— (0..N) OPERATING_COMMAND
+
+        One repairing request can generate multiple operating commands.
+
+    DEPARTMENT (1) —— (0..N) OPERATING_COMMAND
+
+        One department can receive many operating commands. Each command is handled by one department.
+6-
+📑 Answers:
+
+a)
+
+    Entities: Customer, Order
+
+    Relationship: Submits
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Customer (1) — (0..N) Order
+
+        Order (1) — (1) Customer
+
+b)
+
+    Entities: Team, Player
+
+    Relationship: Consists of / Plays for
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Team (1) — (0..N) Player
+
+        Player (1) — (1) Team
+
+c)
+
+    Entities: PurchaseOrder, Product
+
+    Relationship: Includes
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        PurchaseOrder (1) — (0..N) Product
+
+        Product (1) — (0..N) PurchaseOrder
+
+        This is a many-to-many relationship.
+
+d)
+
+    Entities: Manager, Department
+
+    Relationship: Manages
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Manager (0..1) — (0..1) Department
+
+        This is a one-to-zero-or-one relationship.
+
+e)
+
+    Entities: Department, Person
+
+    Relationship: Employs
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Department (1) — (0..N) Person
+
+        Person (0..1) — (1) Department
+
+f)
+
+    Entities: Author, Book
+
+    Relationship: Writes
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Author (0..N) — (0..N) Book
+
+        Many-to-many relationship.
+
+g)
+There are multiple interpretations since constraints are partially specified — but let’s outline them:
+
+    Entities: Lecturer, Course
+
+    Relationship: Teaches
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        Lecturer: (0..1), (1), or (1)
+
+        Course: (1)
+
+        For example, if it’s "exactly one course per lecturer and exactly one lecturer per course", then it’s (1)—(1) relationship.
+
+Possible options based on wording:
+
+    Lecturer (0..1) — (1) Course
+
+    Lecturer (1) — (1) Course
+
+We’d need exact wording for "at most," "at least," or "exactly" from the question to pick one.
+
+h)
+
+    Entities: FlightLeg, Airport
+
+    Relationship: Connects
+
+    Degree: Binary (2)
+
+    Membership Class:
+
+        FlightLeg (1) — (2) Airport (origin & destination)
+
+        Airport (1) — (0..N) FlightLeg
+
+    Here, a FlightLeg connects exactly two airports (origin and destination), and each airport is associated with many flight legs.
+
