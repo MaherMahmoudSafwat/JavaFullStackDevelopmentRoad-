@@ -1,0 +1,547 @@
+1-
+Normalized Tables for Personnel Skills Database
+Initial Analysis
+
+The requirements describe a scenario where:
+
+    Each employee can have multiple skills
+
+    Each skill qualification has an acquisition date
+
+    We need to track employee details (E#, EName, Salary) along with their skills (SkillName, DateAcquired)
+
+Normalized Tables
+1. EMPLOYEE (1NF)
+Copy
+
+EMPLOYEE (
+    E# (PK),
+    EName,
+    Salary
+)
+
+2. SKILL (1NF)
+Copy
+
+SKILL (
+    SkillName (PK),
+    Description (optional)
+)
+
+3. EMPLOYEE_SKILL (Resolving M:N relationship)
+Copy
+
+EMPLOYEE_SKILL (
+    E# (FK to EMPLOYEE),
+    SkillName (FK to SKILL),
+    DateAcquired,
+    PRIMARY KEY (E#, SkillName)
+)
+
+Normalization Explanation
+
+    First Normal Form (1NF):
+
+        Separated repeating groups (skills) into separate tables
+
+        All attributes contain atomic values
+
+    Second Normal Form (2NF):
+
+        Removed partial dependencies by separating employee data from skill data
+
+        DateAcquired is fully dependent on the combination of E# and SkillName
+
+    Third Normal Form (3NF):
+
+        Removed transitive dependencies
+
+        All non-key attributes depend only on the primary keys
+
+Alternative Design Consideration
+
+If skills don't need their own descriptions or additional attributes, you could simplify to just two tables:
+Copy
+
+EMPLOYEE (
+    E# (PK),
+    EName,
+    Salary
+)
+
+EMPLOYEE_SKILL (
+    E# (FK to EMPLOYEE),
+    SkillName,
+    DateAcquired,
+    PRIMARY KEY (E#, SkillName)
+)
+
+However, the three-table design is preferred because:
+
+    It properly normalizes the data
+
+    Allows for additional skill attributes in the future
+
+    Maintains referential integrity better
+
+    Prevents duplicate skill names with different spellings
+
+Sample Data
+
+EMPLOYEE:
+E#	EName	Salary
+1	John	50000
+2	Sarah	60000
+
+SKILL:
+SkillName
+Java
+SQL
+ProjectMgmt
+
+EMPLOYEE_SKILL:
+E#	SkillName	DateAcquired
+1	Java	2020-05-15
+1	SQL	2021-02-10
+2	ProjectMgmt	2019-11-20
+
+2-
+Integrity Constraint Violations in COMPANY Database Operations
+
+Let's analyze each operation for potential integrity constraint violations:
+a) Insert into EMPLOYEE
+
+Operation: Insert < 'Robert','F','Scott','943775543','1952-06-21','23 cccst.,TX',M,58000,'888665555',1>
+
+Potential Violations:
+
+    Primary Key Constraint: If SSN '943775543' already exists in EMPLOYEE
+
+    Foreign Key Constraint:
+
+        SUPERSSN '888665555' must exist in EMPLOYEE (valid)
+
+        DNO '1' must exist in DEPARTMENT (valid)
+
+Enforcement:
+
+    DBMS will reject if primary key exists
+
+    DBMS will check foreign key references automatically
+
+b) Insert into PROJECT
+
+Operation: Insert <'ProductA',4,'Bellaire',2>
+
+Potential Violations:
+
+    Primary Key Constraint: If PNUMBER '4' exists in PROJECT
+
+    Foreign Key Constraint: DNUM '2' must exist in DEPARTMENT (invalid - no dept 2)
+
+Enforcement:
+
+    Reject due to invalid department reference
+
+c) Insert into DEPARTMENT
+
+Operation: Insert <'Production', 4, '943775543', '1998-10-01'>
+
+Potential Violations:
+
+    Primary Key Constraint: If DNUMBER '4' exists (it does - conflicts with Administration)
+
+    Foreign Key Constraint: MGRSSN '943775543' must exist in EMPLOYEE (doesn't exist yet)
+
+Enforcement:
+
+    Reject due to duplicate department number
+
+    Even if department number was unique, would reject due to invalid manager SSN
+
+d) Insert into WORKS_ON
+
+Operation: Insert <'677678989', null, '40.0'>
+
+Potential Violations:
+
+    Primary Key Constraint: ESSN+PNO must be unique (PNO is null)
+
+    Foreign Key Constraint:
+
+        ESSN '677678989' must exist in EMPLOYEE (doesn't exist)
+
+        PNO must exist in PROJECT (null might be allowed depending on schema)
+
+Enforcement:
+
+    Reject due to invalid employee SSN
+
+    Would also reject due to null project number if PNO is part of primary key
+
+e) Insert into DEPENDENT
+
+Operation: Insert <'453453453', 'John', M, '1970-12-12', 'SPOUSE'>
+
+Potential Violations:
+
+    Primary Key Constraint: ESSN+DEPENDENT_NAME must be unique (need to check if 'John' exists for this ESSN)
+
+    Foreign Key Constraint: ESSN '453453453' must exist in EMPLOYEE (valid)
+
+Enforcement:
+
+    Would only reject if this employee already has a dependent named 'John'
+
+f) Delete WORKS_ON tuples
+
+Operation: Delete with ESSN = '333445555'
+
+Potential Violations:
+
+    Referential Integrity: No direct violations as WORKS_ON is a relationship table
+
+Enforcement:
+
+    Simple deletion with no constraints violated
+
+g) Delete EMPLOYEE tuple
+
+Operation: Delete SSN = '987654321'
+
+Potential Violations:
+
+    Referential Integrity:
+
+        This employee manages DEPARTMENT 4 (violates DEPARTMENT.MGRSSN)
+
+        Has dependents in DEPENDENT table
+
+        Has works_on records
+
+        Is supervisor for other employees (SUPERSSN references)
+
+Enforcement Options:
+
+    Restrict: Reject deletion (default)
+
+    Cascade: Delete all related records
+
+    Set Null: Set foreign keys to null (where allowed)
+
+h) Delete PROJECT tuple
+
+Operation: Delete PNAME = 'ProductX' (PNUMBER=1)
+
+Potential Violations:
+
+    Referential Integrity: Has works_on records
+
+Enforcement Options:
+
+    Restrict: Reject deletion
+
+    Cascade: Delete all related works_on records
+
+i) Modify DEPARTMENT
+
+Operation: Change MGRSSN to '123456789' and MGRSTARTDATE for DNUMBER=5
+
+Potential Violations:
+
+    Foreign Key: New MGRSSN '123456789' must exist in EMPLOYEE (valid)
+
+    Domain Constraint: Date format must be valid
+
+Enforcement:
+
+    DBMS will verify employee exists
+
+    Application should validate date format
+
+j) Modify EMPLOYEE
+
+Operation: Change SUPERSSN to '943775543' for SSN='999887777'
+
+Potential Violations:
+
+    Foreign Key: '943775543' must exist in EMPLOYEE (doesn't exist)
+
+Enforcement:
+
+    Reject due to invalid supervisor SSN
+
+k) Modify WORKS_ON
+
+Operation: Change HOURS to '5.0' for ESSN='999887777' and PNO=10
+
+Potential Violations:
+
+    Domain Constraint: HOURS must be a valid number
+
+Enforcement:
+
+    Simple update if hours value is valid
+
+3-
+Candidate Keys for CLASS Relation
+
+The relation CLASS(Course#, Univ_Section#, InstructorName, Semester, BuildingCode, Room#, TimePeriod, Weekdays, CreditHours) with unique Univ_Section# has several potential candidate keys, each valid under different constraints:
+Possible Candidate Keys
+
+    Univ_Section# alone
+
+        Constraint: Univ_Section# must be globally unique across all courses, semesters, and instructors
+
+        Validity: This is explicitly given as unique in the problem statement, making it the simplest candidate key
+
+    Composite Key: (Course#, Univ_Section#)
+
+        Constraint: Univ_Section# only needs to be unique within a Course#
+
+        Validity: Useful if section numbers restart for each course (e.g., each course has Section 1, 2, 3...)
+
+    Composite Key: (Course#, Semester, BuildingCode, Room#, TimePeriod, Weekdays)
+
+        Constraint:
+
+            No room double-booking (same room can't host different classes simultaneously)
+
+            Instructors can't teach multiple classes at same time
+
+            BuildingCode+Room# uniquely identifies a physical space
+
+        Validity: Represents a real-world scheduling constraint
+
+    Composite Key: (Course#, Semester, InstructorName, TimePeriod, Weekdays)
+
+        Constraint:
+
+            Instructors teach only one class per time slot
+
+            Course offerings are uniquely identified by instructor+time in a semester
+
+        Validity: Models instructor scheduling constraints
+
+    Composite Key: (Univ_Section#, Semester)
+
+        Constraint: Section numbers may repeat across semesters
+
+        Validity: Common when section numbers restart each term
+
+Most Likely Candidate Keys
+
+In practice, the most realistic candidate keys would be:
+
+    Primary Candidate Key: Univ_Section# alone
+
+        Reason: Directly given as unique in the problem statement
+
+        Constraint: Requires centralized section numbering system
+
+    Alternate Candidate Key: (Course#, Semester, Section#)
+
+        Reason: More common in academic systems where section numbers are unique within a course offering
+
+        Constraint: Requires section numbers to be unique per course per semester
+
+Business Rule Considerations
+
+The validity of each candidate key depends on institutional policies:
+
+    If sections have global unique IDs (like CRNs), Univ_Section# alone suffices
+
+    If sections are numbered per-course (common), then (Course#, Semester, Section#) works
+
+    The room/time key only works if scheduling constraints are strictly enforced
+
+    The instructor/time key assumes no team-teaching arrangements
+
+The simplest design would use Univ_Section# as primary key with proper constraints to ensure other business rules (no room conflicts, etc.) are maintained through additional mechanisms.
+
+4-
+Foreign Key Specification for Order-Processing Database
+Foreign Key Assignments
+
+Based on the given relations and the assumption that an order can be shipped from several warehouses, here are the foreign key specifications:
+
+    ORDER table:
+
+        Cust# → REFERENCES CUSTOMER(Cust#)
+
+        Assumption: Every order must be placed by an existing customer
+
+    ORDERITEM table:
+
+        Order# → REFERENCES ORDER(Order#)
+
+        Item# → REFERENCES ITEM(Item#)
+
+        Assumption:
+
+            Every order item must belong to an existing order
+
+            Every item referenced must exist in the ITEM catalog
+
+        Note: The primary key is likely composite (Order#, Item#)
+
+    SHIPMENT table:
+
+        Order# → REFERENCES ORDER(Order#)
+
+        Warehouse# → REFERENCES WAREHOUSE(Warehouse#)
+
+        Assumption:
+
+            Every shipment record must be tied to an existing order
+
+            Every shipment must originate from a valid warehouse
+
+        Note: Primary key is likely composite (Order#, Warehouse#) since an order can ship from multiple warehouses
+
+Additional Constraints
+
+    Derived Attribute Constraint:
+
+        Ord_Amt in ORDER should equal the sum of (Qty × Unit-price) for all items in that order
+
+        Implementation: This would typically be enforced through application logic or database triggers
+
+    Temporal Constraints:
+
+        Ship_date should be ≥ Odate (shipment can't occur before order placement)
+
+        Implementation: Could be enforced with a check constraint
+
+    Quantity Constraint:
+
+        Qty in ORDERITEM should be > 0
+
+        Implementation: Simple check constraint
+
+Schema with Foreign Keys (Visual Representation)
+Copy
+
+CUSTOMER(Cust# [PK], Cname, City)
+
+ORDER(Order# [PK], Odate, Cust# [FK → CUSTOMER], Ord_Amt)
+
+ORDERITEM(Order# [FK → ORDER], Item# [FK → ITEM], Qty, 
+          PRIMARY KEY (Order#, Item#))
+
+ITEM(Item# [PK], Unit-price)
+
+SHIPMENT(Order# [FK → ORDER], Warehouse# [FK → WAREHOUSE], Ship_date,
+         PRIMARY KEY (Order#, Warehouse#))
+
+WAREHOUSE(Warehouse# [PK], City)
+
+Key Assumptions
+
+    An order can contain multiple items (1:N relationship ORDER to ORDERITEM)
+
+    An order can be shipped from multiple warehouses (M:N relationship between ORDER and WAREHOUSE via SHIPMENT)
+
+    Each item has a fixed unit price (no historical price tracking)
+
+    Customers can place multiple orders
+
+    Warehouses can ship multiple orders
+
+    The Ord_Amt is a denormalized value that should match the sum of order items
+
+5-
+Foreign Key Specification for Sales Trip Tracking Database
+Foreign Key Assignments
+
+Based on the given relations for tracking business trips of salespersons, here are the foreign key specifications:
+
+    TRIP table:
+
+        SSN → REFERENCES SALESPERSON(SSN)
+
+        Assumption: Every trip must be associated with an existing salesperson
+
+        Note: Trip_Id appears to be the primary key of TRIP (unique identifier for each trip)
+
+    EXPENSE table:
+
+        Trip_Id → REFERENCES TRIP(Trip_Id)
+
+        Assumption:
+
+            Every expense record must be tied to an existing business trip
+
+            Multiple expenses can be charged to the same trip
+
+        Note: Account# likely refers to an expense category or GL account, but isn't referenced elsewhere
+
+Primary Key Assumptions
+
+    SALESPERSON:
+
+        SSN is the primary key (unique identifier for each salesperson)
+
+    TRIP:
+
+        Trip_Id is the primary key (unique identifier for each trip)
+
+        Alternative candidate key could be (SSN, Departure_Date, From_City) if trips can't overlap for same salesperson
+
+    EXPENSE:
+
+        Likely composite primary key (Trip_Id, Account#) if multiple expense types per trip
+
+        Or (Trip_Id, Expense#) if using a sequence number per trip's expenses
+
+Schema with Foreign Keys (Visual Representation)
+Copy
+
+SALESPERSON(SSN [PK], Name, Start_Year, Dept_No)
+
+TRIP(Trip_Id [PK], SSN [FK → SALESPERSON], From_City, To_City, 
+     Departure_Date, Return_Date)
+
+EXPENSE(Trip_Id [FK → TRIP], Account#, Amount,
+        [Primary Key could be (Trip_Id, Account#) or (Trip_Id, Expense#)])
+
+Additional Constraints and Assumptions
+
+    Temporal Constraints:
+
+        Return_Date should be ≥ Departure_Date (can't return before departing)
+
+        Implementation: Check constraint in TRIP table
+
+    Expense Tracking:
+
+        Amount in EXPENSE should be > 0
+
+        Implementation: Simple check constraint
+
+    Trip Duration:
+
+        Assumption: A salesperson can't have overlapping trips (would require application logic)
+
+    Department Reference:
+
+        Dept_No in SALESPERSON isn't referenced - assumed to be a simple attribute
+
+        If departments were tracked in another table, this would need a foreign key
+
+    Account# in EXPENSE:
+
+        Assumed to be a category code not requiring foreign key reference
+
+        If accounts were in a separate table, would need foreign key constraint
+
+Business Rule Considerations
+
+    A salesperson can take multiple trips (1:N relationship SALESPERSON to TRIP)
+
+    A trip can have multiple expense items (1:N relationship TRIP to EXPENSE)
+
+    The database tracks trip logistics (cities, dates) separately from financial tracking
+
+    No direct tracking of trip purpose or customer visited (could be additional attributes) 
+

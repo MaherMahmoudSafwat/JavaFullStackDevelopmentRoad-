@@ -1,0 +1,495 @@
+1-
+i) Cardinality Ratios and Participation Constraints
+
+Based on the description, here are the cardinality ratios and participation constraints for each relationship:
+
+    Department-Student (HAVE):
+
+        One-to-Many (1:N)
+
+        Total participation for Department (must have students)
+
+        Partial participation for Student (assuming a student must be in a department)
+
+    Department-Staff (CONTAIN):
+
+        One-to-Many (1:N)
+
+        Total participation for Department (must have staff)
+
+        Total participation for Staff (must belong to a department)
+
+    Staff-Course (TEACH):
+
+        Many-to-One (N:1)
+
+        Total participation for Staff (must teach one course)
+
+        Partial participation for Course (may be taught by staff)
+
+    Student-Course (TAKE):
+
+        Many-to-Many (M:N)
+
+        Partial participation for both (assuming students may take courses and courses may have students)
+
+    Student-Subtypes (Postgrad/Undergrad):
+
+        Disjoint or Overlapping (not specified, typically disjoint)
+
+        Total participation for subtypes (every student must be one or the other)
+
+ii) Normalized Tables
+Entity Tables:
+
+    DEPARTMENT
+
+        D# (PK)
+
+        DNAME
+
+        (Other department attributes)
+
+    STAFF
+
+        ST# (PK)
+
+        SNAME
+
+        D# (FK to DEPARTMENT) - since each staff belongs to one department
+
+        C# (FK to COURSE) - since each staff teaches one course
+
+        (Other staff attributes)
+
+    STUDENT
+
+        S# (PK)
+
+        SNAME
+
+        D# (FK to DEPARTMENT) - since each student is in one department
+
+        (Other student attributes common to both types)
+
+    POSTGRAD (subtype of STUDENT)
+
+        S# (PK, FK to STUDENT)
+
+        DEGREE
+
+        (Other postgraduate-specific attributes)
+
+    UNDERGRAD (subtype of STUDENT)
+
+        S# (PK, FK to STUDENT)
+
+        CLASS
+
+        (Other undergraduate-specific attributes)
+
+    COURSE
+
+        C# (PK)
+
+        CNAME
+
+        (Other course attributes)
+
+Relationship Tables:
+
+    TAKES (for M:N relationship between STUDENT and COURSE)
+
+        S# (FK to STUDENT)
+
+        C# (FK to COURSE)
+
+        (PK is the combination of S# and C#)
+
+        (Any relationship attributes like grade, semester, etc.)
+
+2-
+Database Design for Computer Company
+EER Model Design
+Entities and Relationships:
+
+    Entities:
+
+        Customer: Individuals/businesses purchasing products
+
+        Order: Customer purchases
+
+        Product: Supertype for all sellable items
+
+            Component: Hardware components (VGA, Mouse, RAM, etc.)
+
+            SystemPackage: Pre-assembled systems
+
+        Supplier: Companies providing components
+
+        ComponentSupplier: Relationship between components and suppliers
+
+        SystemComponent: Relationship between systems and their components
+
+    Relationships:
+
+        Customer places Order (1:N)
+
+        Order contains Products (M:N)
+
+        SystemPackage consists of Components (M:N)
+
+        Supplier provides Components (M:N)
+
+Assumptions:
+
+    A system package consists of multiple components
+
+    Components can be sold individually or as part of systems
+
+    Each component comes from at least one supplier
+
+    Customers can place multiple orders
+
+    Orders can contain both components and systems
+
+Normalized Tables
+Entity Tables:
+
+    CUSTOMER
+
+        CustomerID (PK)
+
+        Name
+
+        Address
+
+        Phone
+
+        Email
+
+        (Other customer attributes)
+
+    PRODUCT (supertype)
+
+        ProductID (PK)
+
+        Name
+
+        Description
+
+        Price
+
+        ProductType (discriminator: 'Component' or 'System')
+
+    COMPONENT (subtype)
+
+        ProductID (PK, FK to PRODUCT)
+
+        ComponentType (VGA, Mouse, RAM, etc.)
+
+        Specifications
+
+        WarrantyPeriod
+
+    SYSTEM_PACKAGE (subtype)
+
+        ProductID (PK, FK to PRODUCT)
+
+        SystemType (Gaming, Office, etc.)
+
+        AssemblyDate
+
+        TotalWarranty
+
+    SUPPLIER
+
+        SupplierID (PK)
+
+        Name
+
+        ContactPerson
+
+        Phone
+
+        Email
+
+        (Other supplier attributes)
+
+    ORDER
+
+        OrderID (PK)
+
+        CustomerID (FK to CUSTOMER)
+
+        OrderDate
+
+        TotalAmount
+
+        Status
+
+        (Other order attributes)
+
+Relationship Tables:
+
+    ORDER_DETAILS (M:N between ORDER and PRODUCT)
+
+        OrderID (FK to ORDER)
+
+        ProductID (FK to PRODUCT)
+
+        Quantity
+
+        UnitPrice
+
+        (PK is combination of OrderID and ProductID)
+
+    SYSTEM_COMPONENTS (M:N between SYSTEM_PACKAGE and COMPONENT)
+
+        SystemID (FK to SYSTEM_PACKAGE.ProductID)
+
+        ComponentID (FK to COMPONENT.ProductID)
+
+        Quantity
+
+        (PK is combination of SystemID and ComponentID)
+
+    SUPPLIER_COMPONENT (M:N between SUPPLIER and COMPONENT)
+
+        SupplierID (FK to SUPPLIER)
+
+        ComponentID (FK to COMPONENT.ProductID)
+
+        SupplyPrice
+
+        LeadTime
+
+        (PK is combination of SupplierID and ComponentID)
+
+Additional Notes:
+
+    The supertype/subtype relationship allows for common attributes to be stored in PRODUCT while specialized attributes go in COMPONENT or SYSTEM_PACKAGE
+
+    All M:N relationships are resolved with bridge tables
+
+    Prices are stored at point of sale in ORDER_DETAILS to preserve historical pricing
+
+    System packages have their own pricing independent of component costs
+
+    The design supports tracking which suppliers provide which components and at what cost
+
+3-
+EER Model Design
+Entities and Relationships:
+
+    Entities:
+
+        LibraryItem: Supertype for all items
+
+            Book: Subtype (can be borrowed)
+
+            Magazine: Subtype (can be borrowed)
+
+            CD: Subtype (cannot be borrowed)
+
+        Author: Writers/creators of items
+
+        Publisher: Companies publishing items
+
+        User: Library members
+
+        Borrowing: Relationship between users and borrowable items
+
+        AuthorItem: Relationship between authors and items
+
+    Relationships:
+
+        LibraryItem has Authors (M:N)
+
+        LibraryItem has Publisher (N:1)
+
+        User borrows Book/Magazine (M:N) with borrowing constraints
+
+        User reads LibraryItem (M:N)
+
+Assumptions:
+
+    CDs can only be read on premises (not borrowed)
+
+    Books and magazines have different borrowing limits
+
+    Each item must have at least one author and one publisher
+
+    Users have borrowing privileges based on membership type
+
+    Borrowing history needs to be tracked
+
+Normalized Tables
+Entity Tables:
+
+    LIBRARY_ITEM (supertype)
+
+        ItemID (PK)
+
+        Title
+
+        PublicationDate
+
+        ISBN/ISSN/UPC
+
+        ItemType (discriminator: 'Book', 'Magazine', 'CD')
+
+        PublisherID (FK to PUBLISHER)
+
+        ShelfLocation
+
+        (Other common attributes)
+
+    BOOK (subtype)
+
+        ItemID (PK, FK to LIBRARY_ITEM)
+
+        Edition
+
+        PageCount
+
+        Genre
+
+        (Other book-specific attributes)
+
+    MAGAZINE (subtype)
+
+        ItemID (PK, FK to LIBRARY_ITEM)
+
+        IssueNumber
+
+        Volume
+
+        Periodicity
+
+        (Other magazine-specific attributes)
+
+    CD (subtype)
+
+        ItemID (PK, FK to LIBRARY_ITEM)
+
+        Duration
+
+        ContentType (Music, Audiobook, etc.)
+
+        (Other CD-specific attributes)
+
+    AUTHOR
+
+        AuthorID (PK)
+
+        Name
+
+        Biography
+
+        Nationality
+
+        (Other author attributes)
+
+    PUBLISHER
+
+        PublisherID (PK)
+
+        Name
+
+        Address
+
+        ContactInfo
+
+        (Other publisher attributes)
+
+    USER
+
+        UserID (PK)
+
+        Name
+
+        Address
+
+        Phone
+
+        Email
+
+        MembershipType
+
+        JoinDate
+
+        BorrowingLimit
+
+        (Other user attributes)
+
+Relationship Tables:
+
+    AUTHOR_ITEM (M:N between AUTHOR and LIBRARY_ITEM)
+
+        AuthorID (FK to AUTHOR)
+
+        ItemID (FK to LIBRARY_ITEM)
+
+        ContributionType (primary, secondary, etc.)
+
+        (PK is combination of AuthorID and ItemID)
+
+    BORROWING (M:N between USER and borrowable items)
+
+        BorrowID (PK)
+
+        UserID (FK to USER)
+
+        ItemID (FK to LIBRARY_ITEM, but only Books/Magazines)
+
+        BorrowDate
+
+        DueDate
+
+        ReturnDate
+
+        Status (checked out, returned, overdue)
+
+        (Constraints ensure only books/magazines can be borrowed)
+
+    READING_ACTIVITY (M:N between USER and all LIBRARY_ITEMS)
+
+        ActivityID (PK)
+
+        UserID (FK to USER)
+
+        ItemID (FK to LIBRARY_ITEM)
+
+        ActivityDate
+
+        ActivityType (onsite reading, digital access, etc.)
+
+        Duration
+
+Additional Constraints:
+
+    Borrowing Constraints:
+
+        Implemented through application logic or database triggers
+
+        Ensure only Books and Magazines can be borrowed
+
+        Enforce different borrowing periods based on item type
+
+        Track and enforce user borrowing limits
+
+    Subtype Constraints:
+
+        Each LIBRARY_ITEM must be exactly one subtype (Book, Magazine, or CD)
+
+        Implemented through the ItemType discriminator and foreign keys
+
+    Temporal Data:
+
+        Borrowing history is maintained for reporting and analytics
+
+        Reading activity is tracked for all items
+
+This design supports all library operations while maintaining data integrity through proper normalization and relationship management.
+
