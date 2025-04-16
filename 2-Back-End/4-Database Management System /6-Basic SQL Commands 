@@ -1,0 +1,143 @@
+-- 1. CREATE A NEW DATABASE
+-- This creates a database named 'BeginnerDB'
+CREATE DATABASE BeginnerDB;
+GO
+
+-- Switch to the newly created database
+USE BeginnerDB;
+GO
+
+-- 2. CREATE TABLES WITH DIFFERENT DATA TYPES AND CONSTRAINTS
+
+-- Create a 'Customers' table with various data types and a primary key
+CREATE TABLE Customers 
+(
+    CustomerID INT PRIMARY KEY,                     -- Primary key (unique identifier)
+    FirstName VARCHAR(50) NOT NULL,                -- Variable length string
+    LastName CHAR(50) NOT NULL,                    -- Fixed length string
+    Email NVARCHAR(100) UNIQUE,                    -- Unicode variable length string with unique constraint
+    BirthDate DATE,                                -- Date only (no time)
+    RegistrationDateTime DATETIME DEFAULT GETDATE(), -- Date and time with default value
+    AnnualIncome DECIMAL(12,2),                    -- Decimal number with precision
+    IsActive BIT DEFAULT 1,                        -- Boolean (0 or 1)
+    ProfileImage VARBINARY(MAX),                   -- Binary data for images/files
+    Notes TEXT                                     -- Large text data (deprecated in newer SQL versions)
+); 
+GO
+
+-- Create an 'Orders' table with foreign key to Customers
+CREATE TABLE Orders 
+(
+    OrderID INT PRIMARY KEY IDENTITY(1,1),        -- Auto-incrementing primary key
+    CustomerID INT NOT NULL,                      -- Will be foreign key
+    OrderDate DATETIME2 DEFAULT SYSDATETIME(),    -- High precision date/time
+    TotalAmount MONEY,                            -- Currency data type
+    OrderStatus VARCHAR(20) CHECK (OrderStatus IN ('Pending', 'Shipped', 'Delivered', 'Cancelled')),
+    
+    -- Foreign key constraint linking to Customers table
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+GO
+
+-- Create a 'Products' table with various numeric types
+CREATE TABLE Products 
+(
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    Description NTEXT,                            -- Unicode large text
+    Price SMALLMONEY,                             -- Smaller currency range than MONEY
+    Weight FLOAT,                                 -- Floating point number
+    InStock SMALLINT,                             -- Small integer
+    CategoryID TINYINT                            -- Very small integer (0-255)
+);
+GO
+
+-- 3. ALTER THE TABLES TO ADD MORE STRUCTURE
+
+-- Add a new column to Customers table
+ALTER TABLE Customers
+ADD PhoneNumber VARCHAR(20);
+GO
+
+-- Add a unique constraint on PhoneNumber (allowing NULLs)
+ALTER TABLE Customers
+ADD CONSTRAINT UQ_Customers_Phone UNIQUE (PhoneNumber);
+GO
+
+-- Modify a column's data type
+ALTER TABLE Products
+ALTER COLUMN Description NVARCHAR(MAX);  -- Changing from NTEXT to NVARCHAR(MAX)
+GO
+
+-- Add a foreign key to Products table (assuming we create a Categories table)
+CREATE TABLE Categories 
+(
+    CategoryID TINYINT PRIMARY KEY,
+    CategoryName VARCHAR(50) NOT NULL
+);
+GO
+
+-- Now add the foreign key constraint
+ALTER TABLE Products
+ADD CONSTRAINT FK_Products_Categories
+FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID);
+GO
+
+-- 4. INSERT SOME SAMPLE DATA
+
+-- Insert into Categories
+INSERT INTO Categories (CategoryID, CategoryName)
+VALUES (1, 'Electronics'), (2, 'Clothing'), (3, 'Books');
+GO
+
+-- Insert into Customers
+INSERT INTO Customers (CustomerID, FirstName, LastName, Email, BirthDate, AnnualIncome)
+VALUES 
+    (1, 'John', 'Doe', 'john.doe@email.com', '1985-05-15', 75000.00),
+    (2, 'Jane', 'Smith', 'jane.smith@email.com', '1990-11-22', 85000.50);
+GO
+
+-- Insert into Products
+INSERT INTO Products (ProductID, ProductName, Description, Price, Weight, InStock, CategoryID)
+VALUES 
+    (101, 'Laptop', 'High performance laptop', 999.99, 2.5, 10, 1),
+    (102, 'T-Shirt', 'Cotton t-shirt', 19.99, 0.3, 50, 2);
+GO
+
+-- Insert into Orders
+INSERT INTO Orders (CustomerID, TotalAmount, OrderStatus)
+VALUES 
+    (1, 999.99, 'Shipped'),
+    (2, 19.99, 'Pending');
+GO
+
+-- 5. DELETE DATA FROM TABLES
+
+-- Delete specific orders with 'Pending' status
+DELETE FROM Orders 
+WHERE OrderStatus = 'Pending';
+GO
+
+-- 6. DROP (REMOVE) THE TABLES AND DATABASE
+
+-- First drop tables with foreign key constraints (order matters)
+DROP TABLE Orders;
+GO
+
+DROP TABLE Products;
+GO
+
+DROP TABLE Categories;
+GO
+
+DROP TABLE Customers;
+GO
+
+-- Finally, drop the database
+-- Note: We need to switch to master database first to drop BeginnerDB
+USE master;
+GO
+
+DROP DATABASE BeginnerDB;
+GO
+
