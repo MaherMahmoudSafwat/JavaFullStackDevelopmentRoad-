@@ -1,0 +1,304 @@
+MySQL Database Schema and Query Examples
+Database Creation and Setup
+sql
+Copy
+
+-- Create a new database for a blog platform
+CREATE DATABASE blog_platform;
+USE blog_platform;
+
+Table Definitions with Relationships
+Users Table
+sql
+Copy
+
+-- Stores user account information
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique identifier for each user
+    username VARCHAR(50) UNIQUE NOT NULL,   -- Unique username
+    email VARCHAR(100) UNIQUE NOT NULL,     -- Unique email address
+    password_hash VARCHAR(255) NOT NULL,    -- Encrypted password
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Account creation timestamp
+);
+
+Posts Table
+sql
+Copy
+
+-- Stores blog posts with relationship to users
+CREATE TABLE posts (
+    post_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique post identifier
+    user_id INT NOT NULL,                    -- Author of the post
+    title VARCHAR(200) NOT NULL,             -- Post title
+    content TEXT NOT NULL,                   -- Post content
+    published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Publication date
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE  -- Cascade delete if user is deleted
+);
+
+Comments Table
+sql
+Copy
+
+-- Stores comments on posts with relationships to users and posts
+CREATE TABLE comments (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique comment identifier
+    post_id INT NOT NULL,                      -- Post being commented on
+    user_id INT NOT NULL,                      -- Comment author
+    content TEXT NOT NULL,                     -- Comment text
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Comment timestamp
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,  -- Delete comments if post is deleted
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE   -- Delete comments if user is deleted
+);
+
+Tags Table
+sql
+Copy
+
+-- Stores available tags for categorizing posts
+CREATE TABLE tags (
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique tag identifier
+    name VARCHAR(50) UNIQUE NOT NULL       -- Tag name (must be unique)
+);
+
+Post-Tags Junction Table
+sql
+Copy
+
+-- Many-to-many relationship between posts and tags
+CREATE TABLE post_tags (
+    post_id INT NOT NULL,                  -- Post reference
+    tag_id INT NOT NULL,                   -- Tag reference
+    PRIMARY KEY (post_id, tag_id),         -- Composite primary key
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,  -- Delete relationships if post is deleted
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE      -- Delete relationships if tag is deleted
+);
+
+Basic SELECT Queries
+sql
+Copy
+
+-- Select all columns from users table
+SELECT * FROM users;
+
+-- Select only post_id column from posts
+SELECT post_id FROM posts;
+
+-- Select post_id for posts with ID greater than 1
+SELECT post_id FROM posts WHERE post_id > 1;
+
+-- Select unique tag names
+SELECT DISTINCT name FROM tags;
+
+-- Select with table alias
+SELECT t.column_name FROM table_name AS t;
+
+Set Operations Demo
+sql
+Copy
+
+-- Create a new database for set operations demonstration
+CREATE DATABASE set_operations_demo;
+USE set_operations_demo;
+
+-- Create employees table
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    department VARCHAR(50),
+    salary DECIMAL(10,2)
+);
+
+-- Create contractors table
+CREATE TABLE contractors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    department VARCHAR(50),
+    hourly_rate DECIMAL(10,2)
+);
+
+-- Insert sample data into employees
+INSERT INTO employees (name, department, salary) VALUES
+('John Smith', 'Engineering', 75000.00),
+('Sarah Johnson', 'Marketing', 68000.00),
+('Michael Brown', 'Engineering', 82000.00),
+('Emily Davis', 'HR', 65000.00);
+
+-- Insert sample data into contractors
+INSERT INTO contractors (name, department, hourly_rate) VALUES
+('Robert Wilson', 'Engineering', 45.00),
+('Lisa Miller', 'Marketing', 40.00),
+('Michael Brown', 'Engineering', 50.00),
+('Jessica Taylor', 'Finance', 42.00);
+
+Set Operations Examples
+sql
+Copy
+
+-- UNION: Combine results from two queries, removing duplicates
+SELECT name FROM employees
+UNION
+SELECT name FROM contractors;
+
+-- UNION ALL: Combine results from two queries, keeping duplicates
+SELECT name, department FROM employees
+UNION ALL 
+SELECT name, department FROM contractors;
+
+-- IN: Find names that exist in both tables
+SELECT name FROM employees
+WHERE name IN (SELECT name FROM contractors);
+
+-- NOT IN: Find names in employees that don't exist in contractors
+SELECT name FROM employees
+WHERE name NOT IN (SELECT name FROM contractors);
+
+EXISTS and NOT EXISTS Examples
+sql
+Copy
+
+-- EXISTS: Find customers who have placed at least one order
+SELECT customer_id, customer_name
+FROM customers
+WHERE EXISTS (
+    SELECT 1
+    FROM orders
+    WHERE orders.customer_id = customers.customer_id
+);
+
+-- NOT EXISTS: Find customers who haven't placed any orders
+SELECT customer_id, customer_name
+FROM customers
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM orders
+    WHERE orders.customer_id = customers.customer_id
+);
+
+-- EXISTS with additional condition
+SELECT customer_id, customer_name
+FROM customers c 
+WHERE EXISTS (
+    SELECT 1
+    FROM orders o
+    WHERE o.customer_id = c.customer_id
+    AND o.order_amount > 200
+);
+
+IN Clause with Enumerated Values
+sql
+Copy
+
+-- Find products in specific categories
+SELECT * FROM products
+WHERE category IN ('ELECTRONICS', 'CLOTHING', 'HOME GOODS');
+
+JOIN Operations
+Basic JOIN Types
+sql
+Copy
+
+-- INNER JOIN: Only matching rows from both tables
+SELECT columns FROM TableA
+INNER JOIN TableB ON TableA.key = TableB.key;
+
+-- LEFT JOIN: All rows from left table + matching right table rows
+SELECT columns FROM TableA
+LEFT JOIN TableB ON TableA.key = TableB.key;
+
+-- RIGHT JOIN: All rows from right table + matching left table rows
+SELECT columns FROM TableA
+RIGHT JOIN TableB ON TableA.key = TableB.key;
+
+FULL OUTER JOIN Simulation
+sql
+Copy
+
+-- Combine LEFT and RIGHT JOIN with UNION to simulate FULL OUTER JOIN
+SELECT c.name, o.order_date, o.amount
+FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id
+UNION
+SELECT c.name, o.order_date, o.amount
+FROM customers c RIGHT JOIN orders o ON c.customer_id = o.customer_id
+WHERE c.customer_id IS NULL;
+
+Other JOIN Types
+sql
+Copy
+
+-- CROSS JOIN: Cartesian product of all rows
+SELECT c.name, o.order_id
+FROM customers c
+CROSS JOIN orders o;
+
+-- SELF JOIN: Join a table to itself (for hierarchical data)
+ALTER TABLE customers ADD COLUMN manager_id INT REFERENCES customers(customer_id);
+UPDATE customers SET manager_id = 1 WHERE customer_id IN (2,3);
+
+SELECT e.name AS employee, m.name AS manager
+FROM customers e
+LEFT JOIN customers m ON e.manager_id = m.customer_id;
+
+-- NATURAL JOIN: Joins on columns with the same name (not recommended)
+SELECT columns FROM TableA
+NATURAL JOIN TableB;
+
+-- STRAIGHT_JOIN: Forces join order (left-to-right)
+SELECT columns FROM TableA
+STRAIGHT_JOIN TableB ON TableA.key = TableB.key;
+
+Aggregate Functions
+sql
+Copy
+
+-- COUNT: Number of rows
+SELECT COUNT(*) FROM orders;
+
+-- SUM: Total of values
+SELECT SUM(amount) AS total_sales FROM orders;
+
+-- AVG: Average value
+SELECT AVG(amount) AS average_order FROM orders;
+
+-- MIN/MAX: Smallest/largest values
+SELECT MIN(amount) AS cheapest_order, MAX(amount) AS most_expensive_order FROM orders;
+
+-- GROUP BY: Aggregate by department
+SELECT department, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department;
+
+-- HAVING: Filter aggregated results
+SELECT customer_id, SUM(amount) AS total_spent
+FROM orders
+GROUP BY customer_id
+HAVING SUM(amount) > 500;
+
+LIKE Operator for Pattern Matching
+sql
+Copy
+
+-- Search for names or emails containing "smith"
+SELECT * FROM customers
+WHERE name LIKE "%smith%" OR email LIKE "%smith%";
+
+ORDER BY Clause for Sorting
+sql
+Copy
+
+-- Sort by column position (2nd column = salary)
+SELECT name, salary FROM employees
+ORDER BY 2 DESC;
+
+-- Multi-column sorting
+SELECT first_name, last_name, department, salary
+FROM employees
+ORDER BY department ASC, salary DESC;
+
+-- Alphabetical sorting by name components
+SELECT first_name, last_name, department
+FROM employees
+ORDER BY department, last_name, first_name;
+
+
+
+
