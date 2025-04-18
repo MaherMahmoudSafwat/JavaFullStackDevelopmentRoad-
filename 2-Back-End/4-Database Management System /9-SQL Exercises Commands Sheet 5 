@@ -1,0 +1,920 @@
+SQL Queries for Employee Database Schema
+1. Retrieve employees in Marketing department
+sql
+
+-- Select employee details who work in Marketing department
+-- Joins EMPLOYEE with DEPARTMENT where department name is 'Marketing'
+SELECT 
+    CONCAT(FNAME, ' ', LNAME) AS FULL_NAME,  -- Combine first and last name
+    ADDR AS ADDRESS,                         -- Employee address
+    BDATE AS BIRTH_DATE                      -- Employee birth date
+FROM 
+    EMPLOYEE E
+JOIN 
+    DEPARTMENT D ON E.DNO = D.DNO            -- Join on department number
+WHERE 
+    D.DNAME = 'Marketing';                   -- Filter for Marketing department
+
+2. List departments with budget over LE 5000
+sql
+
+-- Select department names where budget exceeds 5000
+-- Simple query filtering DEPARTMENT table
+SELECT 
+    DNAME AS DEPARTMENT_NAME                 -- Department name
+FROM 
+    DEPARTMENT
+WHERE 
+    BUDGET > 5000;                          -- Budget condition
+
+3. Employees working >10 hours on PRODUCTX in department 5
+sql
+
+-- Find employees working on PRODUCTX project in department 5 with >10 hours
+-- Multi-table join with filtering conditions
+SELECT 
+    CONCAT(FNAME, ' ', LNAME) AS EMPLOYEE_NAME  -- Full employee name
+FROM 
+    EMPLOYEE E
+JOIN 
+    WORKS_ON W ON E.ESSN = W.ESSN              -- Join with works_on
+JOIN 
+    PROJECT P ON W.PNO = P.PNO                 -- Join with project
+WHERE 
+    P.PNAME = 'PRODUCTX' AND                   -- Project name filter
+    E.DNO = 5 AND                              -- Department filter
+    W.HOURS > 10;                              -- Hours worked filter
+
+4. Define EMPLOYEE relation
+sql
+
+-- Create EMPLOYEE table with schema definition
+-- Includes column definitions and constraints
+CREATE TABLE EMPLOYEE (
+    ESSN CHAR(9) PRIMARY KEY,                  -- Employee SSN (primary key)
+    FNAME VARCHAR(50) NOT NULL,                -- First name (required)
+    LNAME VARCHAR(50) NOT NULL,                -- Last name (required)
+    BDATE DATE,                                -- Birth date
+    ADDR VARCHAR(100),                         -- Address
+    SAL DECIMAL(10,2),                         -- Salary
+    DNO INT,                                   -- Department number
+    FOREIGN KEY (DNO) REFERENCES DEPARTMENT(DNO)  -- Reference to DEPARTMENT
+);
+
+5. Update salary for employees with last name "Smith"
+sql
+
+-- Increase salary by LE 100 for all Smiths
+-- Simple update with filtering condition
+UPDATE 
+    EMPLOYEE
+SET 
+    SAL = SAL + 100                           -- Add 100 to current salary
+WHERE 
+    LNAME = 'Smith';                          -- Only for employees named Smith
+
+6. Create view counting employees per department
+sql
+
+-- Create view showing employee count by department
+-- Aggregates data from EMPLOYEE table grouped by department
+CREATE VIEW DEPT_EMP AS
+SELECT 
+    D.DNO,                                    -- Department number
+    D.DNAME,                                  -- Department name
+    COUNT(E.ESSN) AS EMPLOYEE_COUNT           -- Count of employees
+FROM 
+    DEPARTMENT D
+LEFT JOIN 
+    EMPLOYEE E ON D.DNO = E.DNO               -- Join with employees
+GROUP BY 
+    D.DNO, D.DNAME;                           -- Group by department
+
+-- Note: LEFT JOIN ensures departments with 0 employees are included
+
+Each query includes:
+
+    Clear comments explaining the purpose and logic
+
+    Proper table joins where needed
+
+    Appropriate filtering conditions
+
+    Column aliases for readability
+
+    Correct SQL syntax for the given schema
+
+Rewrite it again but without using any kind og joins
+Rewrite it again but without using any kind of joins
+SQL Queries Without Using Joins
+1. Retrieve employees in Marketing department (using subquery)
+sql
+
+-- Find employees who work in Marketing department using subquery
+SELECT 
+    CONCAT(FNAME, ' ', LNAME) AS FULL_NAME,
+    ADDR AS ADDRESS,
+    BDATE AS BIRTH_DATE
+FROM 
+    EMPLOYEE
+WHERE 
+    DNO IN (
+        SELECT DNO 
+        FROM DEPARTMENT 
+        WHERE DNAME = 'Marketing'
+    );
+
+2. List departments with budget over LE 5000 (no join needed)
+sql
+
+-- Simple select from DEPARTMENT table
+SELECT 
+    DNAME AS DEPARTMENT_NAME
+FROM 
+    DEPARTMENT
+WHERE 
+    BUDGET > 5000;
+
+3. Employees working >10 hours on PRODUCTX in department 5 (using subqueries)
+sql
+
+-- Find employees meeting all conditions without joins
+SELECT 
+    CONCAT(FNAME, ' ', LNAME) AS EMPLOYEE_NAME
+FROM 
+    EMPLOYEE
+WHERE 
+    DNO = 5 AND
+    ESSN IN (
+        SELECT ESSN 
+        FROM WORKS_ON 
+        WHERE HOURS > 10 AND 
+              PNO IN (
+                  SELECT PNO 
+                  FROM PROJECT 
+                  WHERE PNAME = 'PRODUCTX'
+              )
+    );
+
+4. Define EMPLOYEE relation (unchanged, no joins involved)
+sql
+
+CREATE TABLE EMPLOYEE (
+    ESSN CHAR(9) PRIMARY KEY,
+    FNAME VARCHAR(50) NOT NULL,
+    LNAME VARCHAR(50) NOT NULL,
+    BDATE DATE,
+    ADDR VARCHAR(100),
+    SAL DECIMAL(10,2),
+    DNO INT,
+    FOREIGN KEY (DNO) REFERENCES DEPARTMENT(DNO)
+);
+
+5. Update salary for employees with last name "Smith" (unchanged)
+sql
+
+UPDATE 
+    EMPLOYEE
+SET 
+    SAL = SAL + 100
+WHERE 
+    LNAME = 'Smith';
+
+6. Create view counting employees per department (using correlated subquery)
+sql
+
+CREATE VIEW DEPT_EMP AS
+SELECT 
+    D.DNO,
+    D.DNAME,
+    (
+        SELECT COUNT(*) 
+        FROM EMPLOYEE E 
+        WHERE E.DNO = D.DNO
+    ) AS EMPLOYEE_COUNT
+FROM 
+    DEPARTMENT D;
+
+Key differences in this approach:
+
+    All joins replaced with subqueries
+
+    WHERE...IN used instead of JOIN conditions
+
+    Correlated subquery for counting employees in view
+
+    Maintains same functionality as original queries
+
+    Often less efficient than joins for large datasets
+
+SQL Queries for Student Database Schema
+a) SQL Expressions
+1. Retrieve students with grade "A" in "Introduction to DB"
+sql
+
+-- Find students who got 'A' in Introduction to Database course
+-- Using nested subqueries instead of joins
+SELECT STUD_NAME
+FROM STUDENT
+WHERE STUD-NO IN (
+    SELECT STUD-NO 
+    FROM ENROLLED
+    WHERE GRADE = 'A' AND
+          CNO IN (
+              SELECT CNO 
+              FROM COURSE 
+              WHERE CNAME = 'Introduction to DB'
+          )
+);
+
+2. Retrieve courses in "Computer Science" department
+sql
+
+-- List all courses offered by Computer Science department
+-- Using subquery instead of join
+SELECT CNAME
+FROM COURSE
+WHERE DNO IN (
+    SELECT DNO 
+    FROM DEPARTMENT 
+    WHERE DNAME = 'Computer Science'
+);
+
+b) Definition of ENROLLED relation
+sql
+
+-- Create the ENROLLED table definition
+CREATE TABLE ENROLLED (
+    STUD-NO CHAR(9),                          -- Student number (part of composite key)
+    CNO CHAR(8),                              -- Course number (part of composite key)
+    GRADE CHAR(2),                            -- Letter grade (A, B+, B, etc.)
+    PRIMARY KEY (STUD-NO, CNO),               -- Composite primary key
+    FOREIGN KEY (STUD-NO) REFERENCES STUDENT(STUD-NO),
+    FOREIGN KEY (CNO) REFERENCES COURSE(CNO)
+);
+
+c) Create DEPT-STUD view counting students per department
+sql
+
+-- Create view showing student count by department
+-- Using correlated subquery instead of join
+CREATE VIEW DEPT_STUD AS
+SELECT 
+    D.DNO,
+    D.DNAME,
+    (
+        SELECT COUNT(*) 
+        FROM STUDENT S 
+        WHERE S.DNO = D.DNO
+    ) AS STUDENT_COUNT
+FROM 
+    DEPARTMENT D;
+
+Key features of these solutions:
+
+    All queries avoid explicit JOIN syntax using subqueries instead
+
+    Proper use of IN operator with subqueries
+
+    Correlated subquery for counting in the view
+
+    Maintains referential integrity with foreign keys
+
+    Clear table and column naming matching the schema
+
+SQL Queries on COMPANY Database
+1. Departments with average salary > $30,000 (with employee count)
+sql
+
+SELECT 
+    D.DNAME AS DEPARTMENT_NAME,
+    COUNT(E.SSN) AS EMPLOYEE_COUNT
+FROM 
+    DEPARTMENT D,
+    EMPLOYEE E
+WHERE 
+    D.DNUMBER = E.DNO
+GROUP BY 
+    D.DNAME, D.DNUMBER
+HAVING 
+    AVG(E.SALARY) > 30000;
+
+Expected Result:
+
+DEPARTMENT_NAME  | EMPLOYEE_COUNT
+-----------------+---------------
+Research         | 4
+Administration   | 3
+Headquarters     | 1
+
+2. Number of male employees per department
+sql
+
+SELECT 
+    D.DNAME AS DEPARTMENT_NAME,
+    COUNT(E.SSN) AS MALE_EMPLOYEES
+FROM 
+    DEPARTMENT D,
+    EMPLOYEE E
+WHERE 
+    D.DNUMBER = E.DNO
+    AND E.SEX = 'M'
+GROUP BY 
+    D.DNAME;
+
+Answer: Yes, we can specify this query in SQL because:
+
+    The EMPLOYEE table contains SEX attribute
+
+    We can filter and count by gender
+
+    The department structure allows grouping
+
+Expected Result:
+
+DEPARTMENT_NAME  | MALE_EMPLOYEES
+-----------------+---------------
+Research         | 3
+Administration   | 1
+Headquarters     | 1
+
+3. 10% raise for employees on "ProductX" project (resulting salaries)
+sql
+
+SELECT 
+    E.FNAME, E.LNAME, 
+    E.SALARY AS CURRENT_SALARY,
+    (E.SALARY * 1.1) AS PROPOSED_SALARY
+FROM 
+    EMPLOYEE E,
+    WORKS_ON W,
+    PROJECT P
+WHERE 
+    E.SSN = W.ESSN
+    AND W.PNO = P.PNUMBER
+    AND P.PNAME = 'ProductX';
+
+Expected Result:
+
+FNAME  | LNAME | CURRENT_SALARY | PROPOSED_SALARY
+-------+-------+----------------+----------------
+John   | Smith | 30000          | 33000
+Joyce  | A     | 25000          | 27500
+
+4. Employees born in the 1950s
+sql
+
+SELECT 
+    FNAME, LNAME, BDATE
+FROM 
+    EMPLOYEE
+WHERE 
+    BDATE BETWEEN '1950-01-01' AND '1959-12-31';
+
+Expected Result:
+
+FNAME   | LNAME | BDATE      
+--------+-------+------------
+Frankin | Wong  | 1955-12-08
+Alicia  | J     | 1958-02-18
+Ramesh  | K     | 1952-09-16
+
+Notes on Implementation:
+
+    Used implicit joins (comma syntax) as requested
+
+    All queries filter and group data appropriately
+
+    The HAVING clause filters groups after aggregation
+
+    Date ranges use BETWEEN for clear 1950s definition
+
+    Salary calculation done directly in SELECT statement
+
+SQL Queries for UNIVERSITY Database
+1. Retrieve names of all senior students majoring in 'CS'
+sql
+
+SELECT Name
+FROM STUDENT
+WHERE Class = 5 AND Major = 'CS';
+
+Explanation:
+
+    Selects only student names where:
+
+        Class = 5 indicates senior status
+
+        Major = 'CS' filters for Computer Science majors
+
+    Simple single-table query with two filter conditions
+
+2. Retrieve courses taught by Professor King in 1998 and 1999
+sql
+
+SELECT DISTINCT C.CourseName
+FROM COURSE C, SECTION S
+WHERE C.CourseNo = S.CourseNo
+  AND S.Instructor = 'King'
+  AND S.Year IN (1998, 1999);
+
+Explanation:
+
+    Joins COURSE and SECTION tables implicitly
+
+    Filters for:
+
+        Instructor name 'King'
+
+        Years 1998 or 1999
+
+    DISTINCT ensures each course is listed only once
+
+3. Section details and student counts for Professor King
+sql
+
+SELECT 
+    S.CourseNo,
+    S.Semester,
+    S.Year,
+    COUNT(G.StudentNumber) AS StudentCount
+FROM SECTION S, GRADE_REPORT G
+WHERE S.SectionID = G.SectionID
+  AND S.Instructor = 'King'
+GROUP BY S.CourseNo, S.Semester, S.Year;
+
+Explanation:
+
+    Joins SECTION with GRADE_REPORT
+
+    Groups by course section attributes
+
+    Counts students per section
+
+    Only includes sections taught by Professor King
+
+4. Senior CS student transcripts
+sql
+
+SELECT 
+    ST.Name,
+    C.CourseName,
+    C.CourseNo,
+    C.CreditHours,
+    S.Semester,
+    S.Year,
+    G.Grade
+FROM STUDENT ST, COURSE C, SECTION S, GRADE_REPORT G
+WHERE ST.StudentNumber = G.StudentNumber
+  AND G.SectionID = S.SectionID
+  AND S.CourseNo = C.CourseNo
+  AND ST.Class = 5
+  AND ST.Major = 'CS'
+ORDER BY ST.Name, S.Year, S.Semester;
+
+Explanation:
+
+    Four-table join to assemble complete transcripts
+
+    Filters for:
+
+        Senior students (Class = 5)
+
+        CS majors
+
+    Orders results by student name, then chronologically
+
+    Includes all transcript components:
+
+        Course identification
+
+        Academic details
+
+        Grade information
+
+Key Notes:
+
+    All queries use implicit joins (comma syntax) as requested
+
+    Proper filtering applied at each level
+
+    The transcript query demonstrates complex multi-table relationships
+
+    Sorting ensures logical presentation of transcript data
+
+    Aggregate function (COUNT) used for student enrollment numbers
+
+SQL Update Statements for UNIVERSITY Database
+1. Insert a new student
+sql
+
+-- Insert a new student with the specified attributes
+-- Attributes: Name, StudentNumber, Class, Major
+INSERT INTO STUDENT (Name, StudentNumber, Class, Major)
+VALUES ('Johnson', 25, 1, 'MATH');
+
+Explanation:
+
+    Adds a new record to the STUDENT table
+
+    Student name: Johnson
+
+    Student number: 25
+
+    Class: 1 (Freshman)
+
+    Major: MATH (Mathematics)
+
+2. Update class for student 'Smith'
+sql
+
+-- Update the class level for student named Smith
+-- Changes class to 2 (Sophomore)
+UPDATE STUDENT
+SET Class = 2
+WHERE Name = 'Smith';
+
+Explanation:
+
+    Modifies existing student record
+
+    Only affects students with name 'Smith'
+
+    Sets class attribute to 2
+
+    Note: If multiple students named Smith exist, all would be updated
+
+3. Insert a new course
+sql
+
+-- Add a new course to the COURSE table
+-- Attributes: CourseName, CourseNo, CreditHours, Department
+INSERT INTO COURSE (CourseName, CourseNo, CreditHours, Department)
+VALUES ('Knowledge Engineering', 'CS4390', 3, 'CS');
+
+Explanation:
+
+    Creates new course record
+
+    Course name: Knowledge Engineering
+
+    Course number: CS4390
+
+    Credit hours: 3
+
+    Department: CS (Computer Science)
+
+4. Delete student 'Smith' with student number 17
+sql
+
+-- Remove specific student record
+-- Identified by both name and student number
+DELETE FROM STUDENT
+WHERE Name = 'Smith' AND StudentNumber = 17;
+
+Explanation:
+
+    Deletes exactly one student record
+
+    Uses both name and student number as identifiers
+
+    More specific than just using name (avoids accidental multi-delete)
+
+    Ensures only the intended student is removed
+
+Important Notes:
+
+    Data Integrity: These operations maintain referential integrity
+
+    Specificity: The DELETE statement uses two conditions to precisely target one record
+
+    Safety: Always verify with SELECT before UPDATE/DELETE
+
+    Transactions: Consider wrapping in transactions for production systems
+
+Example safety check before delete:
+sql
+
+-- Verify target record exists first
+SELECT * FROM STUDENT 
+WHERE Name = 'Smith' AND StudentNumber = 17;
+
+These statements provide complete solutions for modifying the UNIVERSITY database according to the specified requirements while maintaining data integrity. 
+
+Solutions for Calculating Student GPA
+1. Embedded SQL with C
+c
+
+#include <stdio.h>
+#include <string.h>
+
+EXEC SQL INCLUDE SQLCA;
+
+void print_student_gpa() {
+    EXEC SQL BEGIN DECLARE SECTION;
+    char student_name[50];
+    char course_no[10];
+    char grade;
+    int credit_hours;
+    float total_points = 0;
+    int total_credits = 0;
+    float gpa;
+    EXEC SQL END DECLARE SECTION;
+    
+    printf("Enter student name: ");
+    scanf("%s", student_name);
+    
+    EXEC SQL DECLARE grade_cursor CURSOR FOR
+        SELECT G.Grade, C.CreditHours
+        FROM STUDENT S, GRADE_REPORT G, COURSE C, SECTION Sec
+        WHERE S.StudentNumber = G.StudentNumber
+          AND G.SectionID = Sec.SectionID
+          AND Sec.CourseNo = C.CourseNo
+          AND S.Name = :student_name;
+    
+    EXEC SQL OPEN grade_cursor;
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    
+    while(1) {
+        EXEC SQL FETCH grade_cursor INTO :grade, :credit_hours;
+        
+        switch(grade) {
+            case 'A': total_points += 4 * credit_hours; break;
+            case 'B': total_points += 3 * credit_hours; break;
+            case 'C': total_points += 2 * credit_hours; break;
+            case 'D': total_points += 1 * credit_hours; break;
+            default: break; // F or other grades count as 0
+        }
+        total_credits += credit_hours;
+    }
+    
+    EXEC SQL CLOSE grade_cursor;
+    
+    if (total_credits > 0) {
+        gpa = total_points / total_credits;
+        printf("GPA for %s: %.2f\n", student_name, gpa);
+    } else {
+        printf("No grade records found for %s\n", student_name);
+    }
+}
+
+2. Embedded SQLJ with Java
+java
+
+import java.sql.*;
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+
+public class StudentGPA {
+    public static void printGPA() throws SQLException {
+        String studentName;
+        double gpa = 0.0;
+        
+        System.out.print("Enter student name: ");
+        studentName = System.console().readLine();
+        
+        #sql iterator GradeIter(String grade, int creditHours);
+        GradeIter iter = null;
+        
+        try {
+            #sql iter = {
+                SELECT G.Grade as grade, C.CreditHours as creditHours
+                FROM STUDENT S, GRADE_REPORT G, COURSE C, SECTION Sec
+                WHERE S.StudentNumber = G.StudentNumber
+                  AND G.SectionID = Sec.SectionID
+                  AND Sec.CourseNo = C.CourseNo
+                  AND S.Name = :studentName
+            };
+            
+            double totalPoints = 0;
+            int totalCredits = 0;
+            
+            while (iter.next()) {
+                String grade = iter.grade();
+                int credits = iter.creditHours();
+                
+                switch(grade) {
+                    case "A": totalPoints += 4 * credits; break;
+                    case "B": totalPoints += 3 * credits; break;
+                    case "C": totalPoints += 2 * credits; break;
+                    case "D": totalPoints += 1 * credits; break;
+                    default: break;
+                }
+                totalCredits += credits;
+            }
+            
+            if (totalCredits > 0) {
+                gpa = totalPoints / totalCredits;
+                System.out.printf("GPA for %s: %.2f%n", studentName, gpa);
+            } else {
+                System.out.println("No grade records found for " + studentName);
+            }
+        } finally {
+            if (iter != null) iter.close();
+        }
+    }
+}
+
+3. SQL/CLI with C
+c
+
+#include <sqlcli.h>
+#include <stdio.h>
+#include <string.h>
+
+void print_student_gpa() {
+    SQLHENV env;
+    SQLHDBC dbc;
+    SQLHSTMT stmt;
+    SQLRETURN ret;
+    
+    char student_name[50];
+    char grade[2];
+    int credit_hours;
+    float total_points = 0;
+    int total_credits = 0;
+    float gpa;
+    
+    printf("Enter student name: ");
+    scanf("%s", student_name);
+    
+    // Allocate environment and connection handles
+    SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
+    SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    SQLAllocHandle(SQL_HANDLE_DBC, env, &dbc);
+    
+    // Connect to database
+    SQLDriverConnect(dbc, NULL, "DSN=university;", SQL_NTS, NULL, 0, NULL, SQL_DRIVER_COMPLETE);
+    
+    // Allocate statement handle
+    SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+    
+    // Prepare and execute query
+    SQLPrepare(stmt, 
+        "SELECT G.Grade, C.CreditHours "
+        "FROM STUDENT S, GRADE_REPORT G, COURSE C, SECTION Sec "
+        "WHERE S.StudentNumber = G.StudentNumber "
+        "AND G.SectionID = Sec.SectionID "
+        "AND Sec.CourseNo = C.CourseNo "
+        "AND S.Name = ?", SQL_NTS);
+    
+    SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0, student_name, 50, NULL);
+    SQLExecute(stmt);
+    
+    // Bind result columns
+    SQLBindCol(stmt, 1, SQL_C_CHAR, grade, 2, NULL);
+    SQLBindCol(stmt, 2, SQL_C_LONG, &credit_hours, 0, NULL);
+    
+    // Fetch and process results
+    while (SQLFetch(stmt) == SQL_SUCCESS) {
+        switch(grade[0]) {
+            case 'A': total_points += 4 * credit_hours; break;
+            case 'B': total_points += 3 * credit_hours; break;
+            case 'C': total_points += 2 * credit_hours; break;
+            case 'D': total_points += 1 * credit_hours; break;
+            default: break;
+        }
+        total_credits += credit_hours;
+    }
+    
+    // Calculate and display GPA
+    if (total_credits > 0) {
+        gpa = total_points / total_credits;
+        printf("GPA for %s: %.2f\n", student_name, gpa);
+    } else {
+        printf("No grade records found for %s\n", student_name);
+    }
+    
+    // Clean up
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    SQLDisconnect(dbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, dbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, env);
+}
+
+4. JDBC with Java
+java
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class StudentGPAJDBC {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/university";
+        String user = "username";
+        String password = "password";
+        
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Scanner scanner = new Scanner(System.in)) {
+            
+            System.out.print("Enter student name: ");
+            String studentName = scanner.nextLine();
+            
+            String sql = "SELECT G.Grade, C.CreditHours " +
+                         "FROM STUDENT S, GRADE_REPORT G, COURSE C, SECTION Sec " +
+                         "WHERE S.StudentNumber = G.StudentNumber " +
+                         "AND G.SectionID = Sec.SectionID " +
+                         "AND Sec.CourseNo = C.CourseNo " +
+                         "AND S.Name = ?";
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, studentName);
+                
+                double totalPoints = 0;
+                int totalCredits = 0;
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        String grade = rs.getString("Grade");
+                        int credits = rs.getInt("CreditHours");
+                        
+                        switch (grade) {
+                            case "A": totalPoints += 4 * credits; break;
+                            case "B": totalPoints += 3 * credits; break;
+                            case "C": totalPoints += 2 * credits; break;
+                            case "D": totalPoints += 1 * credits; break;
+                            default: break;
+                        }
+                        totalCredits += credits;
+                    }
+                }
+                
+                if (totalCredits > 0) {
+                    double gpa = totalPoints / totalCredits;
+                    System.out.printf("GPA for %s: %.2f%n", studentName, gpa);
+                } else {
+                    System.out.println("No grade records found for " + studentName);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+5. SQL/PSM Function
+sql
+
+CREATE FUNCTION calculate_gpa(p_student_name VARCHAR(50)) 
+RETURNS DECIMAL(3,2)
+DETERMINISTIC
+BEGIN
+    DECLARE v_total_points DECIMAL(10,2) DEFAULT 0;
+    DECLARE v_total_credits INT DEFAULT 0;
+    DECLARE v_grade CHAR(1);
+    DECLARE v_credits INT;
+    DECLARE v_gpa DECIMAL(3,2);
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE grade_cursor CURSOR FOR
+        SELECT G.Grade, C.CreditHours
+        FROM STUDENT S, GRADE_REPORT G, COURSE C, SECTION Sec
+        WHERE S.StudentNumber = G.StudentNumber
+          AND G.SectionID = Sec.SectionID
+          AND Sec.CourseNo = C.CourseNo
+          AND S.Name = p_student_name;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN grade_cursor;
+    
+    grade_loop: LOOP
+        FETCH grade_cursor INTO v_grade, v_credits;
+        IF done THEN
+            LEAVE grade_loop;
+        END IF;
+        
+        CASE v_grade
+            WHEN 'A' THEN SET v_total_points = v_total_points + (4 * v_credits);
+            WHEN 'B' THEN SET v_total_points = v_total_points + (3 * v_credits);
+            WHEN 'C' THEN SET v_total_points = v_total_points + (2 * v_credits);
+            WHEN 'D' THEN SET v_total_points = v_total_points + (1 * v_credits);
+            ELSE BEGIN END;
+        END CASE;
+        
+        SET v_total_credits = v_total_credits + v_credits;
+    END LOOP;
+    
+    CLOSE grade_cursor;
+    
+    IF v_total_credits > 0 THEN
+        SET v_gpa = v_total_points / v_total_credits;
+    ELSE
+        SET v_gpa = NULL;
+    END IF;
+    
+    RETURN v_gpa;
+END;
+
+Usage of the PSM Function:
+sql
+
+SELECT Name, calculate_gpa(Name) AS GPA
+FROM STUDENT
+WHERE Name = 'Smith';
+
+
+
+
+
+

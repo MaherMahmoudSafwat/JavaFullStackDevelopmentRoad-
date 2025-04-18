@@ -1,0 +1,36 @@
+I-- INSERT STATEMENT: Adds new records to a table
+-- Usage: When you need to add new data to your database
+INSERT INTO users (username, email, created_at)  -- Specifies table and columns to insert into
+VALUES ('johndoe', 'john@example.com', NOW());   -- Provides values for each column
+-- NOW() is a function that inserts the current timestamp
+-- This creates a new user with username 'johndoe', email 'john@example.com', and current time as creation date
+
+-- UPDATE STATEMENT: Modifies existing records in a table
+-- Usage: When you need to change existing data
+UPDATE products                      -- Specifies table to update
+SET price = price * 1.1              -- Sets new price to 110% of current price (10% increase)
+WHERE category = 'Electronics';      -- Only updates products in Electronics category
+-- Important: Without WHERE clause, this would update ALL products in the table
+
+-- DELETE STATEMENT: Removes records from a table
+-- Usage: When you need to remove obsolete or unnecessary data
+DELETE FROM temp_logs                              -- Specifies table to delete from
+WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY);  -- Only deletes records older than 30 days
+-- DATE_SUB subtracts 30 days from current date (NOW())
+-- Important: Without WHERE clause, this would delete ALL records in the table
+
+-- VIEW CREATION: Defines a virtual table based on a query
+-- Usage: Views are used for:
+--   1. Simplifying complex queries
+--   2. Restricting access to sensitive data
+--   3. Presenting data in specific ways without changing underlying tables
+CREATE VIEW active_customers AS                   -- Creates a view named 'active_customers'
+SELECT customer_id, name, email                   -- Selects these columns from underlying table
+FROM customers                                    -- Specifies source table
+WHERE is_active = 1;                              -- Only includes customers marked as active
+-- Key characteristics of views:
+-- 1. Doesn't store data physically (it's just a saved query)
+-- 2. Always shows current data from underlying tables
+-- 3. Can be queried like a regular table: SELECT * FROM active_customers
+-- 4. Some views can be updated (modifying underlying tables)
+
