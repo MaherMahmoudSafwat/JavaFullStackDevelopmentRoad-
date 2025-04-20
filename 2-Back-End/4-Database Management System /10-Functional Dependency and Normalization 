@@ -1,0 +1,157 @@
+Database Concepts Explained Simply (With Examples)
+1. Functional Dependency (FD)
+
+Definition:
+When the value of one attribute (column) determines the value of another attribute in the same table.
+Example:
+StudentID	Name	Age
+101	Alice	20
+102	Bob	22
+
+    StudentID → Name, Age
+
+        If you know StudentID, you can find Name and Age.
+
+    Name ↛ Age
+
+        Two students named "Alice" could have different ages → No FD.
+
+2. Normalization (Reducing Redundancy)
+Types of Normalization:
+1NF (First Normal Form)
+
+Rule:
+
+    Each column must have single, atomic values (no lists).
+
+    No repeating groups.
+
+Example (Bad):
+OrderID	Products
+1	Pen, Pencil, Eraser	(Violates 1NF)
+
+Fix (Good):
+OrderID	Product
+1	Pen
+1	Pencil
+2NF (Second Normal Form)
+
+Rule:
+
+    Must be in 1NF + no partial dependency (non-key columns depend on the entire primary key).
+
+Example (Bad):
+OrderID	ProductID	ProductName
+1	P001	Laptop
+
+    ProductName depends only on ProductID (not the full key OrderID+ProductID).
+
+Fix (Good):
+Orders Table:
+| OrderID | ProductID |
+
+Products Table:
+| ProductID | ProductName |
+3NF (Third Normal Form)
+
+Rule:
+
+    Must be in 2NF + no transitive dependency (non-key columns depend only on the primary key).
+
+Example (Bad):
+StudentID	College	CollegeLocation
+101	MIT	Boston
+
+    CollegeLocation depends on College (not directly on StudentID).
+
+Fix (Good):
+Students Table:
+| StudentID | College |
+
+Colleges Table:
+| College | CollegeLocation |
+BCNF (Boyce-Codd Normal Form)
+
+Rule:
+
+    Stricter than 3NF. Every determinant (X → Y) must be a candidate key.
+
+Example (Bad):
+Employee	Department	Manager
+Alice	HR	John
+
+    Department → Manager, but Department is not a candidate key.
+
+Fix (Good):
+Employees Table:
+| Employee | Department |
+
+Dept_Managers Table:
+| Department | Manager |
+Higher Normal Forms (4NF, 5NF, 6NF)
+
+    4NF (Fourth NF):
+
+        Removes multi-valued dependencies.
+
+        Example: A doctor with multiple specialties and languages.
+
+    5NF (Fifth NF):
+
+        Splits join dependencies (rarely used).
+
+    6NF:
+
+        Used in temporal databases (e.g., tracking historical data).
+
+Most databases stop at 3NF or BCNF.
+3. Keys in Databases
+SuperKey
+
+    Any set of columns that uniquely identifies a row.
+
+    Example:
+
+        For Students(StudentID, Name, Email), superkeys are:
+
+            {StudentID}
+
+            {StudentID, Name}
+
+            {Email} (if unique)
+
+Candidate Key
+
+    A minimal superkey (no extra columns).
+
+    Example:
+
+        {StudentID} and {Email} (if both are unique).
+
+Primary Key
+
+    The chosen candidate key for the table.
+
+    Example:
+
+        StudentID is the primary key.
+
+Summary Table
+Concept	Definition	Example
+Functional Dependency	X → Y means X determines Y	StudentID → Name
+1NF	No repeating groups	Split comma-separated lists
+2NF	No partial dependencies	Move ProductName to its table
+3NF	No transitive dependencies	Move CollegeLocation
+BCNF	Every determinant is a candidate key	Split Department → Manager
+SuperKey	Any unique identifier	{StudentID, Name}
+Candidate Key	Minimal superkey	{StudentID} or {Email}
+Primary Key	Selected candidate key	StudentID
+When to Normalize?
+
+    Normalize: For transactional databases (e.g., banking).
+
+    Denormalize: For analytics (e.g., data warehouses).
+
+
+
+
