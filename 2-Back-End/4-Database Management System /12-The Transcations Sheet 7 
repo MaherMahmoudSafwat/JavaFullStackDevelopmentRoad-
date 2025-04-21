@@ -1,0 +1,109 @@
+1-
+Deadlock Analysis in the Given Schedule
+
+We have three transactions (T1, T2, T3) accessing database items (A, B, C, D, E) with the following locking rules:
+
+    S Lock (Shared Lock) → For retrieve (read) operations.
+
+    X Lock (Exclusive Lock) → For update (write) operations.
+
+    Locks are held until the end of the transaction (no early release).
+
+Step 1: Track Lock Requests and Holdings
+
+We analyze the sequence of operations to see if a circular wait (deadlock) occurs.
+Time	Transaction	Operation	Lock Type	Locks Held (After Operation)	Blocking? (If Lock Conflict)
+t1	T1	retrieve A	S	T1: S(A)	No
+	T3	retrieve B	S	T3: S(B)	No
+	T2	retrieve C	S	T2: S(C)	No
+	T2	update C	X	T2: X(C) (upgrades S→X)	No (T2 already holds S(C))
+	T3	retrieve D	S	T3: S(B), S(D)	No
+	T2	retrieve D	S	T2: X(C), S(D)	No (S(D) allows concurrency)
+	T1	update E	X	T1: S(A), X(E)	No
+	T3	retrieve E	S	T3: S(B), S(D), S(E)	No (S(E) allowed with X(E)? Conflict! (S and X are incompatible if X is held first)
+	T1	retrieve C	S	T1: S(A), X(E), S(C) blocked	Yes! (T2 holds X(C))
+	T2	update D	X	T2: X(C), X(D) blocked	Yes! (T3 holds S(D))
+Step 2: Deadlock Detection
+
+At time tn, we have:
+
+    T1 is blocked waiting for S(C) (held by T2 in X mode).
+
+    T2 is blocked waiting for X(D) (held by T3 in S mode).
+
+    T3 is blocked waiting for S(E) (held by T1 in X mode).
+
+This forms a circular wait:
+
+    T1 → T2 → T3 → T1
+    Thus, a deadlock exists.
+
+Step 3: Overcoming the Deadlock
+Solution: Deadlock Prevention via Lock Timeout or Wait-Die/Wound-Wait
+
+    Lock Timeout:
+
+        Set a timeout for lock requests (e.g., 5 seconds).
+
+        If a transaction waits too long, it aborts and retries.
+
+        Example: T3 aborts after failing to acquire S(E).
+
+    Wait-Die Scheme:
+
+        Older transactions wait, younger ones die.
+
+        Example: If T1 is older than T2, T1 waits for T2; otherwise, T1 aborts.
+
+    Wound-Wait Scheme:
+
+        Older transactions force younger ones to abort.
+
+        Example: If T1 is older than T3, T1 "wounds" T3 (forces abort).
+
+Step 4: Applying Wait-Die (Assume T1 is oldest, T3 youngest)
+
+    T3 requests S(E) but T1 holds X(E):
+
+        Since T3 is younger, it dies (aborts).
+
+        T3 releases all locks (S(B), S(D)).
+
+    Now:
+
+        T2 can acquire X(D) (since T3 released S(D)).
+
+        T2 completes, releases X(C) and X(D).
+
+        T1 acquires S(C) and completes.
+
+        Finally, T3 restarts.
+
+Final Schedule After Deadlock Resolution
+Time	Transaction	Operation	Action
+tn	T3	retrieve E	Aborts (Wait-Die)
+	T2	update D	Proceeds (X(D) granted)
+	T2	Commits	Releases X(C), X(D)
+	T1	retrieve C	Proceeds (S(C) granted)
+	T1	Commits	Releases S(A), X(E)
+	T3	Restarts	Re-executes from retrieve B
+Outcome:
+
+    Deadlock resolved by aborting T3.
+
+    All transactions eventually complete without circular waiting.
+
+Key Takeaways
+
+    Deadlocks occur when transactions wait cyclically for locks.
+
+    Solutions include:
+
+        Timeouts (simple but may cause unnecessary aborts).
+
+        Wait-Die/Wound-Wait (prioritizes older transactions).
+
+    After resolution, the system proceeds normally with retries.
+
+This ensures database consistency while minimizing blocking. 🚀
+
