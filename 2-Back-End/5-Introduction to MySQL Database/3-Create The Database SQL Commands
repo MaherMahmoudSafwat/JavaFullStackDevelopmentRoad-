@@ -1,0 +1,64 @@
+What is a Database?
+
+A database is an organized collection of structured data stored electronically in a computer system. Databases allow for efficient storage, retrieval, updating, and management of information.
+Key Characteristics of Databases:
+
+    Structured storage: Data is organized in tables, documents, or other formats
+
+    Centralized management: Data can be accessed and managed through a database management system (DBMS)
+
+    Multi-user access: Allows concurrent access by multiple users/applications
+
+    Data integrity: Maintains accuracy and consistency of data
+
+    Security: Provides controlled access to authorized users
+
+    Query capabilities: Allows searching and filtering of data
+
+Common Types of Databases:
+
+    Relational Databases (SQL): Organize data in tables with rows and columns (e.g., MySQL, PostgreSQL, Oracle)
+
+    NoSQL Databases: Flexible schemas for unstructured data (e.g., MongoDB, Cassandra)
+
+    Graph Databases: Store data in nodes and relationships (e.g., Neo4j)
+
+    Time-Series Databases: Optimized for time-stamped data (e.g., InfluxDB)
+
+    In-Memory Databases: Store data in RAM for fast access (e.g., Redis)
+
+Database Management Systems (DBMS)
+
+Software that interacts with databases, applications, and users to capture and analyze data (e.g., MySQL, Microsoft SQL Server, Oracle Database)
+
+Databases are fundamental to most modern applications, from simple mobile apps to complex enterprise systems. 
+
+
+SQL Commands to create a Database;
+----------------------------------
+
+-- 1. Creates a new database named 'Products'
+-- Will throw an error if 'Products' already exists
+CREATE DATABASE Products;
+
+-- 2. Creates a database named 'Company' only if it doesn't exist
+-- Prevents errors if database already exists
+CREATE DATABASE IF NOT EXISTS Company;
+
+-- 3. Sets 'Products' as the active database for subsequent operations
+-- All following commands will affect this database
+USE Products;
+
+-- 4. Lists all tables in the currently selected database
+-- Returns empty result if no tables exist
+SHOW TABLES;
+
+-- 5. Modifies the 'Products' database to use UTF-8 character encoding
+-- utf8_general_ci provides case-insensitive sorting
+ALTER DATABASE Products CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+-- 6. Permanently deletes the 'Products' database and ALL its contents
+-- WARNING: This action cannot be undone!
+DROP DATABASE Products;
+
+
