@@ -1,0 +1,42 @@
+-- 1. Adds a new Boolean column 'IsProductsAvailable' to the 'Products' table.
+--    The column is set as NOT NULL, meaning it cannot contain NULL values.
+ALTER TABLE Products 
+ADD COLUMN IsProductsAvailable BOOLEAN NOT NULL;
+
+-- 2. Modifies the 'ProductName' column to be a VARCHAR(30) that allows NULL values
+--    and enforces uniqueness (no duplicate names allowed).
+ALTER TABLE Products 
+MODIFY ProductName VARCHAR(30) NULL UNIQUE;
+
+-- 3. Renames the 'ProductDescription' column to 'TheDescriptionOfTheProduct',
+--    changes its data type to VARCHAR(100), and sets a default value of 'Product'.
+ALTER TABLE Products 
+CHANGE COLUMN ProductDescription TheDescriptionOfTheProduct VARCHAR(100) DEFAULT 'Product';
+
+-- 4. Adds a new TEXT column 'ProductProperties' after 'TheDescriptionOfTheProduct'.
+ALTER TABLE Products 
+ADD COLUMN ProductProperties TEXT AFTER TheDescriptionOfTheProduct;
+
+-- 5. Creates a new table 'X' with the same structure as 'Products' (copies column definitions but no data).
+CREATE TABLE X LIKE Products;
+
+-- 6. Deletes all data from the 'Products' table but keeps its structure intact.
+TRUNCATE TABLE Products;
+
+-- 7. Renames the 'Products' table to 'ProductsXYZ'.
+RENAME TABLE Products TO ProductsXYZ;
+
+-- 8. Deletes the temporary table 'X' (created in step 5).
+DROP TABLE X;
+
+-- 9. Removes the 'ProductProperties' column from the 'ProductsXYZ' table.
+ALTER TABLE ProductsXYZ 
+DROP COLUMN ProductProperties;
+
+-- 10. Re-adds the 'ProductProperties' column as VARCHAR(255) (replacing the previous TEXT type).
+ALTER TABLE ProductsXYZ 
+ADD COLUMN ProductProperties VARCHAR(255);
+
+
+
+

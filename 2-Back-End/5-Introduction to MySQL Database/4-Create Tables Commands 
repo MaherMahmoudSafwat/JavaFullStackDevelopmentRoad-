@@ -1,0 +1,94 @@
+-- Create Employees table to store employee information
+CREATE TABLE Employees (
+    -- Employee's name (increased length from 15 to 50 for full names)
+    Name VARCHAR(50),
+    
+    -- Employee's address (increased length from 15 to 100 for complete addresses)
+    Address VARCHAR(100),
+    
+    -- Phone number (changed from SMALLINT to VARCHAR to properly store phone formats)
+    -- SMALLINT would be inappropriate for phone numbers as it can't store formatting
+    PhoneNumber VARCHAR(15),
+    
+    -- Employee salary (changed from FLOAT to DECIMAL for precise monetary values)
+    -- DECIMAL(10,2) allows for 10 digits with 2 decimal places (e.g., 9999999.99)
+    Salary DECIMAL(10,2),
+    
+    -- Timestamp of when employee record was created
+    -- Added DEFAULT to automatically set creation time
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Employee's date of birth
+    DateOfBirth DATE
+);
+
+-- Display the structure of Employees table
+DESCRIBE Employees;
+
+--To know what is the current database you are working at it right now.
+SELECT DATABASE();
+-- Create Projects table to store project information
+CREATE TABLE Projects (
+    -- Unique identifier for each project (auto-incremented integer)
+    -- INT(23) changed to INT since display width (23) is deprecated in MySQL 8+
+    ProjectID INT PRIMARY KEY AUTO_INCREMENT,
+    
+    -- Name of the project (must be unique and cannot be null)
+    -- Increased length from 10 to 100 to accommodate longer project names
+    ProjectName VARCHAR(100) UNIQUE NOT NULL,
+    
+    -- Boolean flag indicating if project is assigned to employees
+    -- BOOLEAN is an alias for TINYINT(1) in MySQL
+    IsProjectAssignedToEmployees BOOLEAN,
+    
+    -- Boolean flag indicating if project is completed
+    -- BOOL is identical to BOOLEAN in MySQL
+    IsProjectFinished BOOL,
+    
+    -- Timestamp of when project was created
+    -- Added DEFAULT to automatically set creation time
+    dateOfProjectCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Binary data for project images/logos (removed UNIQUE as BLOBs can't be uniquely indexed)
+    -- Changed to LONGBLOB to support larger files (up to 4GB)
+    ProjectsImagesAndLogos LONGBLOB NOT NULL,
+    
+    -- Project classification with predefined values (added NOT NULL constraint)
+    ProjectType ENUM('A','B','C') NOT NULL,
+    
+    -- Set of possible colors associated with project
+    TheProjectsColors SET('RED','GREEN','BLUE'),
+    
+    -- Mandatory end date for the project
+    DateOfTheEndOfTheProject DATETIME NOT NULL
+);
+
+-- Display the structure of Projects table
+DESCRIBE Projects;
+-- List all tables in the current database
+SHOW TABLES;
+
+-- Display detailed information about all tables
+SHOW TABLE STATUS;
+
+-- Create Products table to store product information
+CREATE TABLE Products (
+    -- Unique identifier for each product (auto-incremented integer)
+    -- Changed INT(17) to INT since display width is deprecated in MySQL 8+
+    -- AUTO_INCREMENT automatically generates sequential numbers
+    ProductID INT PRIMARY KEY AUTO_INCREMENT,
+    
+    -- Name of the product (must be unique and cannot be null)
+    -- Increased length from 15 to 100 to accommodate longer product names
+    -- UNIQUE constraint ensures no duplicate product names
+    ProductName VARCHAR(100) UNIQUE NOT NULL,
+    
+    -- Detailed description of the product
+    -- TEXT type allows for long descriptions (up to 65,535 characters)
+    -- NOT NULL constraint ensures every product must have a description
+    ProductDescription TEXT NOT NULL
+);
+
+-- Display the structure of the Products table
+DESCRIBE Products;
+
