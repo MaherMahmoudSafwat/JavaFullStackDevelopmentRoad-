@@ -1,0 +1,64 @@
+-- 1. First, create the Customer table (parent table)
+-- Note: AUTO_INCREMENT only works with PRIMARY KEY in MySQL
+CREATE TABLE Customer (
+    CustomerID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    CustomerFirstName VARCHAR(15) NOT NULL,
+    CustomerLastName VARCHAR(15),
+    Address VARCHAR(30) NOT NULL,
+    Email VARCHAR(30) UNIQUE,  -- UNIQUE ensures no duplicate emails
+    Gender ENUM('Male','Female')  -- Only allows these two values
+);
+
+-- 2. Create Product table with foreign key to Customer
+-- Note: INT(39) is unnecessary - INT is sufficient
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY,
+    CustomerID INT,
+    ProductName VARCHAR(30),
+    -- Foreign key with ON DELETE CASCADE (if customer is deleted, their products are too)
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID) ON DELETE CASCADE
+);
+
+-- 3. Create Orders table (using backticks because Order is a reserved word)
+-- Better to name it Orders (plural) to avoid reserved word issues
+CREATE TABLE `Order` (
+    OrderID INT PRIMARY KEY,
+    ProductID INT,
+    OrderName VARCHAR(30) NOT NULL,
+    NumberOfOrders DECIMAL(7,3),
+    -- Named foreign key constraint (good practice)
+    CONSTRAINT fk_order_product FOREIGN KEY (ProductID) 
+    REFERENCES Product(ProductID) ON DELETE RESTRICT  -- Prevents deleting products with orders
+);
+
+-- 4. Alternative Orders table with proper naming (recommended)
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    ProductID INT,
+    OrderName VARCHAR(30) NOT NULL,
+    NumberOfOrders DECIMAL(7,3),
+    CONSTRAINT fk_orders_product FOREIGN KEY (ProductID) 
+    REFERENCES Product(ProductID) ON DELETE RESTRICT
+);
+
+-- 5. To drop a foreign key (first need to know its name)
+-- Run this if you don't know the constraint name:
+-- SHOW CREATE TABLE Orders;
+
+-- Then drop it (replace 'fk_orders_product' with actual name):
+ALTER TABLE Orders DROP FOREIGN KEY fk_orders_product;
+
+-- Important Notes:
+-- 1. Always create parent tables first (Customer before Product)
+-- 2. Foreign key columns must match data types exactly
+-- 3. ON DELETE options:
+--    - CASCADE: Delete child records when parent is deleted
+--    - RESTRICT: Prevent parent deletion if children exist (default)
+--    - SET NULL: Set foreign key to NULL (column must allow NULL)
+-- 4. MySQL requires InnoDB engine for foreign keys (default in modern MySQL)
+
+
+
+
+
+
