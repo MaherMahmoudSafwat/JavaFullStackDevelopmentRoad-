@@ -1,0 +1,48 @@
+-- 1. CREATE TABLE: Creates the Employees table with specified columns and constraints
+CREATE TABLE Employees (
+    EmployeeID INTEGER PRIMARY KEY AUTO_INCREMENT,  -- Unique ID that auto-increments
+    FirsName VARCHAR(30) NOT NULL,                -- First name (with typo, will fix later)
+    LastName VARCHAR(30),                         -- Optional last name
+    Email VARCHAR(30) NOT NULL UNIQUE,            -- Email must be unique and not null
+    Age INT NOT NULL,                             -- Age cannot be null
+    Salary DECIMAL(9,2) NOT NULL,                 -- Salary with 9 total digits (7 before, 2 after decimal)
+    Address VARCHAR(15) NOT NULL                  -- Address limited to 15 characters
+);
+
+-- 2. ADD CONSTRAINT: Adds check constraint to ensure valid age and minimum salary
+ALTER TABLE Employees 
+ADD CONSTRAINT Checker CHECK (AGE >= 18 AND Salary > 5000.00);  -- Employees must be adults with salary > 5000
+
+-- 3. ADD INDEX: Creates an index on Salary column for faster queries
+ALTER TABLE Employees 
+ADD INDEX Salary;  -- Improves performance for salary-based searches
+
+-- 4. CHANGE COLUMN: Fixes the typo in column name from FirsName to FirstName
+ALTER TABLE Employees 
+CHANGE COLUMN FirsName FirstName VARCHAR(30) NOT NULL;  -- Renames column while keeping same data type
+
+-- 5. INSERT: Adds a new employee record
+INSERT INTO Employees (FirstName, LastName, Email, Age, Salary, Address) 
+VALUES ('Ahmed', 'Tawfik', 'Ahmed123@gmail.com', 19, 50000.00, 'Faisal');  -- Adds employee Ahmed
+
+-- 6. SELECT with LIMIT/OFFSET: Gets employees with pagination (skips first 3, shows next 3)
+SELECT * FROM Employees 
+LIMIT 3 OFFSET 3;  -- Pagination: skip 3 rows, return next 3 rows
+
+-- 7. SELECT with ORDER BY: Gets all employees sorted by first name
+SELECT * FROM Employees 
+ORDER BY FirstName;  -- Alphabetical order by first name
+
+-- 8. UPDATE: Modifies an existing employee's details
+UPDATE Employees 
+SET Age = 25, Salary = 75000.00, Address = 'El-Dokki' 
+WHERE EmployeeID = 1;  -- Updates only employee with ID=1
+
+-- 9. DELETE: Removes employees with high salaries
+DELETE FROM Employees 
+WHERE Salary > 50000.00;  -- Deletes all employees earning more than 50,000
+
+
+
+
+
