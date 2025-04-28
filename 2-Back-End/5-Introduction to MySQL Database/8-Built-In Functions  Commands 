@@ -1,0 +1,52 @@
+-- 1. Select ALL columns from 'large_dataset' and sort results by 'customer_name' in ascending order (A-Z)
+SELECT * FROM large_dataset ORDER BY customer_name;
+
+-- 2. Select only the 'email' column for records where 'age' is greater than 25
+SELECT email FROM large_dataset WHERE age > 25;
+
+-- 3. Select 'email' for records where 'age' is between 26 and 39 (exclusive)
+SELECT email FROM large_dataset WHERE age > 25 AND age < 40;
+
+-- 4. Select 'email' for records where 'age' is between 25 and 43 (inclusive)
+SELECT email FROM large_dataset WHERE age BETWEEN 25 AND 43;
+
+-- 5. Select ALL columns for records where 'customer_name' contains the substring 'alk' (anywhere in the name)
+SELECT * FROM large_dataset WHERE customer_name LIKE '%alk%';
+
+-- 6. Select ALL columns for records where the 'notes' column is NULL (empty/no value)
+SELECT * FROM large_dataset WHERE notes IS NULL;
+
+-- 7. Select ALL columns for records where the 'notes' column is NOT NULL (has a value)
+SELECT * FROM large_dataset WHERE notes IS NOT NULL;
+
+-- 8. Select ALL columns for records where 'purchase_count' is exactly 9
+SELECT * FROM large_dataset WHERE purchase_count IN (9);
+
+-- 9. Calculate the character length of the string 'Ahmed' (returns 5)
+SELECT CHAR_LENGTH('Ahmed');
+
+-- 10. Get the ASCII value of the FIRST character in the string 'Ahmed' (returns 65 for 'A')
+SELECT ASCII('Ahmed');
+
+-- 11. [ERROR - FIXED] Get the ASCII value of the first character in 'email' for records where 'age' > 30
+SELECT ASCII(email) FROM large_dataset WHERE age > 30;
+
+-- 12. Concatenate 'customer_name' and 'email' with a comma separator (using CONCAT_WS for proper formatting)
+SELECT CONCAT_WS(', ', customer_name, email) FROM large_dataset;
+
+-- 13. Concatenate 'customer_name' and 'email' with a comma (no automatic space handling)
+SELECT CONCAT(customer_name, ',', email) FROM large_dataset;
+
+-- 14. Extract the first 5 characters from the 'email' column for all records
+SELECT SUBSTRING(email, 1, 5) FROM large_dataset;
+
+-- 15. Replace ALL occurrences of 'a' with 'axbt' in the 'email' column
+SELECT REPLACE(email, 'a', 'axbt') FROM large_dataset;
+
+-- 16. Convert all characters in the 'email' column to UPPERCASE
+SELECT UPPER(email) FROM large_dataset;
+
+
+
+
+
