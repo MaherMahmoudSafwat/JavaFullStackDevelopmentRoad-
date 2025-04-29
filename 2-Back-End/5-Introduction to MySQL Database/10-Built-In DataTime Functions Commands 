@@ -1,1 +1,36 @@
+/* DATE AND TIME FUNCTIONS IN MySQL */
+
+-- Current Date & Time Functions
+SELECT NOW();                          -- Returns current datetime in 'YYYY-MM-DD HH:MM:SS' format
+SELECT CURRENT_TIMESTAMP();            -- Same as NOW(), returns current timestamp
+SELECT CURTIME();                      -- Returns current time in 'HH:MM:SS' format
+
+-- Day/Date Analysis Functions
+SELECT DAYNAME(NOW());                 -- Returns name of current day (e.g., 'Wednesday')
+SELECT DAYNAME("2025-05-02");         -- Returns day name for specific date (e.g., 'Friday')
+SELECT DAYOFWEEK(NOW());               -- Returns weekday number (1=Sunday,...,7=Saturday)
+SELECT DAYOFYEAR(NOW());               -- Returns day of year (1-366)
+SELECT HOUR(NOW());                    -- Returns current hour (0-23)
+
+-- Time Difference Calculations
+SELECT TIMEDIFF("2025-4-29 05:30", "2025-5-2 05:30");  -- Returns '-72:00:00' (3 days difference)
+SELECT TIMEDIFF("2025-4-29 05:30", "2025-4-2 05:30");  -- Returns '648:00:00' (27 days difference)
+
+-- Week and Date Extraction
+SELECT WEEK("2017-6-15");             -- Returns week number of year (1-53) for given date
+SELECT DATE(NOW());                    -- Extracts date part from current datetime
+
+-- Date Arithmetic Operations
+SELECT DATE_ADD("2025-4-29", INTERVAL 3 DAY);    -- Adds 3 days → '2025-5-02'
+SELECT DATE_ADD("2025-4-29", INTERVAL 3 MONTH);  -- Adds 3 months → '2025-7-29'
+SELECT DATE_ADD(DATE_ADD("2025-4-29", INTERVAL 3 YEAR), INTERVAL 4 DAY);  -- Adds 3 years + 4 days → '2028-5-03'
+
+-- Special Cases and Conversions
+SELECT SEC_TO_TIME(72234239);         -- Converts seconds to 'HH:MM:SS' format → '20065:03:59'
+SELECT DATE_ADD("2025-49-29", INTERVAL 3 YEAR);  -- ❌ Invalid (month must be 1-12) - will error
+
+SELECT TIMEDIFF("05:30","03:57");                      -- Returns '01:33:00' (1 hour 33 mins difference)
+
+
+
 
