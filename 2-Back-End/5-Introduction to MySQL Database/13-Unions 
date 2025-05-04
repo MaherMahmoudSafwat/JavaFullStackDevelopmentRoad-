@@ -1,0 +1,28 @@
+-- 1. UNION (combines and removes duplicates)
+SELECT account_balance FROM large_dataset  -- Selects balance column from first table
+UNION                                      -- Combines results and removes duplicate rows
+SELECT ID FROM Employees;                  -- Selects ID column from second table
+
+-- 2. UNION ALL (combines and keeps duplicates)
+SELECT id FROM large_dataset  -- Selects id column from first table
+UNION ALL                    -- Combines results without removing duplicates
+SELECT ID FROM Employees;    -- Selects ID column from second table
+
+-- 3. INTERSECT (returns only common values - emulated in MySQL)
+
+SELECT id FROM large_dataset INTERSECT SELECT ID FROM Employees;
+
+SELECT id FROM large_dataset  -- Selects from first table
+WHERE id IN (                -- Filters for values that exist in both tables
+    SELECT ID FROM Employees -- Subquery checks second table
+);
+
+-- 4. EXCEPT (returns only values in first table - emulated in MySQL)
+SELECT id FROM large_dataset  -- Selects from first table
+WHERE id NOT IN (            -- Filters for values not present in second table
+    SELECT ID FROM Employees -- Subquery checks second table
+);
+
+
+
+

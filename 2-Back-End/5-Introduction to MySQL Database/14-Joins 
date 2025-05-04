@@ -1,0 +1,44 @@
+-- 1. INNER JOIN with tables reversed
+-- Same result as above, just table order changed
+SELECT Orders.ORDERID, Customer.CustomerName  
+FROM Customer 
+INNER JOIN Orders ON Orders.CustomerID = Customer.CustomerID;
+
+-- 2. LEFT JOIN (all customers, with orders if they exist)
+-- Returns ALL customers plus any matching orders
+-- Customers without orders will show NULL for order fields
+SELECT Orders.ORDERID, Customer.CustomerName  
+FROM Customer 
+LEFT JOIN Orders ON Orders.CustomerID = Customer.CustomerID;
+
+-- 3. RIGHT JOIN (all orders, with customer info if available)
+-- Returns ALL orders plus customer data if customer exists
+-- Orders without customers will show NULL for customer fields
+SELECT Orders.ORDERID, Customer.CustomerName  
+FROM Customer 
+RIGHT JOIN Orders ON Orders.CustomerID = Customer.CustomerID;
+
+-- 4. CROSS JOIN with ON clause (incorrect usage)
+-- CROSS JOIN creates cartesian product, ON clause is ignored
+-- This is syntactically wrong - don't use ON with CROSS JOIN
+SELECT Orders.ORDERID, Customer.CustomerName  
+FROM Customer 
+CROSS JOIN Orders ON Orders.CustomerID = Customer.CustomerID;
+
+-- 5. Proper CROSS JOIN (cartesian product)
+-- Combines EVERY customer with EVERY order
+-- Results in (customer count × order count) rows
+SELECT Orders.ORDERID, Customer.CustomerName  
+FROM Customer 
+CROSS JOIN Orders;
+
+-- 6. SELF JOIN to find customers from same country
+-- Joins Customer table to itself to find country matches
+SELECT a.CustomerName AS Customer1,     
+       b.CustomerName AS Customer2,     
+       a.CustomerCountry 
+FROM Customer a   -- First instance (alias 'a')
+JOIN Customer b   -- Second instance (alias 'b')
+ON a.CustomerCountry = b.CustomerCountry   
+WHERE a.CustomerID < b.CustomerID  -- Prevents duplicate pairs
+ORDER BY a.CustomerCountry;

@@ -1,0 +1,73 @@
+-- 1. Finds the minimum account balance in the entire dataset
+-- Useful for identifying the customer with the lowest balance
+SELECT MIN(account_balance) FROM large_dataset;
+
+-- 2. Finds the maximum account balance in the entire dataset
+-- Useful for identifying the customer with the highest balance
+SELECT MAX(account_balance) FROM large_dataset;
+
+-- 3. Finds maximum balance for customers with ID greater than 5
+-- Helps analyze high-value customers above a certain ID threshold
+SELECT MAX(account_balance) FROM large_dataset WHERE id > 5;
+
+-- 4. Finds maximum balance for customers with ID greater than 10
+-- More restrictive version of the previous query
+SELECT MAX(account_balance) FROM large_dataset WHERE id > 10;
+
+-- 5. Finds maximum balance for customers with ID greater than 13
+-- Further narrows down the customer segment
+SELECT MAX(account_balance) FROM large_dataset WHERE id > 13;
+
+-- 6. Finds maximum balance for customers with ID greater than 17
+-- Most restrictive ID filter in this series
+SELECT MAX(account_balance) FROM large_dataset WHERE id > 17;
+
+-- 7. Counts all non-NULL values in the notes column
+-- Shows how many records have actual notes entered
+SELECT COUNT(notes) FROM large_dataset;
+
+-- 8. Attempts to count NULL notes (but has incorrect syntax)
+-- Note: COUNT(column) only counts non-null values, so this will always return 0
+SELECT COUNT(notes) FROM large_dataset WHERE notes is NULL;
+
+-- 9. Incorrect query (has typo "ELECT" and wrong NULL comparison)
+-- = NULL is invalid in SQL (should use IS NULL)
+ELECT COUNT(notes) FROM large_dataset WHERE notes = NULL;
+
+-- 10. Counts rows where notes equals NULL (syntax error)
+-- = NULL doesn't work in SQL - will return empty result
+SELECT COUNT(*) FROM large_dataset WHERE notes = NULL;
+
+-- 11. Correct way to count NULL notes
+-- COUNT(*) counts all rows where notes IS NULL
+SELECT COUNT(*) FROM large_dataset WHERE notes is NULL;
+
+-- 12. Sums all non-NULL values in the notes column
+-- Only meaningful if notes contains numerical data
+SELECT SUM(notes) FROM large_dataset;
+
+-- 13. Calculates total sum of all account balances
+-- Important for financial reporting and analysis
+SELECT SUM(account_balance) FROM large_dataset;
+
+-- 14. Calculates average account balance
+-- Provides insight into typical customer balance
+SELECT AVG(account_balance) FROM large_dataset;
+
+-- 15. Counts customers grouped by their active status
+-- Shows how many customers are active/inactive
+SELECT Count(customer_name), is_active 
+FROM large_dataset 
+GROUP BY is_active;
+
+-- 16. Counts customers by active status, filtering for groups with >5 members
+-- Identifies significant customer segments
+SELECT Count(customer_name), is_active 
+FROM large_dataset 
+GROUP BY is_active 
+HAVING COUNT(id) > 5;
+
+
+
+
+
