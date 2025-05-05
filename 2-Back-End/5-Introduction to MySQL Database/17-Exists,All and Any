@@ -1,0 +1,46 @@
+-- Query 1: Returns ALL customer countries IF customer ID 7 exists
+-- EXISTS returns TRUE if the subquery returns any rows
+-- Note: This returns ALL countries if ID 7 exists, none otherwise (probably not what you want)
+SELECT CustomerCountry 
+FROM Customer 
+WHERE EXISTS (
+    -- Subquery checks for existence of customer with ID 7
+    -- SELECT 1 is used because we only care about existence, not values
+    SELECT 1 
+    FROM Customer 
+    WHERE CustomerID = 7
+);
+
+-- Query 2: Returns ALL customer countries IF customer ID 7 DOES NOT exist
+-- NOT EXISTS returns TRUE only when the subquery returns no rows
+SELECT CustomerCountry 
+FROM Customer 
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM Customer 
+    WHERE CustomerID = 7
+);
+
+-- Query 3: Returns ALL order IDs where the ID equals EVERY order ID > 109
+-- = ALL only makes sense when the subquery returns 0 or 1 rows
+-- If subquery is empty (no orders > 109), returns ALL orders (because the condition is vacuously true)
+-- If subquery has multiple rows, would return nothing (impossible to equal multiple values)
+SELECT OrderID  
+FROM Orders  
+WHERE OrderID = ALL (     
+    SELECT OrderID      
+    FROM Orders      
+    WHERE OrderID > 109 
+);
+
+-- Query 4: THIS QUERY HAS A TYPO ("ANYU" should be "ANY")
+-- Corrected version would return orders where ID matches ANY order ID > 109
+-- Equivalent to: WHERE OrderID IN (SELECT OrderID FROM Orders WHERE OrderID > 109)
+SELECT OrderID  
+FROM Orders  
+WHERE OrderID = ANY (     
+    SELECT OrderID      
+    FROM Orders      
+    WHERE OrderID > 109 
+);
+

@@ -1,0 +1,33 @@
+/*
+ * This query retrieves order information from the Orders table
+ * and adds a descriptive label based on the OrderID value
+ */
+SELECT 
+    -- Selects the original order name column
+    ORDERNAME,
+    
+    /* 
+     * Creates a new calculated column called OrderDescription
+     * that provides different text based on OrderID value:
+     */
+    CASE 
+        -- When OrderID equals exactly 101:
+        WHEN ORDERID = 101 THEN 'IT''S 101'  -- Note: Two single quotes escape the apostrophe
+        
+        -- When OrderID equals exactly 107:
+        WHEN ORDERID = 107 THEN 'IT IS 107'
+        
+        -- For all other OrderID values not matching above cases:
+        ELSE 'IT IS ANOTHER VALUE' 
+    END AS OrderDescription  -- Names the new column "OrderDescription"
+    
+-- Specifies the source table for the data
+FROM 
+    Orders; 
+
+
+
+
+
+
+

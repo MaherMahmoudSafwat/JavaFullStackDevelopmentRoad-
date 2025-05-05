@@ -1,0 +1,44 @@
+-- =============================================
+-- VIEW CREATION: 'Viewer'
+-- =============================================
+
+/*
+WHAT THIS DOES:
+Creates a virtual table (view) named 'Viewer' that contains data from the 'Orders' table
+based on the specified selection criteria.
+
+KEY POINTS:
+1. A view doesn't store data physically - it's a saved query that runs whenever accessed
+2. The view will always show CURRENT data from the underlying 'Orders' table
+3. Views are useful for:
+   - Simplifying complex queries
+   - Restricting access to certain columns
+   - Providing consistent business logic
+*/
+CREATE VIEW Viewer AS 
+-- SELECT statement defines what data the view will show
+SELECT ORDERNAME  -- Only includes the ORDERNAME column from the source table
+FROM Orders       -- Specifies the source table
+WHERE ORDERID >= 103;  -- Filter: only includes rows where ORDERID is 103 or higher
+
+-- =============================================
+-- VIEW DELETION: 'Viewer'
+-- =============================================
+
+/*
+WHAT THIS DOES:
+Permanently removes the 'Viewer' view from the database.
+
+IMPORTANT NOTES:
+1. This only removes the view definition, NOT the underlying data in the 'Orders' table
+2. Any permissions specific to this view will also be dropped
+3. After dropping, you'll need to recreate the view to use it again
+4. No warning is given if the view doesn't exist (use IF EXISTS to prevent errors)
+*/
+DROP VIEW Viewer;  -- Basic drop command
+
+-- SAFER ALTERNATIVE (checks if view exists first):
+-- DROP VIEW IF EXISTS Viewer;
+
+
+
