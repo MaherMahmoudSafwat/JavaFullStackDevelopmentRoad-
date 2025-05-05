@@ -1,0 +1,22 @@
+-- Turn off automatic committing of each individual statement
+-- Now we must explicitly COMMIT or ROLLBACK our transactions
+SET AUTOCOMMIT = 0;  -- Same as SET AUTOCOMMIT = OFF
+
+-- Start a new transaction (optional when AUTOCOMMIT=0, but good practice)
+BEGIN;
+
+-- Example: Transfer $100 from account 1 to account 2
+UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;
+
+-- Verify the results before finalizing
+SELECT * FROM accounts WHERE account_id IN (1, 2);
+
+-- If everything looks correct, make the changes permanent
+COMMIT;  -- Saves all changes in this transaction to the database
+
+-- Alternatively, if there was an error:
+-- ROLLBACK;  -- Would undo all changes in this transaction
+
+
+

@@ -1,0 +1,41 @@
+/*
+ * FOREIGN KEY CONSTRAINT EXAMPLES
+ * All variations for the Orders->Customer relationship
+ * Note: CustomerID column must allow NULL for SET NULL operations
+ */
+
+-- 1. STRONG RELATIONSHIP: Child records deleted when parent is deleted
+-- Use when orders shouldn't exist without a customer
+ALTER TABLE Orders 
+ADD CONSTRAINT FK_CASCADE 
+FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID) 
+ON DELETE CASCADE;  -- Deletes orders when customer is deleted
+-- ON UPDATE defaults to RESTRICT (prevents customer ID changes)
+
+-- 2. SEMI-FLEXIBLE RELATIONSHIP: Preserves orders but maintains ID sync
+-- Use when orders should persist but keep updated customer IDs
+ALTER TABLE Orders 
+ADD CONSTRAINT FK_SETNULL_CASCADE 
+FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID) 
+ON DELETE SET NULL   -- Keeps orders but nullifies customer reference
+ON UPDATE CASCADE;   -- Updates order's CustomerID if customer's ID changes
+
+-- 3. FLEXIBLE RELATIONSHIP: Decouples on both delete and update
+-- Use when orders should persist independently of customer changes
+ALTER TABLE Orders 
+ADD CONSTRAINT FK_SETNULL_BOTH 
+FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID) 
+ON DELETE SET NULL   -- Keeps orders but nullifies on customer deletion
+ON UPDATE SET NULL;  -- Nullifies reference if customer ID changes
+
+/*
+ * EXECUTION NOTES:
+ * 1. Run these separately (only one can be active at a time)
+ * 2. Drop previous constraint first if modifying:
+ *    ALTER TABLE Orders DROP FOREIGN KEY FK_CASCADE;
+ * 3. Verify column allows NULL before SET NULL operations:
+ *    ALTER TABLE Orders MODIFY CustomerID INT NULL;
+ */
+
+
+
