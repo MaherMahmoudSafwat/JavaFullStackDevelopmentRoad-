@@ -1,0 +1,32 @@
+-- Create a new MySQL user named 'Ahmed' with password '1234567'
+-- Note: In production, always use stronger passwords
+CREATE USER 'Ahmed'@'%' IDENTIFIED BY '1234567';
+
+-- Grant SELECT (read-only) privileges on the 'Customer' table to Ahmed
+-- This allows Ahmed to view data but not modify it
+GRANT SELECT ON database_name.Customer TO 'Ahmed'@'%';
+
+-- Display the current MySQL user you're connected as
+-- Helpful for verifying which account is active
+SELECT USER();
+
+-- Grant ALL privileges (SELECT, INSERT, UPDATE, DELETE, etc.) on the Customer table
+-- to both Ahmed and Samira users
+-- WARNING: ALL gives complete control - use sparingly
+GRANT ALL ON database_name.Customer TO 'Ahmed'@'%', 'Samira'@'%';
+
+-- Attempt to revoke UPDATE privilege on 'Custmer' (typo - should be 'Customer')
+-- This fails because: 1) table name is wrong, 2) privilege might not exist separately
+-- Correct version would be: REVOKE UPDATE ON database_name.Customer FROM 'Ahmed'@'%';
+REVOKE UPDATE ON database_name.Custmer FROM 'Ahmed'@'%';
+
+-- Revoke ALL privileges on Customer table from Ahmed
+-- This completely removes Ahmed's access to the Customer table
+REVOKE ALL ON database_name.Customer FROM 'Ahmed'@'%';
+
+
+
+
+
+
+

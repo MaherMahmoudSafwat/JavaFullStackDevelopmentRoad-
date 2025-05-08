@@ -1,0 +1,74 @@
+CREATE DATABASE SmartProductInventorySystem 
+CHARACTER SET = UTF8 
+COLLATE = UTF8_GENERAL_CI;
+
+CREATE TABLE Product
+(
+    ProductID INT(15) PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(35) NOT NULL,
+    Description TEXT(379),
+    CostPrice DECIMAL(7,3) NOT NULL,
+    SellingPrice INT(5) NOT NULL,
+    CurrentStock INT(5) NOT NULL
+);
+
+CREATE TABLE Product_BarCode
+(
+    ProductID INT(15),
+    BarCode INT(15),
+    CONSTRAINT FK_KEY FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE Product_Category
+(
+    ProductID INT(15),
+    Category VARCHAR(15),
+    CONSTRAINT FK_KEY_Category FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE Supplier
+(
+    SupplierID INT(25) PRIMARY KEY AUTO_INCREMENT,
+    DeliveryTime DATETIME NOT NULL,
+    PriceChargement FLOAT(10,5) NOT NULL
+);
+
+CREATE TABLE Supplier_Phone
+(
+    SupplierID INT(25),
+    Phone INT(13),
+    CONSTRAINT FK_KEY_SupplierPhone FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID)
+    ON DELETE RESTRICT 
+    ON UPDATE SET NULL
+);
+
+CREATE TABLE Provides
+(
+    ProductID INT(15),
+    SupplierID INT(25),
+    CONSTRAINT FK_KEY_ProvidesProductID FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT FK_KEY_ProvidesSupplierID FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT
+);
+
+CREATE TABLE Sales
+(
+    ProductID INT(15),
+    DateSales DATETIME NOT NULL,
+    Sold FLOAT(5,1) NOT NULL,
+    PriceChargement DOUBLE(7,5) NOT NULL,
+    CONSTRAINT FK_KEY_Sales FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE INDEX Index_Product ON Product(ProductID,Name,CostPrice,SellingPrice,CurrentStock);
+CREATE INDEX Index_Supplier ON Supplier(SupplierID);
+CREATE INDEX Index_Sales ON Sales(Sold);

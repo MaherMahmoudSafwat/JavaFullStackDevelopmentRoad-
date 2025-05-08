@@ -1,0 +1,13 @@
+Product(ProductID,Name,Description,CostPrice,SellingPrice,CurrentStock)
+
+Product_BarCode(ProductID,BarCode)
+
+Product_Category(ProductID,Category)
+
+Supplier(SupplierID,DeliveryTime,PriceChargement)
+
+Supplier_Phone(SupplierID,Phone)
+
+Provides(ProductID,SupplierID)
+
+Sales(ProductID,Date,Sold,PriceChargement)

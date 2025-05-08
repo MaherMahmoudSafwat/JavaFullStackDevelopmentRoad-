@@ -1,0 +1,36 @@
+
+SELECT SUM(SellingPrice)
+FROM Product 
+WHERE NOT Description IS NULL;
+
+---------------------------------------
+
+SELECT P.Name , B.BarCode 
+FROM Product P
+INNER JOIN Product_BarCode B
+ON P.ProductID = B.ProductID;
+
+
+---------------------------------------
+
+SELECT PriceChargement
+FROM Sales
+GROUP BY Sold
+HAVING SUM(PriceChargement) > 25;
+
+---------------------------------------
+
+SELECT DeliveryTime
+FROM Supplier
+WHERE SupplierID IN (1,3);
+
+---------------------------------------
+
+SELECT Phone
+FROM Supplier_Phone
+WHERE 
+Phone LIKE '1___3%' 
+AND 
+SupplierID > 1;
+
+
