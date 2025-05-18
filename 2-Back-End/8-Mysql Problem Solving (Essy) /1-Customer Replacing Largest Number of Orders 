@@ -1,0 +1,18 @@
+//First Solution
+
+SELECT customer_number
+FROM Orders
+GROUP BY customer_number
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+//Another Solution
+
+WITH OrderCounts AS (
+    SELECT customer_number, COUNT(*) as order_count
+    FROM Orders
+    GROUP BY customer_number
+)
+SELECT customer_number
+FROM OrderCounts
+WHERE order_count = (SELECT MAX(order_count) FROM OrderCounts);
