@@ -39,7 +39,7 @@ public class Main {
          * Numbers.forEach(Con);
          * Which would use our predefined Consumer
          */
-        Numbers.stream().reduce()
+        Numbers.parallelStream().reduce()
     }
 }
 
