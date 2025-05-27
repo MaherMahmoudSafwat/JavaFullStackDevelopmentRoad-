@@ -1,0 +1,83 @@
+What is Maven?
+
+Apache Maven is a build automation and project management tool primarily used for Java-based projects. It simplifies the build process by handling:
+
+    Dependency management (automatically downloading libraries)
+
+    Compilation
+
+    Testing
+
+    Packaging (JAR, WAR, etc.)
+
+    Deployment
+
+Maven uses a Project Object Model (POM) file (pom.xml) to define project structure, dependencies, and build steps.
+Why Was Maven Created?
+
+Before Maven, developers used Apache Ant, which required writing lengthy and complex XML scripts for builds. Ant lacked:
+
+    Standardized project structure
+
+    Built-in dependency management
+
+    Convention over configuration
+
+Maven was introduced in 2004 to solve these problems by introducing:
+✅ Standardized project layout (src/main/java, src/test/java, etc.)
+✅ Automatic dependency resolution (from Maven Central Repository)
+✅ Lifecycle-based builds (compile → test → package → install)
+✅ Plugins for common tasks (compiling, testing, generating docs)
+Key Features & Uses of Maven
+Feature	Why It’s Useful
+Dependency Management	No manual JAR downloads; Maven fetches them automatically.
+Build Lifecycle	Standardized phases (clean, compile, test, package, install).
+POM (Project Object Model)	Single pom.xml file defines everything—no need for custom scripts.
+Maven Central Repository	Huge library of open-source Java packages (like log4j, JUnit).
+Plugin Ecosystem	Extensible with plugins for code coverage, Docker, etc.
+How Maven Works (Example Workflow)
+
+    Define pom.xml (lists dependencies & build steps).
+
+    Run mvn compile → Maven downloads dependencies & compiles code.
+
+    Run mvn test → Runs unit tests.
+
+    Run mvn package → Creates a JAR/WAR file.
+
+    Run mvn install → Installs the built artifact in your local repository.
+
+Example pom.xml:
+xml
+
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany</groupId>
+    <artifactId>my-app</artifactId>
+    <version>1.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
+Maven vs. Alternatives
+Tool	Pros	Cons
+Maven	Standardized, great for dependency management.	Can be slow; XML-based config.
+Gradle	Faster, flexible (Groovy/Kotlin DSL).	Steeper learning curve.
+Ant	Highly customizable.	No built-in dependency management.
+Conclusion: Why Use Maven?
+
+✔ Saves time (no manual dependency management).
+✔ Standardizes projects (easier collaboration).
+✔ Huge ecosystem (plugins for almost everything).
+
+It’s still widely used, though Gradle is gaining popularity (especially in Android/Kotlin projects).
+
+
+

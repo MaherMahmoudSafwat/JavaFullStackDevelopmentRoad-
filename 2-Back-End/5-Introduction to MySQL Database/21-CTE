@@ -1,0 +1,22 @@
+-- Define a Common Table Expression (CTE) named 'CTE_Example'
+-- CTEs act as temporary result sets that exist only during query execution
+WITH CTE_Example AS
+(
+    -- This is the CTE's query definition:
+    -- Selects the maximum value from the 'Number' column
+    SELECT MAX(Number) AS MaxNumber
+    -- From the 'Products' table
+    FROM Products
+    -- Where the Product_id is greater than 1 (filters out products with ID 1 or less)
+    WHERE Product_id > 1
+)
+-- Main query that uses the CTE
+-- Selects all columns (just one in this case) from the CTE result set
+SELECT *
+FROM CTE_Example;
+
+
+
+
+
+
