@@ -5,14 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dbbc766b-f180-45c8-bcad-5acf807e9579" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/AddNewCar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Car.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Dealer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../26-Constructor Reference/ConstructorReference/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../26-Constructor Reference/ConstructorReference/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../26-Constructor Reference/ConstructorReference/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../26-Constructor Reference/ConstructorReference/src/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../New Text Document.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,24 +22,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2xe7jKVJNnGKTuZTjLYGiVZmUzV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "/home/maher/Desktop/JavaFullStackDevelopmentRoad-/2-Back-End/7-Advanced Java Concepts /27-Virtual Car DealerShip Simulator Project/VirtualCarDealerShipSimulator/src/Main.java"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/home/maher/Desktop/JavaFullStackDevelopmentRoad-/2-Back-End/7-Advanced Java Concepts /27-Virtual Car DealerShip Simulator Project/VirtualCarDealerShipSimulator/src/Main.java&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
