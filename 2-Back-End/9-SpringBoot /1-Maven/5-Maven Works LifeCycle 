@@ -1,0 +1,102 @@
+How Maven Works (Step-by-Step Breakdown)
+1. Core Concepts
+
+    pom.xml: The project blueprint (dependencies, plugins, configs).
+
+    Lifecycle Phases: Pre-defined stages (compile, test, package, etc.).
+
+    Plugins: Tools that execute tasks during phases (e.g., maven-compiler-plugin).
+
+    Repositories:
+
+        Local (~/.m2/repository): Your machine’s cache.
+
+        Remote (Maven Central/Internal): Public/private servers hosting JARs.
+
+2. Behind the Scenes: What Happens When You Run mvn install?
+
+    Reads pom.xml → Identifies dependencies and plugins.
+
+    Checks Local Repository (~/.m2/repository) → Looks for cached JARs.
+
+    Downloads Missing Dependencies → Fetches from Maven Central/internal repos if not found locally.
+
+    Executes Lifecycle Phases → Runs plugins for each phase:
+
+        compile → Converts .java to .class.
+
+        test → Runs JUnit tests.
+
+        package → Creates a JAR/WAR.
+
+    Installs Artifact → Saves the JAR to ~/.m2/repository for reuse.
+
+3. Transitive Dependencies
+
+    If Project A needs Library B, and Library B needs Library C, Maven automatically pulls both.
+
+Where is the .m2 Folder in Linux? (Minute-by-Minute Guide)
+1. Default Location
+bash
+
+~/.m2/repository/  # Full path: /home/your_username/.m2/repository/
+
+    Created automatically on your first Maven command (e.g., mvn --version).
+
+2. How to Find It (Terminal Commands)
+bash
+
+# Check if it exists:
+ls -la ~/.m2/  # Lists the folder if present
+
+# If missing, trigger creation by running any Maven command:
+mvn --version  # Creates `.m2` if it doesn’t exist
+
+3. Customizing the Location
+
+Edit ~/.m2/settings.xml (create it if missing):
+xml
+
+<settings>
+  <localRepository>/custom/path/to/repo</localRepository>
+</settings>
+
+Key Files in .m2
+File/Folder	Purpose
+repository/	Stores all downloaded dependencies (JARs, plugins).
+settings.xml	Configures remote repos, proxies, mirrors (override default behavior).
+Behind the Scenes: Dependency Resolution Flow
+
+    Local Repo Check → ~/.m2/repository/org/springframework/...
+
+    Remote Repo Check → Maven Central (or internal repos if configured).
+
+    Download & Cache → Saves JARs locally for future builds.
+
+Common Commands
+Command	Action
+mvn clean install	Builds project + installs JAR to local repo.
+mvn dependency:tree	Shows all dependencies (including transitive ones).
+mvn dependency:purge-local-repository	Deletes cached dependencies.
+Troubleshooting
+
+    Corrupted Local Repo? Delete it and let Maven rebuild:
+    bash
+
+rm -rf ~/.m2/repository/
+
+Force Maven to Re-Download:
+bash
+
+    mvn clean install -U  # -U = "update snapshots"
+
+Summary
+
+    Maven automates builds using a lifecycle and plugins.
+
+    .m2/repository is your local cache (auto-created in /home/username/.m2/).
+
+    Dependencies are resolved from local → remote repos.
+
+
+
