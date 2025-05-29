@@ -1,0 +1,6 @@
+sudo ln -s /usr/pgadmin4/bin/pgadmin4 /usr/local/bin/
+
+flatpak run org.pgadmin.pgadmin4
+
+ALTER USER username WITH PASSWORD 'new_password'
+
