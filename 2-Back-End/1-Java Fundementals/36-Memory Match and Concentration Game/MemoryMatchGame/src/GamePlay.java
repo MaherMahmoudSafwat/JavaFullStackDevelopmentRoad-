@@ -61,7 +61,7 @@ public class GamePlay extends EmojisInCards
     }
     public void StartGamePlay()
     {
-        ShowAllCards();
+        //ShowAllCards();
         while (Flag < 16)
         {
             ShowEmptyStringCards();

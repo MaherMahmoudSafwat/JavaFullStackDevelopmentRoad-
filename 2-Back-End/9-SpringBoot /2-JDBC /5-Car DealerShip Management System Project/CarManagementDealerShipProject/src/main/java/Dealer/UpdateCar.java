@@ -38,7 +38,7 @@ public class UpdateCar
             System.out.println("Please enter the car price");
             while(!IsValid)
             {
-                System.out.println("Please enter the car price");try {
+                try {
                     Car.setCarPrice(Integer.parseInt(Input.nextLine()));
                     IsValid = true;
                 } catch (InvalidPriceException e) {

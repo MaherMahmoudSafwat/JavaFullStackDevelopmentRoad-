@@ -133,7 +133,7 @@ public class EmojisInCards
             }
         }
     }
-    public void ShowAllCards()
+  /*  public void ShowAllCards()
     {
         for(int i =0; i<ArrCards.length; i++)
         {
@@ -144,4 +144,4 @@ public class EmojisInCards
             System.out.println();
         }
     }
-}
+*/}

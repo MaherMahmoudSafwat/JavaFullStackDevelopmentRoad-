@@ -1,0 +1,48 @@
+<!-- This is the root element for Hibernate configuration -->
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+
+    <!-- The session-factory contains all database and Hibernate settings -->
+    <session-factory>
+
+        <!-- 1. DATABASE CONNECTION SETTINGS -->
+
+        <!-- JDBC driver class for PostgreSQL -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
+        <!-- Database URL - format: jdbc:postgresql://host:port/database_name -->
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+
+        <!-- Database username -->
+        <property name="hibernate.connection.username">postgres</property>
+
+        <!-- Database password -->
+        <property name="hibernate.connection.password">User</property>
+
+
+        <!-- 2. HIBERNATE BEHAVIOR SETTINGS -->
+
+        <!--
+            hbm2ddl.auto: Controls automatic schema generation
+            Options:
+            - update: Update the schema if needed (add new columns/tables)
+            - create: Drop and recreate schema each time (DANGEROUS for production)
+            - create-drop: Create on startup, drop on exit (for testing)
+            - validate: Validate schema without making changes
+            - none: Disable schema updates (production-safe)
+        -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!--
+            Dialect: Tells Hibernate which database you're using
+            (Different databases have slightly different SQL syntax)
+        -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Show SQL statements in console (great for debugging) -->
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- Format SQL for better readability in logs -->
+        <property name="hibernate.format_sql">true</property>
+
+    </session-factory>
+</hibernate-configuration>
