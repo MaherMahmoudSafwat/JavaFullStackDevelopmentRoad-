@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring Beans Configuration File -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define a bean named "Alien" -->
+    <bean id="Alien" class="org.example.Alien" scope="prototype">
+        <!--
+            id: Unique identifier for the bean
+            class: Fully qualified class name of the bean
+            scope: "prototype" means a new instance is created for each request
+        -->
+    </bean>
+
+</beans>
+
+
