@@ -5,15 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="289c43ec-d7a5-4c77-8966-9242fd27ad4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Alien.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Computer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Desktop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Laptop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Spring.XML" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../1-Setup Project Object Creation/ObjectCreation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1-Setup Project Object Creation/ObjectCreation/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/src/main/java/org/example/Alien.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/src/main/java/org/example/Computer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/src/main/java/org/example/Desktop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/src/main/java/org/example/Laptop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../3-Beans/Beans/src/main/resources/Spring.XML" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../../New Text Document.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

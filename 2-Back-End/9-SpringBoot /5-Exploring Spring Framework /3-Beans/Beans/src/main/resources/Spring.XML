@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring Beans Configuration File
+    Defines how Spring should create and manage our objects (beans)
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--
+        XML namespace declarations - Required for Spring to understand the configuration format
+        These should always be included exactly as shown
+    -->
+
+    <!--
+        ALIEN BEAN CONFIGURATION
+        This creates an Alien object with dependency injection
+    -->
+    <bean id="alien1" class="org.example.Alien" autowire="byType">
+        <!--
+            id: Unique name to identify this bean
+            class: Fully qualified class name (package + class)
+            autowire="byType": Spring automatically finds matching beans by type
+        -->
+
+        <!-- PROPERTY INJECTION: Setting simple values -->
+        <property name="age" value="21"/>
+        <!--
+            Sets the 'age' property to 21
+            Requires a setAge() method in the Alien class
+        -->
+
+        <!-- PROPERTY INJECTION: Reference to another bean -->
+        <property name="com" ref="com1"/>
+        <!--
+            Sets the 'com' property to refer to bean with id="com1"
+            Requires a setCom() method in the Alien class
+        -->
+
+        <!--
+            COMMENTED OUT CONSTRUCTOR INJECTION EXAMPLES
+            These show different ways to do constructor injection
+        -->
+        <!--
+        <constructor-arg value="21"></constructor-arg>
+        <constructor-arg ref="lap1"></constructor-arg>
+        -->
+        <!--
+        <constructor-arg type="com.telusko.Laptop" ref="lap1"/>
+        <constructor-arg type="int" value="21"/>
+        -->
+        <!--
+        <constructor-arg index="1" ref="lap1"/>
+        <constructor-arg index="0" value="21"/>
+        -->
+        <!--
+        <constructor-arg name="lap" ref="lap1"/>
+        <constructor-arg name="age" value="21"/>
+        -->
+
+        <!-- INNER BEAN DEFINITION -->
+        <property name="com">
+            <bean class="org.example.Laptop"/>
+            <!--
+                Defines a bean inline (only usable within this property)
+                Doesn't need an id since it's private to this property
+            -->
+        </property>
+    </bean>
+
+    <!-- LAPTOP BEAN (Computer implementation) -->
+    <bean id="com1" class="org.example.Laptop" primary="true">
+        <!--
+            id: Unique identifier 'com1'
+            class: Implementation of Computer interface
+            primary="true": Marks this as the preferred choice when multiple
+                           implementations exist (for autowiring byType)
+        -->
+    </bean>
+
+    <!-- DESKTOP BEAN (Alternative Computer implementation) -->
+    <bean id="com2" class="org.example.Desktop" lazy-init="true">
+        <!--
+            id: Unique identifier 'com2'
+            lazy-init="true": Bean is only created when first requested,
+                             not at application startup (saves resources)
+        -->
+    </bean>
+
+</beans>
