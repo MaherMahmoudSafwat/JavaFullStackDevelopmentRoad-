@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring Beans Configuration File - This is where we define our objects (beans)
+    that Spring will create and manage for us
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--
+        XML namespace declarations - These are required for Spring to understand
+        the configuration format. Don't modify these.
+    -->
+
+    <!--
+        BEAN DEFINITION: Creating an 'Alien' object
+        id: The name we'll use to get this bean from Spring (like a variable name)
+        class: The full package path to the Alien class
+        autowire="byName": Tells Spring to automatically connect dependencies by matching property names
+    -->
+    <bean id="Alien" class="org.example.Alien" autowire="byName">
+
+        <!--
+            PROPERTY INJECTION: Setting simple values (primitives, Strings)
+            name: The property name in the Alien class (must have a setter method)
+            value: The actual value to set (21 in this case)
+        -->
+        <property name="age" value="21"/>
+
+        <!--
+            REFERENCE INJECTION: Connecting another bean
+            name: The property name in Alien class (must have a setter)
+            ref: Points to another bean's id (Lap1 in this case)
+        -->
+        <property name="Lap" ref="Lap1"/>
+
+        <!--
+            CONSTRUCTOR INJECTION EXAMPLES (all do similar things in different ways)
+            These show different methods to pass values when creating the Alien object
+        -->
+
+        <!-- Simplest form - Spring figures out order automatically -->
+        <constructor-arg value="21"/>
+        <constructor-arg ref="Lap1"/>
+
+        <!-- Explicit type specification - ensures correct parameter matching -->
+        <constructor-arg type="org.example.Laptop" ref="Lap1"/>
+        <constructor-arg type="int" value="21"/>
+
+        <!-- Index-based - specifies parameter order (0 = first, 1 = second) -->
+        <constructor-arg index="1" ref="Lap1"/>
+        <constructor-arg index="0" value="21"/>
+
+        <!-- Name-based - matches constructor parameter names exactly -->
+        <constructor-arg name="lap" ref="Lap1"/>
+        <constructor-arg name="age" value="21"/>
+    </bean>
+
+    <!--
+        OTHER BEAN DEFINITIONS: Creating objects Alien might need
+        Uncomment this if you want Spring to create a Laptop with id "Lap1"
+    -->
+    <!-- <bean id="Lap1" class="org.example.Laptop"/> -->
+
+    <!-- Alternative computer implementations -->
+    <bean id="com2" class="org.example.Laptop">
+        <!-- Could add properties or constructor args here if needed -->
+    </bean>
+
+    <bean id="com1" class="org.example.Desktop">
+        <!-- Could add properties or constructor args here if needed -->
+    </bean>
+
+</beans>
+
+

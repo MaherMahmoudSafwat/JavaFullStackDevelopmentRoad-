@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00e67c73-a149-4e8f-8106-178697ea66ea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../2-Injections/Injections/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../2-Injections/Injections/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../2-Injections/Injections/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../2-Injections/Injections/src/main/java/org/example/Alien.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../2-Injections/Injections/src/main/resources/Spring.XML" afterDir="false" />
+    <list default="true" id="289c43ec-d7a5-4c77-8966-9242fd27ad4f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Alien.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Computer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Desktop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Laptop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Spring.XML" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../1-Setup Project Object Creation/ObjectCreation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../1-Setup Project Object Creation/ObjectCreation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../../../New Text Document.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -28,9 +33,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../.." />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
+  "associatedIndex": 4
 }]]></component>
-  <component name="ProjectId" id="2y5q1nR2r7iHwyrooHPA69M7kZX" />
+  <component name="ProjectId" id="2y6GAYFTBo6kUau1fUrH9jteSUz" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -40,20 +45,19 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "/home/maher/Desktop/JavaFullStackDevelopmentRoad-/2-Back-End/9-SpringBoot /5-Exploring Spring Framework /1-Setup Project Object Creation/ObjectCreation/src/main/java/org/example/Main.java"
+    "onboarding.tips.debug.path": "/home/maher/Desktop/JavaFullStackDevelopmentRoad-/2-Back-End/9-SpringBoot /5-Exploring Spring Framework /2-Injections/Injections/src/main/java/org/example/Main.java"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="00e67c73-a149-4e8f-8106-178697ea66ea" name="Changes" comment="" />
-      <created>1749134570650</created>
+      <changelist id="289c43ec-d7a5-4c77-8966-9242fd27ad4f" name="Changes" comment="" />
+      <created>1749147467424</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1749134570650</updated>
+      <updated>1749147467424</updated>
     </task>
     <servers />
   </component>
@@ -62,8 +66,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>63</line>
-          <option name="timeStamp" value="1" />
+          <line>13</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
