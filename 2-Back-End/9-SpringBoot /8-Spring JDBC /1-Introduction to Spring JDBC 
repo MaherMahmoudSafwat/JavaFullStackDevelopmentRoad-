@@ -1,0 +1,162 @@
+Spring JDBC - Simplified Database Access in Spring
+What is Spring JDBC?
+
+Spring JDBC is a module in the Spring Framework that simplifies database operations by:
+
+    Reducing boilerplate code (no manual Connection, Statement, ResultSet handling).
+
+    Providing exception handling (converts SQL exceptions to Spring’s DataAccessException hierarchy).
+
+    Offering helper classes (JdbcTemplate, NamedParameterJdbcTemplate) for easy query execution.
+
+Key Features of Spring JDBC
+Feature	Description
+JdbcTemplate	Core class for executing SQL queries with minimal code.
+NamedParameterJdbcTemplate	Supports named parameters (:param) instead of ? placeholders.
+RowMapper	Converts ResultSet rows into Java objects.
+Transaction Management	Works with Spring’s @Transactional for declarative transactions.
+Exception Handling	Converts checked SQLException to unchecked DataAccessException.
+Why Use Spring JDBC Over Plain JDBC?
+Plain JDBC	Spring JDBC
+❌ Manual connection handling	✅ Automatic resource management
+❌ Boilerplate try-catch-finally	✅ Cleaner code with JdbcTemplate
+❌ Checked SQLException	✅ Unchecked DataAccessException
+❌ No built-in transaction management	✅ Integrates with Spring @Transactional
+Core Components of Spring JDBC
+1. JdbcTemplate
+
+    The heart of Spring JDBC.
+
+    Executes queries, updates, and stored procedures.
+
+    Example:
+    java
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public List<User> findAllUsers() {
+        String sql = "SELECT * FROM users";
+        return jdbcTemplate.query(sql, new UserRowMapper());
+    }
+
+2. RowMapper (Converts ResultSet → Java Object)
+java
+
+public class UserRowMapper implements RowMapper<User> {
+    @Override
+    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setName(rs.getString("name"));
+        return user;
+    }
+}
+
+3. NamedParameterJdbcTemplate (Better Than ? Placeholders)
+java
+
+@Autowired
+private NamedParameterJdbcTemplate namedJdbcTemplate;
+
+public User findUserById(int id) {
+    String sql = "SELECT * FROM users WHERE id = :userId";
+    Map<String, Object> params = new HashMap<>();
+    params.put("userId", id);
+    return namedJdbcTemplate.queryForObject(sql, params, new UserRowMapper());
+}
+
+Example: CRUD Operations with Spring JDBC
+1. Insert (update())
+java
+
+public void addUser(User user) {
+    String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+    jdbcTemplate.update(sql, user.getName(), user.getEmail());
+}
+
+2. Query (query(), queryForObject)
+java
+
+public List<User> getAllUsers() {
+    String sql = "SELECT * FROM users";
+    return jdbcTemplate.query(sql, new UserRowMapper());
+}
+
+public User getUserById(int id) {
+    String sql = "SELECT * FROM users WHERE id = ?";
+    return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
+}
+
+3. Update
+java
+
+public void updateUser(User user) {
+    String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+    jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getId());
+}
+
+4. Delete
+java
+
+public void deleteUser(int id) {
+    String sql = "DELETE FROM users WHERE id = ?";
+    jdbcTemplate.update(sql, id);
+}
+
+How to Configure Spring JDBC?
+1. Add Dependencies (Maven)
+xml
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+2. Configure DataSource in application.properties
+properties
+
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+
+3. Enable Spring JDBC in a @Repository
+java
+
+@Repository
+public class UserRepository {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    // CRUD methods...
+}
+
+Spring JDBC vs JPA/Hibernate
+Feature	Spring JDBC	JPA/Hibernate
+Control	Full control over SQL	ORM generates SQL
+Boilerplate	Less than plain JDBC, but still some	Minimal (uses entities)
+Use Case	Need raw SQL, complex queries	Rapid development, simple CRUD
+Learning Curve	Easy if you know SQL	Requires understanding of JPA
+When to Use Spring JDBC?
+
+✅ Need fine-grained control over SQL.
+✅ Working with legacy databases or complex queries.
+✅ Prefer lightweight over full ORM (Hibernate).
+Summary
+
+    Spring JDBC = Simpler JDBC (less boilerplate, better exception handling).
+
+    Uses JdbcTemplate for query execution.
+
+    Works with RowMapper for object mapping.
+
+    Great for SQL-heavy applications.
+
+
+
+
