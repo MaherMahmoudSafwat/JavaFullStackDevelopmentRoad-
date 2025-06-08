@@ -1,0 +1,74 @@
+1. Spring Framework Projects
+
+Spring is a popular Java framework for building applications. Its main projects include:
+
+    Spring Boot (easiest for beginners):
+    Quickly create standalone apps with embedded servers (like Tomcat).
+    Example: Web apps, REST APIs, microservices.
+
+    Spring MVC: For traditional web apps (uses Servlets behind the scenes).
+
+    Spring Data: Simplifies database access (e.g., PostgreSQL, MySQL).
+
+    Spring Security: Handles login/auth for apps.
+
+Alternatives to Spring Boot?
+Yes! You can use:
+
+    Servlets + JSP (old-school, more manual work).
+
+    Micronaut/Quarkus (like Spring Boot but lighter).
+
+    Play Framework (for Scala/Java web apps).
+
+2. What are Servlets?
+
+    Servlets are Java classes that handle web requests (e.g., HTTP GET/POST).
+
+    They run inside a Servlet Container (like Tomcat).
+
+    Example:
+    java
+
+    public class HelloServlet extends HttpServlet {
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+            response.getWriter().print("Hello World!");
+        }
+    }
+
+3. Tomcat vs JVM
+Tomcat	JVM (Java Virtual Machine)
+A Servlet Container that runs Java web apps.	The engine that executes all Java programs (including Tomcat!).
+Handles HTTP requests/responses.	Runs bytecode (.class files) on any OS.
+Needs the JVM to work.	Doesn’t need Tomcat (but Tomcat needs it).
+4. Can You Use Servlets in JVM?
+
+    No, Servlets need a Servlet Container (like Tomcat, Jetty).
+
+    The JVM alone can’t run Servlets—it’s like trying to drive a car without wheels!
+
+    Tomcat (which runs on the JVM) manages Servlets for you.
+
+Simple Analogy
+
+    JVM = Car engine.
+
+    Tomcat = The whole car (with seats, wheels, etc.).
+
+    Servlets = Drivers (need the car to work).
+
+    Spring Boot = A fancy self-driving car (uses Tomcat/Servlets internally).
+
+What Should You Learn First?
+
+    Servlets + JSP → Understand basics of web apps.
+
+    Spring Boot → Build modern apps faster.
+
+Try this in order:
+plaintext
+
+Servlets → Spring Boot → Databases (Spring Data) → Security (Spring Security)
+
+
+
