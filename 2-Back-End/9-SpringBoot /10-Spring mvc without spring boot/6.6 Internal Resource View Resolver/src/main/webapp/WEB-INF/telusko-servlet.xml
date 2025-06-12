@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Spring MVC Configuration File
+  Defines the application context for Spring MVC components
+-->
+
+<!-- Root Beans Definition with XML Namespaces -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ctx="http://www.springframework.org/schema/context"       <!-- Context namespace for component scanning -->
+       xmlns:p="http://www.springframework.org/schema/p"             <!-- P-namespace for simplified property configuration -->
+       xmlns:mvc="http://www.springframework.org/schema/mvc"         <!-- MVC namespace for MVC-specific configuration -->
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  
+  <!-- 
+    Component Scanning Configuration
+    - Scans the specified package and its sub-packages for Spring components
+    - Automatically detects @Controller, @Service, @Repository, @Component annotations
+  -->
+  <ctx:component-scan base-package="com.telusko" />
+  
+  <!-- 
+    Annotation Configuration
+    - Enables processing of Spring annotations like:
+      - @Autowired (dependency injection)
+      - @Required (mandatory dependencies)
+      - @Configuration (Java-based config)
+      - etc.
+  -->
+  <ctx:annotation-config/>
+  
+  <!-- 
+    View Resolver Configuration
+    - Maps logical view names to physical JSP files
+    - Combines prefix + viewName + suffix to determine the JSP path
+    Example: "home" → "/views/home.jsp"
+  -->
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!-- Sets the prefix that gets prepended to view names -->
+    <property name="prefix" value="/views/"/>
+    
+    <!-- Sets the suffix that gets appended to view names -->
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+</beans>

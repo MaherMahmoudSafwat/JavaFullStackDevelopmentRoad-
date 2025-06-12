@@ -1,0 +1,52 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<!--
+  Deployment Descriptor (web.xml) for Spring MVC Application
+  - Uses Servlet 2.3 DTD (legacy but compatible with most containers)
+  - Defines the DispatcherServlet configuration
+-->
+
+<web-app>
+  <!-- Application Display Name (shown in admin consoles) -->
+  <display-name>Spring MVC Application</display-name>
+  
+  <!-- 
+    DispatcherServlet Configuration
+    - The front controller for Spring MVC
+    - Handles all incoming requests
+  -->
+  <servlet>
+    <!-- Logical name for this servlet -->
+    <servlet-name>telusko</servlet-name>
+    
+    <!-- 
+      The actual Spring MVC DispatcherServlet class
+      - This is the entry point for all web requests
+      - By default looks for configuration file: [servlet-name]-servlet.xml
+        (In this case: telusko-servlet.xml in WEB-INF/)
+    -->
+    <servlet-class>
+      org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+  </servlet>
+  
+  <!-- 
+    Servlet Mapping
+    - Tells the container which URLs should be handled by Spring
+  -->
+  <servlet-mapping>
+    <!-- Must match the servlet-name above -->
+    <servlet-name>telusko</servlet-name>
+    
+    <!-- 
+      URL Pattern:
+      - "/" = handles all requests except JSPs
+      - "/*" = handles ALL requests including JSPs (not recommended)
+    -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
+
+
+
