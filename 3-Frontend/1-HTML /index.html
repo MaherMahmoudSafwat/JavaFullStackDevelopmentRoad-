@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- HTML5 document type declaration -->
+
+<html lang="en">
+<!-- Main document container with language specification -->
+
+<head>
+    <!-- Document metadata section -->
+    <meta charset="UTF-8">
+    <!-- Character encoding declaration -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Responsive viewport settings -->
+    <title>Maher - Full Stack Java Developer</title>
+    <!-- Page title (appears in browser tab) -->
+
+    <style>
+        /* Basic CSS for presentation */
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
+        tfoot { font-weight: bold; background-color: #f2f2f2; }
+    </style>
+</head>
+
+<body>
+<!-- Main content area -->
+
+<header>
+    <!-- Semantic header section -->
+    <h1>Hello World <br>I'm a Java Full Stack Developer</h1>
+    <!-- Main heading with line break -->
+    <hr>
+    <!-- Horizontal rule for visual separation -->
+</header>
+
+<main>
+    <!-- Primary content container -->
+
+    <section>
+        <!-- Personal information section -->
+        <h2>About Me</h2>
+        <!-- Section heading -->
+        <p>My name is <strong>Maher</strong></p>
+        <!-- Strong importance text -->
+        <p>I'm <mark>24 years</mark> <em>old</em></p>
+        <!-- <mark> highlights relevant text, <em> for emphasis -->
+
+        <details>
+            <!-- Disclosure widget for additional info -->
+            <summary>Contact Details</summary>
+            <!-- Clickable summary -->
+            <p>Email: maher@example.com</p>
+            <p>Phone: +1234567890</p>
+        </details>
+    </section>
+
+    <section>
+        <h2>Technical Skills</h2>
+
+        <article>
+            <!-- Self-contained composition -->
+            <h3>Programming Languages</h3>
+            <ul>
+                <li><data value="cpp">C++</data></li>
+                <!-- <data> links content to machine-readable value -->
+                <li><data value="java">Java</data></li>
+                <li><data value="cs">C#</data></li>
+            </ul>
+        </article>
+
+        <article>
+            <h3>Java Ecosystem</h3>
+            <ol>
+                <li>Java SE</li>
+                <li>Maven</li>
+                <li>Spring Framework</li>
+            </ol>
+        </article>
+    </section>
+
+    <section>
+        <h2>Projects</h2>
+        <div class="project-gallery">
+            <!-- Generic container -->
+            <figure>
+                <!-- Self-contained content -->
+                <img src="project1.jpg" alt="E-commerce System" width="300">
+                <figcaption>Java Spring E-commerce Project</figcaption>
+                <!-- Caption for the image -->
+            </figure>
+        </div>
+    </section>
+</main>
+
+<aside>
+    <!-- Tangentially related content -->
+    <h3>Currently Learning</h3>
+    <p>Exploring <time datetime="2023-11">November 2023</time>:</p>
+    <!-- Machine-readable date/time -->
+    <ul>
+        <li>Microservices</li>
+        <li>Docker</li>
+    </ul>
+</aside>
+
+<section>
+    <h2>Contact Form</h2>
+    <form id="contactForm" action="/submit" method="POST">
+        <!-- Form with explicit ID -->
+        <fieldset>
+            <!-- Groups related form controls -->
+            <legend>Personal Information</legend>
+            <!-- Fieldset caption -->
+
+            <div>
+                <label for="fname">First Name:</label>
+                <!-- Associated label -->
+                <input type="text" id="fname" name="firstName" required>
+                <!-- Required field -->
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <!-- Email input type with validation -->
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Preferences</legend>
+            <select name="contactMethod" required>
+                <option value="">Select preferred contact method</option>
+                <option value="email">Email</option>
+                <option value="phone">Phone</option>
+            </select>
+        </fieldset>
+
+        <button type="submit">Submit</button>
+        <!-- Better than input type="submit" -->
+        <button type="reset">Clear</button>
+        <!-- Reset form button -->
+    </form>
+</section>
+
+<section>
+    <h2>Technical References</h2>
+    <table>
+        <caption>Java Framework Comparison</caption>
+        <!-- Table description -->
+        <thead>
+        <tr>
+            <th scope="col">Framework</th>
+            <!-- Column header -->
+            <th scope="col">Use Case</th>
+            <th scope="col">Difficulty</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Spring Boot</td>
+            <td>Web Applications</td>
+            <td>Intermediate</td>
+        </tr>
+        <tr>
+            <td>Jakarta EE</td>
+            <td>Enterprise Apps</td>
+            <td>Advanced</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <!-- Table footer for summaries -->
+        <tr>
+            <td colspan="2">Average Difficulty</td>
+            <td>Intermediate</td>
+        </tr>
+        </tfoot>
+    </table>
+</section>
+
+<footer>
+    <!-- Document footer -->
+    <p>&copy; 2023 Maher's Portfolio</p>
+    <!-- Copyright symbol -->
+    <address>
+        <!-- Contact information -->
+        Contact: <a href="mailto:maher@example.com">maher@example.com</a>
+    </address>
+    <nav>
+        <!-- Navigation section -->
+        <a href="#top">Back to Top</a>
+        <!-- Document fragment link -->
+    </nav>
+</footer>
+
+<!-- Embedded Content -->
+<iframe
+        src="https://player.vimeo.com/video/824804225"
+        width="600"
+        height="400"
+        title="Java Programming Tutorial"
+        allowfullscreen>
+</iframe>
+<!-- Added title for accessibility -->
+
+<!-- Sample template (hidden) -->
+<template id="projectTemplate">
+    <!-- Content not rendered but stored for JavaScript use -->
+    <div class="project">
+        <h3></h3>
+        <p></p>
+    </div>
+</template>
+
+<!-- Progress indicator -->
+<progress value="75" max="100">75%</progress>
+<!-- Shows completion progress -->
+
+<!-- Dialog/modal -->
+<dialog open>
+    <!-- Can be toggled with JavaScript -->
+    <p>Welcome to my developer portfolio!</p>
+    <button onclick="this.parentElement.close()">Close</button>
+</dialog>
+</body>
+</html>
