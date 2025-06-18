@@ -1,0 +1,81 @@
+/* Styles all paragraph elements (p) with dark red text color */
+.P1 {
+    color: darkred;
+}
+
+/* Styles the element with ID "ERM" - IDs should be unique in HTML */
+#ERM {
+    color: blue;            /* Blue text color */
+    text-align: center;     /* Centers the text horizontally */
+}
+
+/* Styles elements with class "Image" */
+.Image {
+    color: rgba(123, 147, 255, 1.0);               /* Light blue text color */
+    background-color: rgba(123, 123, 123, 0.9);    /* Semi-transparent gray background */
+    background-image: url("/home/maher/Desktop/JavaFullStackDevelopmentRoad-/3-Frontend/2-CSS /Cat.jpeg"); /* Sets a background image */
+    background-repeat: no-repeat;                  /* Prevents the image from repeating */
+}
+
+/* Styles all img elements */
+img {
+    background-position: right;   /* Positions background image to the right */
+    background-size: 100% 100%;   /* Stretches background to fill element */
+    background-color: blue;       /* Blue background color */
+}
+
+/* Styles all span elements */
+span {
+    color: yellow;  /* Yellow text color */
+}
+
+/* Styles elements with class "Border" */
+.Border {
+    border-style: solid double dotted dashed;  /* Different border styles for each side */
+    border-width: 10px;                       /* 10px border thickness */
+    border-color: red;                        /* Red border color */
+    border-bottom-right-radius: 100px;        /* Rounded corner on bottom-right */
+    box-shadow: 10px 10px blue;               /* Blue shadow offset 10px right and down */
+}
+
+/* Styles elements with class "Div1" */
+.Div1 {
+    border-style: solid;          /* Solid border on all sides */
+    padding: 10px 20px 30px 40px; /* Padding: top, right, bottom, left */
+}
+
+/* Styles elements with class "Margins" */
+.Margins {
+    border-style: solid;  /* Solid border */
+    margin: auto;         /* Centers the element horizontally */
+}
+
+/* Styles all button elements */
+button {
+    display: inline-block;    /* Allows setting width/height on inline element */
+    width: 100px;            /* Fixed width */
+    height: 100px;           /* Fixed height */
+    outline-style: dotted;   /* Dotted outline (different from border) */
+    outline-offset: 100px;   /* Space between outline and element border */
+}
+
+/* Styles elements with class "Text" */
+.Text {
+    text-align: center;                  /* Centers text horizontally */
+    text-decoration: underline;          /* Underlines text */
+    text-transform: uppercase;           /* Transforms text to uppercase */
+    text-decoration-color: gray;         /* Gray underline color */
+    text-decoration-thickness: 15px;     /* Thick underline */
+    font-family: sans-serif;             /* Sans-serif font */
+    text-shadow: 2px 2px 5px blue;       /* Blue text shadow with blur */
+}
+
+/* Styles elements with class "Paragrapgh" (note spelling) */
+.Paragrapgh {
+    border-style: solid;     /* Solid border */
+    overflow: scroll;        /* Adds scrollbars if content overflows */
+    direction: ltr;          /* Left-to-right text direction */
+    transform: skew(20deg);  /* Skews element by 20 degrees */
+}
+
+

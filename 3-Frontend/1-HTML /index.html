@@ -1,224 +1,185 @@
 <!DOCTYPE html>
-<!-- HTML5 document type declaration -->
+<!--
+  DOCTYPE: Declares this as an HTML5 document.
+  Must be the very first thing in your HTML file.
+-->
 
 <html lang="en">
-<!-- Main document container with language specification -->
+<!--
+  <html>: Root element of the HTML page.
+  lang="en": Specifies the language (English) for screen readers/search engines.
+-->
 
 <head>
-    <!-- Document metadata section -->
+    <!--
+      <head>: Contains meta-information about the document that isn't displayed.
+      Includes title, styles, scripts, and meta tags.
+    -->
     <meta charset="UTF-8">
-    <!-- Character encoding declaration -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Responsive viewport settings -->
-    <title>Maher - Full Stack Java Developer</title>
-    <!-- Page title (appears in browser tab) -->
+    <!--
+      charset="UTF-8": Ensures proper character encoding for all languages/symbols.
+      Prevents garbled text in browsers.
+    -->
 
-    <style>
-        /* Basic CSS for presentation */
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
-        tfoot { font-weight: bold; background-color: #f2f2f2; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+      viewport: Controls mobile browser rendering.
+      width=device-width: Matches screen width.
+      initial-scale=1.0: Sets default zoom level.
+    -->
+
+    <title>Maher - Java Developer</title>
+    <!--
+      <title>: Sets the browser tab title and search engine result title.
+      Important for SEO and bookmarking.
+    -->
 </head>
 
 <body>
-<!-- Main content area -->
+<!--
+  <body>: Contains all visible content of the webpage.
+  Everything users see goes here.
+-->
 
-<header>
-    <!-- Semantic header section -->
-    <h1>Hello World <br>I'm a Java Full Stack Developer</h1>
-    <!-- Main heading with line break -->
-    <hr>
-    <!-- Horizontal rule for visual separation -->
-</header>
+<!-- HEADER SECTION -->
+<h1>Hello world <br>I'm a Java Developer</h1>
+<!--
+  <h1>: Most important heading (should only be one per page for SEO).
+  <br>: Line break (forces text after it to a new line).
+-->
 
-<main>
-    <!-- Primary content container -->
+<hr>
+<!--
+  <hr>: Horizontal rule (thematic break between sections).
+  Creates a visible divider line.
+-->
 
-    <section>
-        <!-- Personal information section -->
-        <h2>About Me</h2>
-        <!-- Section heading -->
-        <p>My name is <strong>Maher</strong></p>
-        <!-- Strong importance text -->
-        <p>I'm <mark>24 years</mark> <em>old</em></p>
-        <!-- <mark> highlights relevant text, <em> for emphasis -->
+<!-- PERSONAL INFO SECTION -->
+<p>My name is <strong>Maher</strong></p>
+<!--
+  <p>: Paragraph element (blocks of text).
+  <strong>: Indicates important text (bold by default, has semantic meaning).
+-->
 
-        <details>
-            <!-- Disclosure widget for additional info -->
-            <summary>Contact Details</summary>
-            <!-- Clickable summary -->
-            <p>Email: maher@example.com</p>
-            <p>Phone: +1234567890</p>
-        </details>
-    </section>
+<p>I'm 24 years <em>old</em></p>
+<!--
+  <em>: Emphasized text (italic by default, has semantic meaning).
+  Better than <i> for accessibility.
+-->
 
-    <section>
-        <h2>Technical Skills</h2>
+<!-- SKILLS LIST -->
+<ul>
+    <!--
+      <ul>: Unordered list (creates bullet points).
+      Use for items without numerical importance.
+    -->
+    <li>C++</li>  <!-- <li>: List item -->
+    <li>Java</li>
+    <li>C#</li>
+    <li>SpringBoot</li>
+</ul>
 
-        <article>
-            <!-- Self-contained composition -->
-            <h3>Programming Languages</h3>
-            <ul>
-                <li><data value="cpp">C++</data></li>
-                <!-- <data> links content to machine-readable value -->
-                <li><data value="java">Java</data></li>
-                <li><data value="cs">C#</data></li>
-            </ul>
-        </article>
+<!-- TEXT FORMATTING EXAMPLES -->
+<p>I used to study <ins>C++</ins></p>
+<!-- <ins>: Inserted text (underlined by default, shows added content) -->
 
-        <article>
-            <h3>Java Ecosystem</h3>
-            <ol>
-                <li>Java SE</li>
-                <li>Maven</li>
-                <li>Spring Framework</li>
-            </ol>
-        </article>
-    </section>
+<p>I used to make <del>C#</del> projects</p>
+<!-- <del>: Deleted text (strikethrough by default, shows removed content) -->
 
-    <section>
-        <h2>Projects</h2>
-        <div class="project-gallery">
-            <!-- Generic container -->
-            <figure>
-                <!-- Self-contained content -->
-                <img src="project1.jpg" alt="E-commerce System" width="300">
-                <figcaption>Java Spring E-commerce Project</figcaption>
-                <!-- Caption for the image -->
-            </figure>
-        </div>
-    </section>
-</main>
+<p>Sometimes I make some <sup>Programming</sup> projects</p>
+<!-- <sup>: Superscript text (raised baseline, good for exponents/footnotes) -->
 
-<aside>
-    <!-- Tangentially related content -->
-    <h3>Currently Learning</h3>
-    <p>Exploring <time datetime="2023-11">November 2023</time>:</p>
-    <!-- Machine-readable date/time -->
-    <ul>
-        <li>Microservices</li>
-        <li>Docker</li>
-    </ul>
-</aside>
+<p>But other times I do something <sub>else</sub></p>
+<!-- <sub>: Subscript text (lowered baseline, good for chemical formulas) -->
 
-<section>
-    <h2>Contact Form</h2>
-    <form id="contactForm" action="/submit" method="POST">
-        <!-- Form with explicit ID -->
-        <fieldset>
-            <!-- Groups related form controls -->
-            <legend>Personal Information</legend>
-            <!-- Fieldset caption -->
+<!-- IMAGE -->
+<img src="Cat.jpeg" width="277" height="182" alt="A Cute Cat" style="float: right;">
+<!--
+  <img>: Embeds an image.
+  src: Path to image file.
+  width/height: Dimensions in pixels.
+  alt: Alternative text (required for accessibility/SEO).
+  style="float: right": Positions image to right of text.
+-->
 
-            <div>
-                <label for="fname">First Name:</label>
-                <!-- Associated label -->
-                <input type="text" id="fname" name="firstName" required>
-                <!-- Required field -->
-            </div>
+<!-- FORM -->
+<form action="/submit" method="POST">
+    <!--
+      <form>: Container for user input controls.
+      action: Where form data is sent.
+      method: HTTP method (POST for sensitive data, GET for searches).
+    -->
+    <label>First Name: <input type="text" name="firstName"></label>
+    <!--
+      <label>: Associates text with form control (clicking focuses input).
+      <input type="text">: Single-line text field.
+      name: Identifies data when form is submitted.
+    -->
 
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <!-- Email input type with validation -->
-            </div>
-        </fieldset>
+    <input type="radio" name="gender" value="Male" checked>
+    <!--
+      type="radio": Radio button (single selection from group).
+      checked: Makes this selected by default.
+      name groups related radio buttons.
+    -->
 
-        <fieldset>
-            <legend>Preferences</legend>
-            <select name="contactMethod" required>
-                <option value="">Select preferred contact method</option>
-                <option value="email">Email</option>
-                <option value="phone">Phone</option>
-            </select>
-        </fieldset>
+    <select name="cars">
+        <!--
+          <select>: Dropdown list.
+          name: Identifies the selected value.
+        -->
+        <option value="honda">Honda</option>
+        <!--
+          <option>: A choice in the dropdown.
+          value: What gets submitted.
+          Text between tags is what users see.
+        -->
+    </select>
 
-        <button type="submit">Submit</button>
-        <!-- Better than input type="submit" -->
-        <button type="reset">Clear</button>
-        <!-- Reset form button -->
-    </form>
-</section>
+    <input type="submit" value="Send">
+    <!--
+      type="submit": Button that submits the form.
+      value: Text displayed on the button.
+    -->
+</form>
 
-<section>
-    <h2>Technical References</h2>
-    <table>
-        <caption>Java Framework Comparison</caption>
-        <!-- Table description -->
-        <thead>
-        <tr>
-            <th scope="col">Framework</th>
-            <!-- Column header -->
-            <th scope="col">Use Case</th>
-            <th scope="col">Difficulty</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Spring Boot</td>
-            <td>Web Applications</td>
-            <td>Intermediate</td>
-        </tr>
-        <tr>
-            <td>Jakarta EE</td>
-            <td>Enterprise Apps</td>
-            <td>Advanced</td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <!-- Table footer for summaries -->
-        <tr>
-            <td colspan="2">Average Difficulty</td>
-            <td>Intermediate</td>
-        </tr>
-        </tfoot>
-    </table>
-</section>
-
-<footer>
-    <!-- Document footer -->
-    <p>&copy; 2023 Maher's Portfolio</p>
-    <!-- Copyright symbol -->
-    <address>
-        <!-- Contact information -->
-        Contact: <a href="mailto:maher@example.com">maher@example.com</a>
-    </address>
-    <nav>
-        <!-- Navigation section -->
-        <a href="#top">Back to Top</a>
-        <!-- Document fragment link -->
-    </nav>
-</footer>
-
-<!-- Embedded Content -->
+<!-- IFRAME -->
 <iframe
         src="https://player.vimeo.com/video/824804225"
-        width="600"
-        height="400"
-        title="Java Programming Tutorial"
+        width="300"
+        height="300"
+        frameborder="0"
         allowfullscreen>
+    <!--
+      <iframe>: Embeds another webpage.
+      src: URL of content to embed.
+      width/height: Dimensions.
+      frameborder="0": Removes border.
+      allowfullscreen: Permits fullscreen mode.
+    -->
 </iframe>
-<!-- Added title for accessibility -->
 
-<!-- Sample template (hidden) -->
-<template id="projectTemplate">
-    <!-- Content not rendered but stored for JavaScript use -->
-    <div class="project">
-        <h3></h3>
-        <p></p>
-    </div>
-</template>
-
-<!-- Progress indicator -->
-<progress value="75" max="100">75%</progress>
-<!-- Shows completion progress -->
-
-<!-- Dialog/modal -->
-<dialog open>
-    <!-- Can be toggled with JavaScript -->
-    <p>Welcome to my developer portfolio!</p>
-    <button onclick="this.parentElement.close()">Close</button>
-</dialog>
+<!-- TABLE -->
+<table border="1">
+    <!--
+      <table>: Creates a data table.
+      border="1": Shows cell borders (avoid in production - use CSS instead).
+    -->
+    <thead>
+    <!-- <thead>: Groups header content -->
+    <tr>
+        <!-- <tr>: Table row -->
+        <th>Name</th>  <!-- <th>: Table header cell (bold by default) -->
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- <tbody>: Groups main table content -->
+    <tr>
+        <td>Samir</td>  <!-- <td>: Standard table data cell -->
+        <td>samir@example.com</td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

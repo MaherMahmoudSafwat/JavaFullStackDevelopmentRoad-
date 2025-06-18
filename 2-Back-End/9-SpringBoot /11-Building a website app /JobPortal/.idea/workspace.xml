@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="221ce67b-0986-429a-b187-bd9ee352524f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../../3-Frontend/2-CSS /.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../../3-Frontend/2-CSS /.idea/2-CSS .iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../../3-Frontend/2-CSS /.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../../3-Frontend/2-CSS /.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../../3-Frontend/2-CSS /.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../3-Frontend/1-HTML /index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../3-Frontend/1-HTML /index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../New Text Document.txt" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2yd566I3szcgQNRY9njUgabTItB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.JobPortalApplication.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/maher/Desktop/JavaFullStackDevelopmentRoad-/2-Back-End/9-SpringBoot /11-Building a website app /7 JobApp-Project"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="221ce67b-0986-429a-b187-bd9ee352524f" name="Changes" comment="" />
+      <created>1750151433068</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750151433068</updated>
+    </task>
+    <servers />
+  </component>
+</project>
