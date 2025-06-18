@@ -34,7 +34,7 @@ public class JobController {
      * @param postId The ID of the job post to retrieve
      * @return The requested job posting
      */
-    @GetMapping("jobPosts/{postId}")
+    @GetMapping(path = "jobPosts/{postId}",produces = {"application/json"})
     public JobsPortal getJob(@PathVariable int postId) {
         return Service.getJob(postId);
     }
@@ -44,7 +44,7 @@ public class JobController {
      *
      * @param jobPortal The job post data to create (received as JSON in request body)
      */
-    @PostMapping("JobPosts")
+    @PostMapping(path = "JobPosts",consumes = {"application/xml"})
     public void AddNewJob(@RequestBody JobsPortal jobPortal) {
         Service.addJob(jobPortal);
     }
