@@ -1,0 +1,128 @@
+Database-Related Annotations Explained for Beginners
+
+Let's break down the important database-related annotations in your Product class in simple terms:
+1. @Entity - The Class-to-Table Marker
+java
+
+@Entity
+
+    What it does: Tells Spring "This class represents a database table"
+
+    Effect: A table named product (same as class name but lowercase) will be created
+
+    Example: Like labeling a box "PRODUCTS" in a warehouse
+
+2. @Id - The Primary Key
+java
+
+@Id
+private int id;
+
+    What it does: Marks this field as the table's primary key (unique identifier)
+
+    Effect: Each product will have a unique ID number
+
+    Example: Like a student ID number that's different for each student
+
+3. @GeneratedValue - Auto-Incrementing ID
+java
+
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    What it does: Makes the database automatically generate new IDs (1, 2, 3...)
+
+    Strategy options:
+
+        IDENTITY: Uses database auto-increment (most common)
+
+        SEQUENCE: Uses database sequences (Oracle, PostgreSQL)
+
+        TABLE: Uses a separate table to track IDs
+
+    Example: Like getting a ticket number that automatically increases at the deli counter
+
+4. @Lob - Large Object Storage
+java
+
+@Lob
+private byte[] imageData;
+
+    What it does: Marks this field for storing large data (images, files)
+
+    Database behavior:
+
+        MySQL: Creates a LONGBLOB column
+
+        PostgreSQL: Creates a BYTEA column
+
+    Example: Like having a special oversized bin for large packages in your warehouse
+
+Other Non-Database Annotations (For Context)
+@Data (Lombok)
+
+    Auto-generates getters, setters, toString(), etc.
+
+@NoArgsConstructor (Lombok)
+
+    Creates a constructor with no arguments (required by Hibernate)
+
+@AllArgsConstructor (Lombok)
+
+    Creates a constructor with all fields
+
+@JsonFormat (Date Formatting)
+java
+
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+
+    Formats dates as strings (e.g., "25-12-2023") in JSON responses
+
+    Doesn't affect database storage (just how dates appear in API responses)
+
+How These Work Together
+
+    @Entity says "make a table for this"
+
+    @Id and @GeneratedValue define the primary key
+
+    Regular fields (name, price) become normal columns
+
+    @Lob makes special storage for large images
+
+Visual Representation
+text
+
+TABLE product (
+  id INT PRIMARY KEY AUTO_INCREMENT,  ← @Id @GeneratedValue
+  name VARCHAR(255),                 ← Regular field
+  description VARCHAR(255),
+  price DECIMAL(19,2),
+  image_data LONGBLOB,               ← @Lob
+  ...
+)
+
+These annotations help Spring automatically: 
+What @JsonFormat Does
+java
+
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+private Date releaseDate;
+
+1. shape = JsonFormat.Shape.STRING
+
+    Meaning: "Convert the date to a text format"
+
+    Alternative: Could use NUMBER to get milliseconds since 1970 (less readable)
+
+2. pattern = "dd-MM-yyyy"
+
+    Meaning: "Format dates as Day-Month-Year"
+
+    Example: December 25, 2023 → "25-12-2023"
+
+
+    Create the database tables
+
+    Convert Java objects to database rows
+
+    Handle IDs and large data properly
