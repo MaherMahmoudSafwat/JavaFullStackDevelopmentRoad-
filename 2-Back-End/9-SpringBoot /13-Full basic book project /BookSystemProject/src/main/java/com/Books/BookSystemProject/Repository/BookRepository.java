@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Repository
 public class BookRepository
 {
-    private ArrayList<Books>BooksList = new ArrayList<>();
+    private static ArrayList<Books>BooksList = new ArrayList<>();
     public boolean IsBookIdAlreadyExists(int BookID)
     {
         for(Books Book:BooksList)

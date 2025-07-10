@@ -9,6 +9,10 @@
         th, td { border: 1px solid #ddd; padding: 8px; }
         button { padding: 5px 10px; margin: 5px; }
         input { padding: 5px; margin: 5px; width: 200px; }
+        .update-section { background-color: #f9f9f9; }
+        .hidden { display: none; }
+        .edit-btn { background-color: #4CAF50; color: white; }
+        .delete-btn { background-color: #f44336; color: white; }
     </style>
 </head>
 <body>
@@ -24,6 +28,25 @@
     <input type="number" step="0.01" id="addPrice" placeholder="Price">
     <button onclick="addBook()">Add Book</button>
     <p id="addResult"></p>
+</div>
+
+<!-- Update Book -->
+<div class="section update-section">
+    <h2>Update Book</h2>
+    <div id="updateInstructions">
+        <p><strong>Click "Edit" button next to any book in the table below to update it.</strong></p>
+    </div>
+    <div id="updateForm" class="hidden">
+        <h3>Editing Book</h3>
+        <input type="number" id="updateId" placeholder="ID" readonly style="background-color: #f0f0f0;">
+        <input type="text" id="updateName" placeholder="Name">
+        <input type="text" id="updateAuthor" placeholder="Author">
+        <input type="text" id="updateDesc" placeholder="Description">
+        <input type="number" step="0.01" id="updatePrice" placeholder="Price">
+        <button onclick="updateBook()" style="background-color: #2196F3; color: white;">Update Book</button>
+        <button onclick="cancelUpdate()" style="background-color: #ff9800; color: white;">Cancel</button>
+        <p id="updateResult"></p>
+    </div>
 </div>
 
 <!-- Search Books -->
@@ -62,7 +85,10 @@
     const API_URL = "http://localhost:8080/Books";
 
     // Load books on page load
-    window.onload = fetchAllBooks;
+    window.onload = function() {
+        fetchAllBooks();
+        showUpdateInstructions();
+    };
 
     // Fetch all books
     async function fetchAllBooks() {
@@ -93,7 +119,43 @@
             });
             const result = await response.text();
             document.getElementById("addResult").innerText = result;
+
+            // Clear form if book was added successfully
+            if (result.includes("Successfully")) {
+                clearAddForm();
+            }
             fetchAllBooks();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    // Update book
+    async function updateBook() {
+        const book = {
+            bookID: parseInt(document.getElementById("updateId").value),
+            bookName: document.getElementById("updateName").value,
+            bookAuthor: document.getElementById("updateAuthor").value,
+            bookDescription: document.getElementById("updateDesc").value,
+            bookPrice: parseFloat(document.getElementById("updatePrice").value)
+        };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(book)
+            });
+            const result = await response.text();
+            document.getElementById("updateResult").innerText = result;
+
+            // Clear form and hide update section if book was updated successfully
+            if (result.includes("successfully")) {
+                setTimeout(() => {
+                    cancelUpdate();
+                    fetchAllBooks();
+                }, 1500);
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -135,6 +197,56 @@
         }
     }
 
+    // Edit book - populate update form
+    function editBook(book) {
+        document.getElementById("updateId").value = book.bookID;
+        document.getElementById("updateName").value = book.bookName;
+        document.getElementById("updateAuthor").value = book.bookAuthor;
+        document.getElementById("updateDesc").value = book.bookDescription || '';
+        document.getElementById("updatePrice").value = book.bookPrice;
+
+        showUpdateForm();
+
+        // Scroll to update section
+        document.querySelector('.update-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Show update form
+    function showUpdateForm() {
+        document.getElementById("updateForm").classList.remove("hidden");
+        document.getElementById("updateInstructions").classList.add("hidden");
+        document.getElementById("updateResult").innerText = "";
+    }
+
+    // Show update instructions
+    function showUpdateInstructions() {
+        document.getElementById("updateForm").classList.add("hidden");
+        document.getElementById("updateInstructions").classList.remove("hidden");
+    }
+
+    // Cancel update
+    function cancelUpdate() {
+        clearUpdateForm();
+        showUpdateInstructions();
+    }
+
+    // Clear forms
+    function clearAddForm() {
+        document.getElementById("addId").value = "";
+        document.getElementById("addName").value = "";
+        document.getElementById("addAuthor").value = "";
+        document.getElementById("addDesc").value = "";
+        document.getElementById("addPrice").value = "";
+    }
+
+    function clearUpdateForm() {
+        document.getElementById("updateId").value = "";
+        document.getElementById("updateName").value = "";
+        document.getElementById("updateAuthor").value = "";
+        document.getElementById("updateDesc").value = "";
+        document.getElementById("updatePrice").value = "";
+    }
+
     // Display books in table
     function displayBooks(books) {
         const tbody = document.querySelector("#booksTable tbody");
@@ -154,8 +266,16 @@
                 row.insertCell().textContent = book.bookPrice;
 
                 const actionCell = row.insertCell();
+
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+                editBtn.className = "edit-btn";
+                editBtn.onclick = () => editBook(book);
+                actionCell.appendChild(editBtn);
+
                 const deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "Delete";
+                deleteBtn.className = "delete-btn";
                 deleteBtn.onclick = () => deleteBook(book.bookID);
                 actionCell.appendChild(deleteBtn);
             }
