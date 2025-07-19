@@ -1,0 +1,29 @@
+SELECT email
+FROM your_table
+WHERE email REGEXP '^[A-Za-z0-9_]+@[A-Za-z]+\\.com$' 
+/* 
+  REGULAR EXPRESSION BREAKDOWN:
+  
+  ^             - Anchor: Must start at beginning of string
+  [A-Za-z0-9_]+ - Character class:
+                  []    = Match any single character within these brackets
+                  A-Z   = Any uppercase letter (A to Z)
+                  a-z   = Any lowercase letter (a to z)
+                  0-9   = Any digit (0 to 9)
+                  _     = Literal underscore character
+                  +     = Quantifier: One or more of the preceding element
+  @             - Literal @ symbol (must appear exactly once)
+  [A-Za-z]+     - Character class for domain name:
+                  Only letters allowed (no numbers or special chars)
+  \\.           - Escaped literal dot (.) character
+                 (normally . means "any character" in regex)
+  com           - Literal 'com' 
+  $             - Anchor: Must end at end of string
+  
+  FULL TRANSLATION:
+  "Starts with one or more letters/numbers/underscores, followed by @,
+   then one or more letters, followed by .com at the end"
+*/
+
+
+
