@@ -1,0 +1,48 @@
+Text Styles
+.title {
+font-family: Arial;
+font-family: Roboto, Verdana, Arial;
+Change the font.
+A font-stack: if Roboto is not available, it will
+fall back to Verdana. If Verdana is not
+available it will fall back to Arial.
+font-size: 30px; Change text size.
+font-weight: bold;
+font-weight: 700;
+Change text thickness.
+Another way to specify font-weight. We can use: 100, 200,
+300, ..., 900. bold = 700, regular = 400, semibold = 500
+font-style: italic;
+text-align: center; Other values we can use: left, right, justified
+line-height: 24px; Adjust space between lines of text.
+text-decoration: underline;
+text-decoration: none;
+Underlines the text.
+Removes underline.
+}
+<p> by default have margin-top and margin-bottom. A common practice is to:
+1. Reset the default margins.
+p {
+margin-top: 0;
+margin-bottom: 0;
+}
+2. Then apply more precise margins.
+.title {
+margin-bottom: 16px;
+}
+Text Elements (also called Inline Elements)
+● Text elements (<strong>, <u>, <span>, <a>) appear within a line of text.
+<p>
+This is a <strong>text element</strong>
+</p>
+Useful if we want to style only a part of the text.
+● <span> is the most generic text element (it doesn't have any default styles).
+● We can style text elements using a class:
+<p>
+This is a <span class="shop-link">text element</span>
+</p>
+.shop-link {
+text-decoration: underline;
+}
+
+

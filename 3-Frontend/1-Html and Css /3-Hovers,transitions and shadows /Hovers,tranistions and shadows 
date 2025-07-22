@@ -1,0 +1,42 @@
+CSS Pseudo-Classes
+.subscribe-button:hover {
+...
+}
+These styles only apply when hovering over an
+element with class="subscribe-button"
+.subscribe-button:active {
+...
+}
+These styles only apply when clicking on an element
+with class="subscribe-button"
+Intermediate CSS Properties
+.subscribe-button {
+opacity: 0.5; Sets how see-through an element is: 0.5 = 50% see-through.
+opacity: 0;
+opacity: 1;
+0 = complete see-through (invisible).
+1 = not see-through (this is the default value).
+transition: <property> <duration>; Transition smoothly when changing styles
+(often used when hovering).
+transition: background-color 1s;
+transition: color 0.15s;
+Transition background color over 1 second.
+Transition text color over 0.15 seconds.
+transition: <property1> <duration1>,
+<property2> <duration2>,
+...;
+Transition multiple properties by separating
+them with a comma.
+transition: background-color 0.15s,
+color 0.15s;
+Transition both background color and text
+color over 0.15 seconds.
+box-shadow: <h-position> <v-position> <blur> <color>;
+box-shadow: 3px 4px 5px black; Creates a shadow that's 3px to the right of
+the element, 4px to the bottom, with 5px of
+blur, and color of black.
+box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.15);
+}
+Creates a shadow that's 3px to the
+right, 4px to the bottom, with no blur
+and a very faint black color 

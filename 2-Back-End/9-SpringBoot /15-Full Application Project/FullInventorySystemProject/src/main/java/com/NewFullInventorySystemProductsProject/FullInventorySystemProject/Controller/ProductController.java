@@ -40,7 +40,7 @@ public class ProductController
     @GetMapping("/by-search/{Search}")
     public ResponseEntity<Object> GetTheProductBySearch(@PathVariable String Search)
     {
-        Product Products = Product_Service.GetProductBySearch(Search);
+        List<Product> Products = Product_Service.GetProductBySearch(Search);
         if(Products != null)
         {
             return new ResponseEntity<>(Products, HttpStatus.OK);

@@ -34,7 +34,7 @@ public class ProductService
     }
 
     @Transactional(readOnly = true)
-    public Product GetProductBySearch(String Search)
+    public List<Product> GetProductBySearch(String Search)
     {
         return Product_Repository.GetProductBySearch(Search);
     }

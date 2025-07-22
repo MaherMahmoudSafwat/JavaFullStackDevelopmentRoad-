@@ -31,7 +31,7 @@ public class CategoryController
     {
         if(Category_Service.UpdateExistingCategory(UpdateCategory)!=0)
         {
-            return new ResponseEntity<>("Category has been updated sucessfully",HttpStatus.CREATED);
+            return new ResponseEntity<>("Category has been updated successfully",HttpStatus.CREATED);
         }
         return new ResponseEntity<>("Category Id is not found",HttpStatus.NOT_FOUND);
     }

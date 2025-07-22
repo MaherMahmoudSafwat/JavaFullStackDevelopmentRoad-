@@ -1,0 +1,38 @@
+Chrome DevTools
+Lets us view (and modify) the HTML and CSS of a website directly in the browser.
+To open the DevTools: right-click > Inspect.
+CSS Box Model
+● Determines how much space an element takes up.
+● Determines how far away elements are from each other.
+1. Margin = space on the outside 2. Padding = space on the inside 3. Border
+.join-button {
+margin-right: 10px;
+margin-left: 10px;
+margin-top: 10px;
+margin-bottom: 10px;
+Add 10px of space on the outside of the element.
+Normal margin pushes things away from an element.
+margin-right: -20px; Negative margin pulls things towards an element like this:
+margin: 10px; Shorthand for adding 10px of margin on all sides.
+margin: 10px 20px; Add 10px of margin top & bottom and 20px left & right
+margin: <top> <left & right> <bottom>;
+margin: <top> <right> <bottom> <left>;
+padding-right: 10px;
+padding-left: 10px;
+padding-top: 10px;
+padding-bottom: 10px;
+Add 10px of space on the inside of the element.
+padding-right: -20px; Negative padding has no effect.
+padding: 10px; Shorthand for adding 10px of padding on all sides.
+padding: 10px 20px; Add 10px of padding top & bottom and 20px left & right
+padding: <top> <left & right> <bottom>;
+padding: <top> <right> <bottom> <left>;
+border-width: 1px; Sets the border width.
+border-style: solid; Sets the border style (to a solid color).
+border-color: red; Sets the border color.
+border: <width> <style> <color>;
+border: 1px solid red;
+Shorthand for the 3 properties above.
+
+
+

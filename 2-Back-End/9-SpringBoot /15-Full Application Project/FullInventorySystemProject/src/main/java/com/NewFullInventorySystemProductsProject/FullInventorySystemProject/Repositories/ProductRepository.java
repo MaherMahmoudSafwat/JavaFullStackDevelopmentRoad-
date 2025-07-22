@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long>
 {
@@ -27,7 +29,7 @@ public interface ProductRepository extends JpaRepository<Product,Long>
                             "ORDER BY name",
                     nativeQuery = true
             )
-    public Product GetProductBySearch(@PathParam("Search")String Search);
+    public List<Product> GetProductBySearch(@PathParam("Search")String Search);
     @Query
             (
                     value = "SELECT * FROM product_table " +

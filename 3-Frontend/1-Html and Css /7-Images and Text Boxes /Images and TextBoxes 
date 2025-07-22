@@ -1,0 +1,35 @@
+Images
+<img src="image.png"> Loads an image image.png beside the HTML file.
+<img src="pics/image.png"> Loads image.png in the pics folder.
+<img class="image" src="pics/image.png">
+.image {
+width: 300px; Resizes the image to a width of 300px. Height will also
+resize to keep the image's dimensions.
+height: 300px; If both width and height are set, the image may stretch.
+object-fit: cover; Enlarges the image to cover the entire width * height area
+without stretching or distorting.
+object-fit: contain; Shrinks the image so that it's contained in the width *
+height area.
+object-position: left;
+object-position: right;
+object-position: top;
+object-position: bottom;
+Determines where the image is positioned in the width *
+height area.
+}
+Inputs
+<input type="text">
+<input type="text" placeholder="Search">
+Creates a text box.
+Add a placeholder (a label) to the text box.
+<input type="checkbox"> Creates a checkbox.
+<input class="search-bar" type="text">
+.search-bar {
+font-size: 30px; Changes the font-size when typing into the text box.
+}
+.search-bar::placeholder {
+font-size: 30px;
+}Changes the font-size of the placeholder.
+
+
+

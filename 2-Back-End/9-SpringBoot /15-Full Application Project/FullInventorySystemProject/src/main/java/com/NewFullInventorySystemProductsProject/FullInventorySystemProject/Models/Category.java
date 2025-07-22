@@ -1,5 +1,6 @@
 package com.NewFullInventorySystemProductsProject.FullInventorySystemProject.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +46,7 @@ public class Category
     @Column(name = "Name",nullable = false)
     private String CategoryName;
     private String CategoryDescription;
+    @JsonIgnore
     @OneToMany
             (
                     mappedBy = "category",

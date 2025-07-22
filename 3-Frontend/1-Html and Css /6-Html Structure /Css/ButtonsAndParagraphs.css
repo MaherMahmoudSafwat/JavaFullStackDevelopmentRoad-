@@ -1,0 +1,140 @@
+    p
+    {
+         font-family: Arial, Helvetica, sans-serif;
+    }
+    .First_Paragraph
+    {
+        font-size: 35px;
+        font-weight: bold;
+        width:597px;
+        line-height: 39px;
+        margin-bottom: 15px;
+    }
+    .Second_Paragraph
+    {
+        font-weight: bold;
+        color: gray;
+        font-family: Bitcount Grid Single;
+    }
+    .Third_Paragraph
+    {
+        color: rgb(96, 96, 96);
+        font-weight: bold;
+        margin-top: 30px;
+    }
+    .Linker
+    {
+        background-color: rgb(179, 4, 4);
+        color: white;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: center;
+    }
+    .ShopNow:hover
+    {
+        cursor: pointer;
+        text-decoration: underline;
+        margin: 3px;
+    }
+    .New
+    {
+        font-size: 15px;
+        color:red;
+        text-align: center;
+    }
+    .MacBookPro
+    {
+        font-weight: bold;
+        font-size: 29px;
+        text-align: center;
+        margin-top: -5px;
+    }
+    .SuperChargedForPros
+    {
+        text-align: center;
+        font-size: 51px;
+        font-weight: bolder;
+        margin-top: -29px;
+    }
+    .Price
+    {
+        font-size: 20px;
+        color:rgb(26, 14, 14);
+        text-align: center;
+        margin-top: -35px;
+    }
+    .Buttons
+    {
+        background-color: rgb(73, 73, 230);
+        color:white;
+        padding: 10px 15px;
+        border:none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 15px;
+        margin-left: 451px;
+    }
+    .Buttons:hover
+    {
+        opacity:0.3;
+    }
+    .Buttons:active
+    {
+        opacity: 0.7;
+    }
+    .TheStocketMarket
+    {
+        font-size: 31px;
+        font-weight: 700px;
+        margin-right: 9px;
+        cursor: pointer;
+    }
+    .USD
+    {
+        font-size: 19px;
+        color: rgba(109, 108, 108, 0.795);
+    }
+    .Rangesss
+    {
+        font-size:15px;
+        color:rgb(7, 143, 7);
+        line-height: 1px;
+    }
+    .After
+    {
+        font-size: 15px;
+        color: rgba(94, 93, 93, 0.74);
+    }
+    .Number
+    {
+        font-size: 15px;
+        color: red;
+    }
+    .FreeCodeCamp
+    {
+        font-size: 19px;
+        font-weight: bold;
+    }
+    .FreeCodeCamp1h
+    {
+        font-size:21px;
+        color:rgb(131, 128, 128);
+    }
+    .Paragraph
+    {
+        font-size: 19px;
+        width:591px;
+        margin-top: -5px;
+        font-weight: 300;
+    }
+    .Big
+    {
+        font-size: 19px;
+        margin-top: 35px;
+    }
+    .Blue
+    {
+        color:rgb(84, 84, 252);
+    }

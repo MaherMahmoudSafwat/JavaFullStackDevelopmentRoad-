@@ -1,0 +1,41 @@
+The HTML Structure
+<!DOCTYPE html>
+<html>
+<head>
+...
+</head>
+<body>
+...
+</body>
+</html>
+Tells the browser to use a modern version of HTML.
+<head> contains everything that's not visible like the title and description
+(a.k.a. metadata) as well as links to fonts and CSS stylesheets.
+<body> contains everything that's visible like buttons, text, images, etc.
+Elements in the Head Section
+<head>
+<title>Title in the tab</title> Sets the title in the tabs
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=sw
+ap">
+^
+Loads a font from Google onto the page. 1) Search "google fonts" in Google. 2) Pick the
+fonts and styles that you like. 3) Copy the code that Google provides into <head>
+<link rel="stylesheet" href="styles.css"> Loads a CSS file to the page
+</head>
+Filepaths
+href="styles.css" Looks for a file called styles.css beside the HTML file.
+href="fold1/styles.css" Looks for a folder called fold1 beside the HTML file, then
+goes into the folder and looks for styles.css.
+href="fold1/fold2/styles.css" Go into fold1, go into fold2, look for styles.css
+
+
+
+
+
+
+
+
+
