@@ -1,0 +1,32 @@
+CSS Grid
+.grid {
+display: grid;
+grid-template-columns: 100px 100px;
+Turns an element into a grid container.
+Sets how many columns are in the grid and
+how wide the columns are.
+column-gap: 20px;
+row-gap: 40px;
+}
+Sets space between the columns.
+Sets space between the rows.
+.grid {
+display: grid;
+grid-template-columns: 100px 1fr; 1fr = the column will take up the remaining
+amount of space in the grid container.
+grid-template-columns: 1fr 1fr; The columns will take up an equal amount of the
+remaining space (since they're both 1fr).
+grid-template-columns: 1fr 2fr; The number in front of fr = relatively how much
+space the column gets. Here, the 2nd column gets
+twice the amount of space as the 1st.
+justify-content: center;
+justify-content: space-between;
+Aligns the columns horizontally in the center.
+Spread out the columns evenly horizontally.
+align-items: center;
+}
+Aligns the columns vertically in the center.
+For more examples, see grid.html.
+
+
+

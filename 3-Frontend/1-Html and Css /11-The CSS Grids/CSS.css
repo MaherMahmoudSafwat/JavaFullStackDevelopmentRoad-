@@ -1,0 +1,71 @@
+.FullGridsProject
+{
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    column-gap: 90px;
+    justify-content: center;
+    justify-content: space-between;
+    align-items:center;
+}
+.TheFirstDiv,.TheSecondDiv,.TheThirdDiv
+{
+    box-shadow: 0px 0px 5px rgb(44, 44, 44);
+    width: 257px;
+    height: 400px;
+}
+.Image1,.Image2,.Image3
+{
+    width:257px;
+    height: 253px;
+}
+.Img1,.Img2,.Img3
+{
+    width:100%;
+    height: 100%;
+}
+.Oliver,.Mimi,.Rex
+{
+    margin-left: 13px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+.NestedGridsProject
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.Account-Image
+{
+    width:39px;
+    height: 45px;
+}
+.Account
+{
+    width:100%;
+    height: 100%;
+    border-radius: 57%;
+    margin-left: 13px;
+}
+.Mutual
+{
+    margin-top: -5px;
+    margin-left: -67px;
+    color:rgb(124, 122, 122);
+    vertical-align: top;
+}
+.AddFriend
+{
+    margin-left:13px;
+    margin-top: 9px;
+}
+.AddFriendButton
+{
+    background-color: rgb(80, 80, 238);
+    color: white;
+    border: none;
+    width: 95px;
+    height: 39px;
+    font-weight: bold;
+}
+
+

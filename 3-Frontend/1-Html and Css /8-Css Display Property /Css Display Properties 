@@ -1,0 +1,10 @@
+CSS Display Property
+.element {
+display: block; Element will take up the entire line in its container.
+display: inline-block; Element will only take up as much space as needed.
+vertical-align: middle; Determines vertical alignment of inline-block elements.
+display: inline; Element will appear within a line of text (a text element).
+}
+
+
+

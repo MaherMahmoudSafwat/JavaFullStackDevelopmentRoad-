@@ -1,0 +1,36 @@
+.FirstDesign
+{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 5px rgb(179, 179, 179);
+    border-radius: 5px;
+    padding-left: 15px;
+    padding-top:9px;
+    padding-bottom: 5px;
+}
+.Nested-Home,.Nested-Notifications,.Nested-Messages
+{
+    display: flex;
+    flex-direction: row;
+}
+p
+{
+    font-family: Arial; 
+    font-size: 25px;
+    flex:15;
+}
+button
+{
+    background-color: rgb(81, 81, 241);
+    border: none;
+    color:white;
+    font-weight: bold;
+    font-size: 19px;
+    width: 59px;
+    height:35px;
+    border-radius: 19px;
+    flex:1;
+    margin-right: 15px;
+    margin-top: 21px;
+}
+

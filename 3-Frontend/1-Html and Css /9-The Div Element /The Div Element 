@@ -1,0 +1,23 @@
+<div> Element
+<div> is a container. We generally put other elements (including other <div>s) inside (nesting).
+<div class="container">
+<p>Name</p>
+<input type="text">
+</div>
+<div class="container">
+<p>Quantity</p>
+<div>
+<button>1</button>
+<button>2</button>
+</div>
+<button>Submit</button>
+</div>
+.container {
+<div>s allow us to group elements together and create
+more complex layouts.
+display: inline-block;
+width: 200px;
+}
+
+
+

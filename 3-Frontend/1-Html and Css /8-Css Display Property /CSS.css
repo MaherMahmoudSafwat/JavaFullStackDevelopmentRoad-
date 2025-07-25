@@ -1,0 +1,68 @@
+p
+{
+    display:inline-block;
+}
+img
+{
+    display: block;
+}
+input
+{
+    display: block;
+}
+.Request
+{
+    font-weight: 350;
+    font-size: 57px;
+    margin-bottom: 25px;
+}
+input
+{
+    width:555px;
+    height:39px;
+    padding-left: 21px;
+    background-color: rgb(238, 238, 238);
+    color:rgb(24, 21, 21);
+    border:none;
+    font-size: 17px;
+    display: block;
+    margin-bottom: 25px;
+}
+.Now
+{
+    background-color: black;
+    color: white;
+    width: 197px;
+    height:50px;
+    font-size: 21px;
+    border:none;
+    cursor: pointer;
+    margin-right: 15px;
+}
+.Now:hover
+{
+    opacity: 0.7;
+}
+.Now:active
+{
+    opacity: 0.3;
+}
+.Schedule
+{
+    background-color: rgb(233, 233, 233);
+    color: rgb(0, 0, 0);
+    width: 257px;
+    height:50px;
+    font-size: 19px;
+    border:none;
+    cursor: pointer;
+    vertical-align: top;
+}
+.Schedule:hover
+{
+    opacity: 0.7;
+}
+.Schedule:active
+{
+    opacity: 0.3;
+}
