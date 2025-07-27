@@ -1,0 +1,109 @@
+Responsive Design
+Responsive design = making the website look good on any screen size.
+@media (max-width: 750px) {
+.element {
+Only apply the CSS code below when screen width
+is between 0px - 750px.
+width: 350px;
+}
+}
+@media (min-width: 750.02px) and (max-width: 1000px) {
+.element {
+width: 450px;
+}
+Only apply this CSS code when screen width is
+between 750px - 1000px.
+}
+@media (min-width: 1000.02px) {
+.element {
+width: 600px;
+}
+}
+Only apply this CSS code when the screen width is
+over 1000px.
+We generally use a gap of .02px between the ranges (like above) because the browser can
+support fractional screen widths like 750.50px.
+Advanced CSS Selectors
+With Comma
+.class1, .class2 { ... } Target multiple classes at the same time.
+.class1, p { ... } Target a class and all <p>s at the same time.
+With Space
+.class1 img { ... } Target <img>s that are inside elements with
+class="class1"
+.class1 img,
+.class2 .tooltip { ... }
+Target <img>s that are inside elements with
+class="class1" AND .tooltip inside elements with
+class="class2".
+.class2:hover .tooltip { ... } Target .tooltip only when hovering over elements
+with class="class2".
+For a full list of selectors, check out CSS Selectors.
+Inheritance
+A text property set on the outer element will be passed down into inner elements:
+<div style="color: red;">
+<p>Paragraph</p>
+</div>
+This paragraph will have red text.
+For global text styles (styles we want on the entire page), we can set them on the <body>:
+body {
+font-family: Roboto, Arial;
+color: rgb(20, 20, 20);
+}
+All elements on the page by default will use
+font-family: Roboto, Arial and color:
+rgb(20, 20, 20). This can be overridden.
+CSS Specificity
+If multiple CSS selectors change the same property on the same element (see example below),
+CSS Specificity determines which selector "wins" (which style gets applied).
+body { color: black; }
+p { color: red; }
+.title { color: green; }
+<body>
+<p class="title">
+Paragraph of text.
+</p>
+</body>
+In this example, the .title selector has the highest priority
+(according to CSS Specificity) so the text will be green.
+CSS Specificity Rules
+Here's the full set of CSS Specificity Rules (you don't need to memorise all of these).
+Usually, you just need to know a few useful rules and search Google for more if needed:
+1. Inline CSS has higher priority than .class selectors.
+2. .class selectors have higher priority than element name selectors (p).
+3. Element name selectors (p) have higher priority than inheritance (from body).
+4. If 2 selectors have the same priority, the one that is written later wins.
+General Rule of Thumb
+A CSS selector that's more specific (targets a more specific set of elements) has higher priority.
+Semantic Elements
+Elements that work the same way as <div>. However, they also give the HTML meaning when
+screen readers, search engines, or other devices read the website.
+Common semantic elements include:
+<header>, <nav>, <main>, <section>, etc.
+Here's a list of Semantic Elements. They'll be covered in more detail in the accessibility course.
+Comments
+Let us write code that the browser ignores. Useful for documenting how the code works.
+<!-- This is a comment -->
+<p class="title">
+Paragraph of text.
+</p>
+Syntax for a comment in HTML: <!-- ... -->
+/* This is a comment */
+.title {
+color: green;
+}
+Syntax for a comment in CSS: /* ... */
+Other CSS Properties
+Here are some other CSS properties that were covered in the course.
+.tooltip {
+pointer-events: none; Disables all interactions with the mouse (clicks, hovers, etc.)
+white-space: nowrap;
+}
+Prevents the text inside the element from wrapping to
+multiple lines.
+
+
+
+
+
+
+

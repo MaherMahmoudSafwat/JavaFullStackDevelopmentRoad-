@@ -1,0 +1,90 @@
+body
+{
+    height:1500px;
+}
+.FullContainer
+{
+    display: flex;
+    flex-direction: row;
+}
+.FirstSection
+{
+    display:flex;
+    background-color: rgb(63, 63, 63);
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    width:135px;
+    flex-direction: column;
+    padding-top: 19px;
+}
+.Paragraph
+{
+    background-color: rgb(109, 107, 107);
+    position: fixed;
+    width:357px;
+    left:135px;
+    top:0;
+    bottom:0;
+}
+.Image1,.Image2,.Image3
+{
+    margin-top: 29px;
+    display: flex;
+    justify-content: center;
+    padding-top: 21px;
+}
+.Lion-Image,.Cat-Image,.Tree-Image
+{
+    width:39%;
+    border-radius: 50%;
+    height: 53px;
+}
+.UpperSection
+{
+    display: flex;
+    flex-direction: row;
+    vertical-align: top;
+}
+.INFO
+{
+    font-weight: bold;
+    color:white;
+    flex:0.9;
+    margin-left: 29px;
+    margin-top: 61px;
+}
+.TheAddIcon
+{
+    font-weight: bold;
+    color:rgb(218, 215, 215);
+    margin-left: 29px;
+    margin-top: 51px;
+    font-size: 31px;
+}
+.TheRemainingSection
+{
+    display: flex;
+    flex-direction: column;
+}
+.New
+{
+    margin-left:27px;
+    font-size:19px;
+    color:rgb(218, 215, 215);
+    margin-bottom: 21px;
+}
+.Updates
+{
+    margin-left:27px;
+    font-size:19px;
+    color:rgb(218, 215, 215);
+    margin-bottom: 21px;
+}
+.Faq
+{
+    margin-left:27px;
+    font-size:19px;
+    color:rgb(218, 215, 215);
+}

@@ -1,0 +1,95 @@
+Position Absolute
+.absolute {
+position: absolute;
+Positions the element on the page (it will scroll with the page and
+will not stick when scrolling).
+top: 0; Places the element 0px from the top of the page.
+bottom: 10px; 10px from the bottom of the page.
+left: 50px; 50px from the left of the page.
+right: 100px; 100px from the right of the page.
+width: 100px;
+height: 100px;
+}
+Sets the element's width to 100px.
+Sets the element's height to 100px.
+Position Absolute Inside Position Fixed
+● When a position: absolute element is inside a position: fixed element, it will be
+positioned relative to the fixed element.
+● This rule also applies to any position value that is not position: static.
+● This lets us place elements in the corners of other elements. For example, a "Close"
+button in the top-right corner.
+<div style="
+position: fixed;
+width: 100px;
+">
+<button style="
+position: absolute;
+top: 0;
+right: 0;
+">
+X
+</button>
+</div>
+The position: absolute element will be placed in the
+top-right of the position: fixed element.
+Position Relative
+.relative {
+position: relative;
+The element will appear normally (as if it's position: static).
+We can then push it around with top/bottom/left/right.
+top: 10px; Places the element 10px from the top of its original position
+(pushes it down by 10px). Unlike margin, it won't push the rest of
+the page down.
+bottom: 10px; Places the element 10px from the bottom of its original position
+(pushes it up by 10px).
+left: 50px; Places the element 50px from the left of its original position.
+right: 100px; Places the element 100px from the right of its original position.
+width: 100px;
+height: 100px;
+}
+Sets the element's width to 100px.
+Sets the element's height to 100px.
+Position Absolute Inside Position Relative
+● When a position: absolute element is inside a position: relative element, it will
+be positioned relative to the relative element.
+● Useful if we want to display an element normally (using position: relative), but still
+be able to place other elements in the corner (using position: absolute).
+<div style="
+position: relative;
+width: 100px;
+">
+<button style="
+position: absolute;
+top: 0;
+right: 0;
+">
+3
+</button>
+</div>
+The position: absolute element will be placed in
+the top-right of the position: relative element.
+z-index
+Determines which elements appear in front and behind:
+● Elements with a higher z-index appear in front of elements with a lower z-index. The
+default z-index is 0.
+● Elements with position: static; always appear at the back. z-index has no effect.
+● If the z-index is equal or both elements are position: static, the element that was
+written later in the code will appear in front.
+.fixed {
+position: fixed;
+z-index: 2;
+}
+.absolute {
+position: absolute;
+z-index: 1;
+}
+.static {
+position: static;
+}
+This element will appear in front of the position: absolute;
+element because it has a higher z-index.
+This element will appear at the back since it's position: static.
+For more examples, see position.html.
+
+
+

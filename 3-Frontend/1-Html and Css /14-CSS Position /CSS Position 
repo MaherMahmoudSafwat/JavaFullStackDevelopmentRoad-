@@ -1,0 +1,32 @@
+CSS Position
+● Create elements that stick to the page while scrolling.
+● Create elements that appear on top of other elements.
+.element {
+position: static;
+}
+This is the default value that every element starts with.
+position: static; causes the element to display normally.
+Position Fixed
+.fixed {
+position: fixed;
+Positions the element in the browser window (sticks to the page
+while scrolling).
+top: 0; Places the element 0px from the top of the browser window.
+bottom: 10px; 10px from the bottom of the browser window.
+left: 50px; 50px from the left of the browser window.
+right: 100px; 100px from the right of the browser window.
+● If you set opposite directions (top/bottom or left/right),
+the element will stretch.
+top: -5px; Using negative pixels places the element beyond the top edge.
+width: 100px;
+height: 100px;
+}
+Sets the element's width to 100px.
+Sets the element's height to 100px.
+● When using width/height the element will not resize with
+the page.
+● When using top/bottom/left/right the element will resize
+with the page.
+
+
+

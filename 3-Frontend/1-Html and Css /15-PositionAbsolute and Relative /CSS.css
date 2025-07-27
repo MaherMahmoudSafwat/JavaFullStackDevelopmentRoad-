@@ -1,0 +1,44 @@
+.Relative {
+  position: relative;
+  left: 350px; /* Only use LEFT or RIGHT, not both */
+  top: 150px;
+  width: 39%; /* Match image width */
+  height:501px;
+}
+
+img {
+  width: 100%; /* Fills parent width (39%) */
+  height:100%;
+  z-index:1;
+}
+
+.Price {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 9px;
+  font-size: 15px;
+  top: 10px;
+  right: 0px; /* Now aligns properly within .Relative */
+}
+.Bottom
+{
+    position:absolute;
+    background-color:rgb(243, 243, 243);
+    bottom: 0px;
+    width:100%;
+    height:35%;
+    opacity: 0.9;
+}
+.ButtonIconContainer
+{
+    position: absolute;
+    bottom:59px;
+    left:193px;
+    border-width:3px;
+    border-color: black;
+    background-color: rgb(236, 236, 236);
+    width:21%;
+    height:25%;
+    font-weight: 500;
+}
