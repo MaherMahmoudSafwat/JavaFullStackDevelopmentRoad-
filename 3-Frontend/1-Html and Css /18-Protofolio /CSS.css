@@ -1,0 +1,90 @@
+body
+{
+    background-color:rgb(6, 101, 117);
+}
+.Header
+{
+    margin-left: -1px;
+    color:white;
+}
+.Name
+{
+    color:white;
+} 
+legend
+{
+    color: white; 
+}
+.TheFirstName label
+{
+    color: #ffffff;
+}
+.TheFirstName input
+{
+    height:25px;
+    margin-top:13px;
+}
+.Name1
+{
+     color: #ffffff;
+     display:inline-block;
+     width:95px;
+}
+.TheLastName input
+{
+    height:25px;
+    margin-top:13px;
+    margin-left: -3px;
+    width:163px;
+}
+.Phone
+{
+     color: #ffffff;
+     display:inline-block;
+}
+.Phone input
+{
+    height:25px;
+    margin-top:13px;
+    margin-left: -3px;
+    width:163px;
+}
+.Email label
+{
+    color: #ffffff;
+    margin-right: 41px;
+    height:25px;
+}
+.Email input
+{
+    height:25px;
+    margin-top:13px;
+}
+.Password label
+{
+    color: #ffffff;
+    margin-right: 12px;
+    height:25px;
+}
+.Password input
+{
+    height:25px;
+    margin-top:13px;
+    margin-left: -3px;
+    width:163px;
+}
+.Re-Password
+{
+    color: #ffffff;
+    margin-right: 12px;
+    width:105px;
+    display: inline-block;
+    margin-top: 5px;
+}
+.Input
+{
+    height:25px;
+    margin-top:13px;
+    margin-left: -24px;
+    width:163px;
+}

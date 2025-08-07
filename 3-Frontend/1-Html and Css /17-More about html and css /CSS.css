@@ -1,0 +1,59 @@
+body {
+    /* background-image: url("Cat.jpeg"); */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: contain; /* Fits image within body */
+    min-width: 105px;
+    max-height: 309px;
+    /* Replace opacity with background-color for transparency */
+    background-color: rgba(255, 0, 0, 0.5); /* Red tint with 50% opacity */
+}
+u
+{
+    list-style-type: square;
+}
+input:checked + label
+{
+    color:red;
+}
+p::before
+{
+    content: attr(data-text);
+}
+.Parent
+{
+    display:inline-flex;
+    background-color: #eee;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: space-between;
+    width:50%;
+}
+.Parent div
+{
+    width:20%;
+    background-color: red;
+    padding-left:10px;
+}
+img
+{
+    filter: grayscale(73%);
+    -webkit-filter: grayscale(5%);
+}
+button
+{
+    background-color: rgb(52, 52, 221);
+    transform: rotate(70deg);
+    transform:skew(-15deg, -10deg);
+}
+button:hover
+{
+    -moz-transform: rotate(0.5turn);
+}
+@media (min-width:800px) and (max-width: 1050px)
+{
+    img 
+    {
+        height: 759px;
+    }
+}
