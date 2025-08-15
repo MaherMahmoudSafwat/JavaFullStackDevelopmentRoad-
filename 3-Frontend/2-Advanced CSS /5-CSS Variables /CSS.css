@@ -1,0 +1,17 @@
+:root
+{
+    --primary-color:green;
+    --secondary-color:blue;
+}
+.container
+{
+    display:flex;
+}
+
+.box
+{
+    padding:10px;
+    margin:10px;
+    background-color: var(--primary-color);
+    color:var(--secondary-color);
+}

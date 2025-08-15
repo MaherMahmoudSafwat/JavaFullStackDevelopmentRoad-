@@ -1,0 +1,23 @@
+.container
+{
+    display:flex;
+}
+
+.box
+{
+    background-color: #333;
+    color:#fff;
+    padding:10px;
+    margin:10px;
+
+    box-shadow: 5px 5px 5px orange;
+    box-shadow: -5px -5px 5px orange;
+
+    box-shadow: inset 5px 5px 5px orange;
+    box-shadow: inset -5px -5px 5px orange;
+}
+
+p
+{
+    text-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+}

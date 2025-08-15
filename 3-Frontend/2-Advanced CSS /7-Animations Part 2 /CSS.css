@@ -1,0 +1,43 @@
+body
+{
+    background-color: black;
+}
+div
+{
+    width:100px;
+    height:100px;
+    background-color: red;
+    position:relative;
+    top:0;
+    left:0;
+    animation-name: box;
+    animation-duration: 6s;
+}
+@keyframes box
+{
+   0%
+   {
+    top:0;
+    left:0;
+   }
+   25%
+   {
+    top:0;
+    left:300px;
+   }
+   50%
+   {
+    top:300px;
+    left:300px;
+   }
+   75%
+   {
+    top:300px;
+    left:0;
+   }
+   100%
+   {
+    top:0;
+    left:0;
+   }
+}

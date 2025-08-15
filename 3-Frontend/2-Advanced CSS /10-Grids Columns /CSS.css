@@ -1,0 +1,15 @@
+.grid
+{
+    display:grid;
+    /* grid-template-columns: 100px 100px 100px; */
+    /* grid-template-columns: 1fr 2fr 3fr; */
+    /* grid-template-columns: repeat(3,auto); */
+    grid-template-columns: repeat(3,100px);
+}
+.box
+{
+    padding: 1.5rem;
+    background-color: #eee;
+    border:1px solid #bbb;
+    text-align:center;
+}

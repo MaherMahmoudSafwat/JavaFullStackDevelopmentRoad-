@@ -1,0 +1,31 @@
+body
+{
+   background-color: #333; 
+}
+
+div
+{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:50vh;
+}
+
+button
+{
+    font-size: 18px;
+    border:none;
+    padding:15px 25px;
+    background-color: green;
+    transition-property: background-color;
+    transition-duration: 1s;
+    /* transition-timing-function: ease-in;
+    transition: background-color, border-radius, 1s ease-in; */
+    transition: all 1s ease-in;
+}
+
+button:hover
+{
+    background-color: blue;
+    border-radius: 20px;
+}
