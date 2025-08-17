@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="CSS.css">
+</head>
+<body>
+    <header>
+        <div class="image-icon"></div>
+        <div class="title">
+            <p>Caffeine Cove</p>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="navbar">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#menu">Menu</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="coffee-bean"></div>
+        <div class="coffee-bean"></div>
+        <div class="coffee-bean"></div>
+        
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <p>Black coffee is awesome</p>
+                <h3>TIME TO DISCOVER COFFEE HOUSE</h3>
+                <p>
+                    We care about quality and sustainability,
+                    sourcing ethically and using eco-friendly
+                    practices - because great coffee should make a difference
+                </p>
+                <button class="cta-button" onclick="scrollToSection('about')">
+                    Explore More
+                    <div class="button-icon"></div>
+                </button>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="image-container">
+                <div class="Coffee-Picture-Class">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=500&fit=crop" alt="Coffee Shop Interior">
+                </div>
+            </div>
+            <div class="content-container">
+                <h2 class="main-title">Caffeine Cove About Info</h2>
+                <p class="intro-text">
+                    Caffeine Cove began as a small neighborhood cafe with a passion for great coffee and a welcoming atmosphere. Today, it's a go-to spot for coffee lovers seeking quality and comfort.
+                </p>
+                <div class="feature-section">
+                    <h3 class="feature-title">A Cozy Escape</h3>
+                    <p class="feature-text">
+                        Our cafe is designed for relaxation—whether you're working, meeting friends, or enjoying a quiet moment. With a warm ambiance and handcrafted drinks, every visit feels like home.
+                    </p>
+                </div>
+                <div class="feature-section">
+                    <h3 class="feature-title">Quality & Sustainability</h3>
+                    <p class="feature-text">
+                        We source premium, sustainable coffee beans and use eco-friendly practices to serve you responsibly. Every cup supports ethical sourcing and a greener planet.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="menu-section">
+            <div class="menu-header">
+                <p class="small-title">Set Menu</p>
+                <h2 class="big-title">OUR POPULAR MENU</h2>
+            </div>
+
+            <div class="menu-container">
+                <!-- Left Column -->
+                <div class="menu-column">
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="menu-1.png" alt="Espresso" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Espresso</h3>
+                                <p class="menu-description">A strong rich coffee made by forcing hot water through finely ground coffee beans.</p>
+                            </div>
+                            <span class="menu-price">$19.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?w=400&h=400&fit=crop" alt="Americano" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Americano</h3>
+                                <p class="menu-description">Espresso mixed with hot water for a smoother, milder flavor.</p>
+                            </div>
+                            <span class="menu-price">$14.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=400&h=400&fit=crop" alt="Cappuccino" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Cappuccino</h3>
+                                <p class="menu-description">A balanced mix of espresso, steamed milk, and frothy milk foam.</p>
+                            </div>
+                            <span class="menu-price">$12.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1561882468-9110e03e0f78?w=400&h=400&fit=crop" alt="Latte" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Latte</h3>
+                                <p class="menu-description">Espresso with a lot of steamed milk and a light layer of foam.</p>
+                            </div>
+                            <span class="menu-price">$18.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="menu-column">
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400&h=400&fit=crop" alt="Flat White" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Flat White</h3>
+                                <p class="menu-description">Similar to a latte but with a higher ratio of espresso to steamed milk.</p>
+                            </div>
+                            <span class="menu-price">$15.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=400&fit=crop" alt="Cortado" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Cortado</h3>
+                                <p class="menu-description">A perfect balance of espresso and warm milk, reducing acidity.</p>
+                            </div>
+                            <span class="menu-price">$12.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&h=400&fit=crop" alt="Macchiato" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Macchiato</h3>
+                                <p class="menu-description">Espresso "stained" with a small amount of steamed milk.</p>
+                            </div>
+                            <span class="menu-price">$12.99</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="image-container">
+                            <img src="menu-8.png" alt="Mocha" class="menu-image">
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-info">
+                                <h3 class="menu-name">Mocha</h3>
+                                <p class="menu-description">Espresso with chocolate syrup, steamed milk, and whipped cream.</p>
+                            </div>
+                            <span class="menu-price">$12.99</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+         <section id="testimonials" class="Testimonials">
+        <p>WHAT OUR CLIENTS SAY</p>
+        
+        <div class="testimonials-container">
+            <div class="client-testimonial" style="--animation-delay: 0.2s;">
+                <img src="person1.jpg" alt="Mohamed Ramadan" class="client-image">
+                <div class="star-rating">
+                    <span class="star" style="--delay: 0s;">★</span>
+                    <span class="star" style="--delay: 0.2s;">★</span>
+                    <span class="star" style="--delay: 0.4s;">★</span>
+                    <span class="star" style="--delay: 0.6s;">★</span>
+                    <span class="star" style="--delay: 0.8s;">★</span>
+                </div>
+                <p class="client-name">Mohamed Ramadan</p>
+                <p class="client-quote">
+                    Caffeine Cove never disappoints! The coffee is always
+                    fresh, rich, and perfectly brewed. The ambiance is cozy,
+                    making it my go-to spot for work and relaxation.
+                </p>
+            </div>
+
+            <div class="client-testimonial" style="--animation-delay: 0.4s;">
+                <img src="person2.jpg" alt="Islam Mohamed" class="client-image">
+                <div class="star-rating">
+                    <span class="star" style="--delay: 0s;">★</span>
+                    <span class="star" style="--delay: 0.2s;">★</span>
+                    <span class="star" style="--delay: 0.4s;">★</span>
+                    <span class="star" style="--delay: 0.6s;">★</span>
+                    <span class="star" style="--delay: 0.8s;">★</span>
+                </div>
+                <p class="client-name">Islam Mohamed</p>
+                <p class="client-quote">
+                    The baristas are super friendly, and they
+                    remember my order every time! The pastries are
+                    fresh, and the lattes are simply divine. Highly
+                    recommended!
+                </p>
+            </div>
+
+            <div class="client-testimonial" style="--animation-delay: 0.6s;">
+                <img src="person3.jpg" alt="Mostafa Ashraf" class="client-image">
+                <div class="star-rating">
+                    <span class="star" style="--delay: 0s;">★</span>
+                    <span class="star" style="--delay: 0.2s;">★</span>
+                    <span class="star" style="--delay: 0.4s;">★</span>
+                    <span class="star" style="--delay: 0.6s;">★</span>
+                    <span class="star" style="--delay: 0.8s;">★</span>
+                </div>
+                <p class="client-name">Mostafa Ashraf</p>
+                <p class="client-quote">
+                    I appreciate that Caffeine Cove sources ethical,
+                    high-quality beans. The coffee is smooth, and
+                    the flavors are always on point!
+                </p>
+            </div>
+        </div>
+    </section>
+     <section id="contact"class="reservation-area">
+        <!-- Header Section -->
+        <div class="reservation-header">
+            <p class="section-subtitle">What Happens Here</p>
+            <h2 class="section-title">RESERVATION AREA</h2>
+        </div>
+
+        <!-- Main Content -->
+        <div class="reservation-content">
+            <!-- Left Side - Google Map -->
+            <div class="left-side">
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55262.232055127046!2d31.13635897636413!3d30.04002774575956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145847ecd82ee3fd%3A0xdbe911ecbcea92ab!2sCilantro%20Mossadak!5e0!3m2!1sen!2seg!4v1755371588228!5m2!1sen!2seg" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="location-badge">
+                        <h4>📍 Caffeine Cove</h4>
+                        <p>Cilantro Mossadak<br>Cairo, Egypt</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Booking Form -->
+            <div class="right-side">
+                <div class="coffee-decoration"></div>
+                <div class="coffee-decoration"></div>
+                <div class="coffee-decoration"></div>
+                <div class="coffee-decoration"></div>
+
+                <h3 class="booking-title">BOOK A TABLE</h3>
+                <p class="booking-subtitle">Experience exceptional coffee in our welcoming atmosphere.<br>Reserve your perfect moment with us.</p>
+
+                <form class="booking-form" onsubmit="handleReservation(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Your Email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="number" class="form-input" placeholder="Number of Persons" min="1" max="15" required>
+                        </div>
+                        <div class="form-group time-select">
+                            <select required>
+                                <option value="">Select Time Slot</option>
+                                <option value="07:30">7:30 AM</option>
+                                <option value="08:00">8:00 AM</option>
+                                <option value="08:30">8:30 AM</option>
+                                <option value="09:00">9:00 AM</option>
+                                <option value="09:30">9:30 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="10:30">10:30 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="11:30">11:30 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="12:30">12:30 PM</option>
+                                <option value="13:00">1:00 PM</option>
+                                <option value="13:30">1:30 PM</option>
+                                <option value="14:00">2:00 PM</option>
+                                <option value="14:30">2:30 PM</option>
+                                <option value="15:00">3:00 PM</option>
+                                <option value="15:30">3:30 PM</option>
+                                <option value="16:00">4:00 PM</option>
+                                <option value="16:30">4:30 PM</option>
+                                <option value="17:00">5:00 PM</option>
+                                <option value="17:30">5:30 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="18:30">6:30 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                                <option value="19:30">7:30 PM</option>
+                                <option value="20:00">8:00 PM</option>
+                                <option value="20:30">8:30 PM</option>
+                                <option value="21:00">9:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group date-input">
+                        <input type="date" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="message-textarea" placeholder="Special requests, dietary requirements, or celebration details..." rows="4"></textarea>
+                    </div>
+
+                    <button type="submit" class="book-button">
+                        BOOK A TABLE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    </main>
+    <!-- Footer Section -->
+    <footer>
+        <div>
+            <div class="First-Section">
+                <h2>About Us</h2>
+                <p>
+                    This is the perfect place to find a nice and Cozy
+                    spot to sip some. You'll find the java jungle.
+                </p>
+                <p><span class="icon address-icon"></span>Address: Giza, Egypt</p>
+                <p><span class="icon email-icon"></span>Email: contact@mohamedelkashef.com</p>
+                <p><span class="icon phone-icon"></span>Phone: 0123456789</p>
+            </div>
+            
+            <div class="Second-Section">
+                <h2>Quick Links</h2>
+                <a href="#">Home</a>
+                <a href="#">About Us</a>
+                <a href="#">Menu</a>
+                <a href="#">Testimonials</a>
+                <a href="#">Contact</a>
+            </div>
+            
+            <div class="Third-Section">
+                <h2>Follow Us</h2>
+                <p><span class="social-icon facebook"></span>Facebook</p>
+                <p><span class="social-icon twitter"></span>Twitter</p>
+                <p><span class="social-icon youtube"></span>YouTube</p>
+                <p><span class="social-icon instagram"></span>Instagram</p>
+                <p><span class="social-icon pinterest"></span>Pinterest</p>
+            </div>
+        </div>
+        
+        <div>
+            <p><span class="icon copyright-icon"></span>All rights reserved | Made by Mohamed ElKashef</p>
+        </div>
+    </footer>
+</html>
