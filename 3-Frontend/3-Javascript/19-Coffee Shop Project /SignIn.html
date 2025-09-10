@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Caffine Coffee</title>
+  <link rel="stylesheet" href="SignIn.css">
+</head>
+<body>
+  <div class="container">
+        <div class="logo">
+            <span class="coffee-icon">☕</span>
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to your Caffine Coffee account</p>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            <strong>Success!</strong> Your information has been sent successfully!
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            <strong>Error!</strong> Please fill in all required fields.
+        </div>
+
+        <form id="signinForm" action="mailto:MaherMsSoftware2001@gmail.com" method="post">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number (Optional)</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me for 30 days</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="newsletter" name="newsletter">
+                <label for="newsletter">Subscribe to our coffee newsletter</label>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    Sign In
+                </button>
+                <button type="reset" class="btn btn-secondary">Reset Form</button>
+            </div>
+        </form>
+
+        <div class="social-login">
+            <p class="social-text">Or continue with</p>
+            <div class="social-buttons">
+                <button class="social-btn google" onclick="socialLogin('google')">📧 Google</button>
+                <button class="social-btn facebook" onclick="socialLogin('facebook')">📘 Facebook</button>
+                <button class="social-btn twitter" onclick="socialLogin('twitter')">🐦 Twitter</button>
+            </div>
+        </div>
+    </div>
+    <script src="SignInScript.js"></script>
+</body>
+</html>

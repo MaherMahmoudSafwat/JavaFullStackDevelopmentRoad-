@@ -1,0 +1,1885 @@
+# Complete Java Advanced Topics Guide
+# دليل شامل لموضوعات جافا المتقدمة
+
+---
+
+## Table of Contents / فهرس المحتويات
+
+1. [Lambda Expressions / التعبيرات اللامدا](#lambda-expressions)
+2. [Stream API / واجهة التدفق](#stream-api)
+3. [Inner Classes / الكلاسات الداخلية](#inner-classes)
+4. [Anonymous Functions / الوظائف المجهولة](#anonymous-functions)
+5. [Enums / التعدادات](#enums)
+6. [Generics / الأنواع العامة](#generics)
+7. [Collections Framework / إطار المجموعات](#collections-framework)
+8. [Collections Framework / إطار المجموعات](#collections-framework)
+9. [Optional Class / كلاس Optional](#optional-class)
+10. [Multithreading / البرمجة المتوازية](#multithreading)
+11. [Reflection / الانعكاس](#reflection)
+12. [Annotations / التعليقات التوضيحية](#annotations)
+
+---
+
+## 1. Lambda Expressions / التعبيرات اللامدا {#lambda-expressions}
+
+### English Explanation:
+Lambda expressions are anonymous functions that allow you to write concise code. They were introduced in Java 8 and enable functional programming paradigms.
+
+**Syntax:** `(parameters) -> { body }`
+
+### Arabic Explanation / الشرح بالعربية:
+التعبيرات اللامدا هي وظائف مجهولة تسمح لك بكتابة كود مختصر. تم تقديمها في جافا 8 وتمكن من استخدام نماذج البرمجة الوظيفية.
+
+**بناء الجملة:** `(parameters) -> { body }`
+
+### Code Examples / أمثلة الكود:
+
+```java
+import java.util.*;
+import java.util.function.*;
+
+public class LambdaExamples {
+    public static void main(String[] args) {
+        // Simple lambda / لامدا بسيطة
+        List<String> names = Arrays.asList("Ahmed", "Fatma", "Omar", "Nour");
+        
+        // Traditional way / الطريقة التقليدية
+        names.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String name) {
+                System.out.println(name);
+            }
+        });
+        
+        // Lambda way / طريقة اللامدا
+        names.forEach(name -> System.out.println(name));
+        
+        // Method reference / مرجع الطريقة
+        names.forEach(System.out::println);
+        
+        // Lambda with multiple parameters / لامدا بمعاملات متعددة
+        Comparator<String> lengthComparator = (s1, s2) -> s1.length() - s2.length();
+        names.sort(lengthComparator);
+        
+        // Lambda with block body / لامدا مع جسم مبلوك
+        names.forEach(name -> {
+            String upperCase = name.toUpperCase();
+            System.out.println("Name: " + upperCase);
+        });
+        
+        // Functional interfaces / الواجهات الوظيفية
+        Predicate<String> startsWithA = name -> name.startsWith("A");
+        Function<String, Integer> getLength = name -> name.length();
+        Supplier<String> greeting = () -> "Hello World!";
+        Consumer<String> printer = System.out::println;
+    }
+}
+```
+# Basic Java Annotations Reference Guide
+
+## What are Annotations?
+Annotations provide metadata about the program. They don't directly affect program execution but provide information to the compiler, development tools, or runtime.
+
+---
+
+## Built-in Java Annotations
+
+### @Override
+**Purpose**: Indicates that a method overrides a method from a superclass or interface.
+**Benefit**: Compiler checks if the method actually overrides something.
+
+```java
+class Animal {
+    public void sound() {
+        System.out.println("Animal makes sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void sound() {  // Compiler ensures this actually overrides
+        System.out.println("Dog barks");
+    }
+    
+    @Override
+    public void soun() {  // Compile error - method doesn't exist in parent
+        // This will cause compilation error
+    }
+}
+```
+
+### @Deprecated
+**Purpose**: Marks code as deprecated (outdated, should not be used).
+**Effect**: Compiler shows warnings when deprecated code is used.
+
+```java
+public class Calculator {
+    @Deprecated
+    public int oldAdd(int a, int b) {
+        return a + b;
+    }
+    
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        calc.oldAdd(5, 3);  // Compiler warning: deprecated method
+        calc.add(5, 3);     // No warning
+    }
+}
+```
+
+### @SuppressWarnings
+**Purpose**: Suppresses specific compiler warnings.
+**Common values**: "unchecked", "deprecation", "unused", "rawtypes"
+
+```java
+public class WarningExample {
+    
+    @SuppressWarnings("deprecation")
+    public void useDeprecatedMethod() {
+        Calculator calc = new Calculator();
+        calc.oldAdd(1, 2);  // No deprecation warning shown
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void rawTypes() {
+        List list = new ArrayList();  // No unchecked warning
+        list.add("Hello");
+    }
+    
+    @SuppressWarnings({"unused", "deprecation"})
+    public void multipleWarnings() {
+        int unusedVariable = 10;  // No unused variable warning
+        // Code using deprecated methods - no warnings
+    }
+}
+```
+
+### @SafeVarargs
+**Purpose**: Suppresses warnings about potentially unsafe varargs operations.
+**Usage**: Only on final or static methods with varargs.
+
+```java
+public class VarargsExample {
+    
+    @SafeVarargs
+    public static <T> void printAll(T... items) {
+        for (T item : items) {
+            System.out.println(item);
+        }
+    }
+    
+    public static void main(String[] args) {
+        printAll("Hello", "World", "Java");
+        printAll(1, 2, 3, 4, 5);
+    }
+}
+```
+
+### @FunctionalInterface
+**Purpose**: Marks an interface as functional (exactly one abstract method).
+**Benefit**: Compiler ensures interface has only one abstract method.
+
+```java
+@FunctionalInterface
+public interface Calculator {
+    int calculate(int a, int b);  // Only one abstract method allowed
+    
+    // int subtract(int a, int b);  // Would cause compile error
+    
+    // Default and static methods are allowed
+    default void display() {
+        System.out.println("Calculator interface");
+    }
+    
+    static void info() {
+        System.out.println("Functional interface for calculations");
+    }
+}
+
+// Usage with lambda expressions
+public class Main {
+    public static void main(String[] args) {
+        Calculator add = (a, b) -> a + b;
+        Calculator multiply = (a, b) -> a * b;
+        
+        System.out.println(add.calculate(5, 3));      // 8
+        System.out.println(multiply.calculate(5, 3)); // 15
+    }
+}
+```
+
+---
+
+## Meta-Annotations (Annotations for Annotations)
+
+### @Retention
+**Purpose**: Specifies how long annotations are retained.
+**Values**: 
+- `SOURCE` - Only in source code
+- `CLASS` - In class files but not at runtime  
+- `RUNTIME` - Available at runtime
+
+```java
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    String value();
+}
+```
+
+### @Target
+**Purpose**: Specifies where annotation can be applied.
+**Values**: `TYPE`, `FIELD`, `METHOD`, `PARAMETER`, `CONSTRUCTOR`, etc.
+
+```java
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
+
+@Target(ElementType.METHOD)  // Can only be used on methods
+public @interface MethodOnly {
+}
+
+@Target({ElementType.FIELD, ElementType.METHOD})  // Multiple targets
+public @interface FieldOrMethod {
+}
+```
+
+---
+
+## Creating Custom Annotations
+
+### Simple Custom Annotation
+```java
+// Define the annotation
+public @interface Author {
+    String name();
+    String date() default "Unknown";
+}
+
+// Use the annotation
+public class Book {
+    
+    @Author(name = "John Doe", date = "2024")
+    public void writeChapter() {
+        // Method implementation
+    }
+    
+    @Author(name = "Jane Smith")  // date will be "Unknown"
+    public void reviewChapter() {
+        // Method implementation
+    }
+}
+```
+
+### Annotation with Multiple Elements
+```java
+import java.lang.annotation.*;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface TestInfo {
+    String description();
+    int priority() default 1;
+    String[] tags() default {};
+}
+
+// Usage
+public class TestClass {
+    
+    @TestInfo(
+        description = "Tests user login functionality",
+        priority = 2,
+        tags = {"login", "security", "critical"}
+    )
+    public void testLogin() {
+        // Test implementation
+    }
+}
+```
+
+---
+
+## Practical Examples
+
+### Example 1: Method Documentation
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Performance {
+    String level() default "normal";
+    boolean critical() default false;
+}
+
+public class DatabaseService {
+    
+    @Performance(level = "high", critical = true)
+    public void connectToDatabase() {
+        // Database connection logic
+    }
+    
+    @Performance(level = "low")
+    public void logActivity() {
+        // Logging logic
+    }
+}
+```
+
+### Example 2: Field Validation
+```java
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Range {
+    int min() default 0;
+    int max() default 100;
+}
+
+public class Student {
+    @Range(min = 0, max = 100)
+    private int grade;
+    
+    @Range(min = 18, max = 65)
+    private int age;
+    
+    // Constructor, getters, setters...
+}
+```
+
+---
+
+## Key Points to Remember
+
+1. **@Override**: Always use when overriding methods - catches typos and ensures actual overriding
+2. **@Deprecated**: Mark old code that shouldn't be used anymore
+3. **@SuppressWarnings**: Use sparingly and only when you're sure the warning can be ignored
+4. **@FunctionalInterface**: Use for interfaces intended for lambda expressions
+5. **Custom annotations**: Combine with reflection for powerful runtime behavior
+6. **Meta-annotations**: Use @Retention and @Target when creating custom annotations
+
+---
+
+## Common Mistakes to Avoid
+
+```java
+// ❌ Wrong: @Override on methods that don't actually override
+class Parent {
+    public void method1() {}
+}
+class Child extends Parent {
+    @Override
+    public void method2() {}  // Error: doesn't override anything
+}
+
+// ✅ Correct: @Override only on actual overrides
+class Child extends Parent {
+    @Override
+    public void method1() {}  // Correct: actually overrides
+}
+
+// ❌ Wrong: Suppressing all warnings
+@SuppressWarnings("all")  // Too broad, hides important warnings
+
+// ✅ Correct: Suppress specific warnings only
+@SuppressWarnings("unchecked")  // Specific and targeted
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What are the advantages of Lambda expressions?**
+**س1: ما هي مزايا التعبيرات اللامدا؟**
+
+**A1:** 
+- **English:** Concise syntax, enables functional programming, reduces boilerplate code, improves readability, enables parallel processing with streams.
+- **Arabic:** بناء جملة مختصر، تمكن البرمجة الوظيفية، تقلل الكود المكرر، تحسن القراءة، تمكن المعالجة المتوازية مع التدفقات.
+
+**Q2: What is a functional interface?**
+**س2: ما هي الواجهة الوظيفية؟**
+
+**A2:**
+- **English:** An interface with exactly one abstract method. It can have default and static methods. Examples: Runnable, Callable, Comparator.
+- **Arabic:** واجهة تحتوي على طريقة مجردة واحدة بالضبط. يمكن أن تحتوي على طرق افتراضية وثابتة. أمثلة: Runnable, Callable, Comparator.
+
+---
+
+## 2. Stream API / واجهة التدفق {#stream-api}
+
+### English Explanation:
+Stream API provides a functional approach to process collections of objects. It supports operations like filter, map, reduce, and collect.
+
+### Arabic Explanation / الشرح بالعربية:
+واجهة التدفق توفر نهج وظيفي لمعالجة مجموعات الكائنات. تدعم عمليات مثل التصفية والتخطيط والتقليل والجمع.
+
+### Code Examples / أمثلة الكود:
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class StreamExamples {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<String> words = Arrays.asList("apple", "banana", "cherry", "date", "elderberry");
+        
+        // Filter and collect / تصفية وجمع
+        List<Integer> evenNumbers = numbers.stream()
+                .filter(n -> n % 2 == 0)
+                .collect(Collectors.toList());
+        System.out.println("Even numbers: " + evenNumbers);
+        
+        // Map operation / عملية التخطيط
+        List<String> upperCaseWords = words.stream()
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+        System.out.println("Uppercase: " + upperCaseWords);
+        
+        // Reduce operation / عملية التقليل
+        int sum = numbers.stream()
+                .reduce(0, Integer::sum);
+        System.out.println("Sum: " + sum);
+        
+        // Complex stream operations / عمليات تدفق معقدة
+        List<String> result = words.stream()
+                .filter(word -> word.length() > 5)
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+        System.out.println("Filtered and processed: " + result);
+        
+        // Parallel streams / التدفقات المتوازية
+        long count = numbers.parallelStream()
+                .filter(n -> n > 5)
+                .count();
+        System.out.println("Count > 5: " + count);
+        
+        // Group by operation / عملية التجميع
+        Map<Integer, List<String>> wordsByLength = words.stream()
+                .collect(Collectors.groupingBy(String::length));
+        System.out.println("Words by length: " + wordsByLength);
+        
+        // Finding operations / عمليات البحث
+        Optional<String> firstLongWord = words.stream()
+                .filter(word -> word.length() > 6)
+                .findFirst();
+        firstLongWord.ifPresent(word -> System.out.println("First long word: " + word));
+    }
+}
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What's the difference between intermediate and terminal operations?**
+**س1: ما الفرق بين العمليات الوسطية والنهائية؟**
+
+**A1:**
+- **English:** Intermediate operations (filter, map, sorted) are lazy and return streams. Terminal operations (collect, forEach, reduce) are eager and produce final results.
+- **Arabic:** العمليات الوسطية (filter, map, sorted) كسولة وترجع تدفقات. العمليات النهائية (collect, forEach, reduce) نشطة وتنتج نتائج نهائية.
+
+**Q2: When should you use parallel streams?**
+**س2: متى يجب استخدام التدفقات المتوازية؟**
+
+**A2:**
+- **English:** For large datasets, CPU-intensive operations, and when operations are stateless and associative. Avoid for small datasets or I/O operations.
+- **Arabic:** للبيانات الكبيرة، العمليات كثيفة المعالج، وعندما تكون العمليات بلا حالة وترابطية. تجنبها للبيانات الصغيرة أو عمليات الإدخال/الإخراج.
+
+---
+
+## 3. Inner Classes / الكلاسات الداخلية {#inner-classes}
+
+### English Explanation:
+Inner classes are classes defined within another class. Java supports four types: static nested, non-static inner, local, and anonymous classes.
+
+### Arabic Explanation / الشرح بالعربية:
+الكلاسات الداخلية هي كلاسات معرفة داخل كلاس آخر. جافا تدعم أربعة أنواع: المتداخلة الثابتة، الداخلية غير الثابتة، المحلية، والمجهولة.
+
+### Code Examples / أمثلة الكود:
+
+```java
+// Outer class / الكلاس الخارجي
+public class OuterClass {
+    private String outerField = "Outer Field";
+    private static String staticField = "Static Field";
+    
+    // 1. Static Nested Class / الكلاس المتداخل الثابت
+    static class StaticNestedClass {
+        public void display() {
+            // Can access static members of outer class
+            // يمكن الوصول للأعضاء الثابتة للكلاس الخارجي
+            System.out.println("Static field: " + staticField);
+            // System.out.println(outerField); // Error! Cannot access non-static
+        }
+    }
+    
+    // 2. Non-static Inner Class / الكلاس الداخلي غير الثابت
+    class InnerClass {
+        public void display() {
+            // Can access all members of outer class
+            // يمكن الوصول لجميع أعضاء الكلاس الخارجي
+            System.out.println("Outer field: " + outerField);
+            System.out.println("Static field: " + staticField);
+        }
+        
+        public void callOuterMethod() {
+            outerMethod();
+        }
+    }
+    
+    public void outerMethod() {
+        System.out.println("Outer method called");
+        
+        // 3. Local Inner Class / الكلاس الداخلي المحلي
+        class LocalInnerClass {
+            public void display() {
+                System.out.println("Local inner class: " + outerField);
+            }
+        }
+        
+        LocalInnerClass localInner = new LocalInnerClass();
+        localInner.display();
+    }
+    
+    // Method that demonstrates anonymous class
+    // طريقة توضح الكلاس المجهول
+    public void demonstrateAnonymousClass() {
+        // 4. Anonymous Class / الكلاس المجهول
+        Runnable anonymousRunnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Anonymous class running: " + outerField);
+            }
+        };
+        anonymousRunnable.run();
+    }
+    
+    // Main method to test / الطريقة الرئيسية للاختبار
+    public static void main(String[] args) {
+        // Creating static nested class instance
+        // إنشاء مثيل للكلاس المتداخل الثابت
+        StaticNestedClass staticNested = new StaticNestedClass();
+        staticNested.display();
+        
+        // Creating outer class instance
+        // إنشاء مثيل للكلاس الخارجي
+        OuterClass outer = new OuterClass();
+        
+        // Creating inner class instance
+        // إنشاء مثيل للكلاس الداخلي
+        InnerClass inner = outer.new InnerClass();
+        inner.display();
+        inner.callOuterMethod();
+        
+        // Calling method with local inner class
+        // استدعاء طريقة مع كلاس داخلي محلي
+        outer.outerMethod();
+        
+        // Demonstrating anonymous class
+        // توضيح الكلاس المجهول
+        outer.demonstrateAnonymousClass();
+    }
+}
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What's the difference between static and non-static inner classes?**
+**س1: ما الفرق بين الكلاسات الداخلية الثابتة وغير الثابتة؟**
+
+**A1:**
+- **English:** Static nested classes can't access non-static members of outer class and don't need outer class instance. Non-static inner classes have access to all outer class members and need outer class instance.
+- **Arabic:** الكلاسات المتداخلة الثابتة لا تستطيع الوصول للأعضاء غير الثابتة للكلاس الخارجي ولا تحتاج لمثيل الكلاس الخارجي. الكلاسات الداخلية غير الثابتة لها وصول لجميع أعضاء الكلاس الخارجي وتحتاج لمثيل الكلاس الخارجي.
+
+---
+
+## 4. Anonymous Functions / الوظائف المجهولة {#anonymous-functions}
+
+### English Explanation:
+Anonymous functions are functions without names, implemented using lambda expressions or anonymous classes. They're useful for short-lived functionality.
+
+### Arabic Explanation / الشرح بالعربية:
+الوظائف المجهولة هي وظائف بدون أسماء، تُنفذ باستخدام تعبيرات لامدا أو كلاسات مجهولة. مفيدة للوظائف قصيرة المدى.
+
+### Code Examples / أمثلة الكود:
+
+```java
+import java.util.*;
+import java.util.function.*;
+
+public class AnonymousFunctionExamples {
+    public static void main(String[] args) {
+        // Anonymous function with Comparator / وظيفة مجهولة مع Comparator
+        List<String> names = Arrays.asList("Ahmed", "Ziad", "Fatma", "Omar");
+        
+        // Using anonymous class / باستخدام كلاس مجهول
+        Collections.sort(names, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.length() - s2.length();
+            }
+        });
+        
+        // Using lambda expression / باستخدام تعبير لامدا
+        Collections.sort(names, (s1, s2) -> s1.length() - s2.length());
+        
+        // Method reference / مرجع الطريقة
+        Collections.sort(names, Comparator.comparing(String::length));
+        
+        // Anonymous function with custom functional interface
+        // وظيفة مجهولة مع واجهة وظيفية مخصصة
+        Calculator add = (a, b) -> a + b;
+        Calculator multiply = (a, b) -> a * b;
+        Calculator divide = (a, b) -> {
+            if (b == 0) throw new IllegalArgumentException("Division by zero");
+            return a / b;
+        };
+        
+        System.out.println("Add: " + add.calculate(10, 5));
+        System.out.println("Multiply: " + multiply.calculate(10, 5));
+        System.out.println("Divide: " + divide.calculate(10, 5));
+        
+        // Anonymous functions with built-in functional interfaces
+        // وظائف مجهولة مع واجهات وظيفية مدمجة
+        
+        // Predicate - takes one argument, returns boolean
+        Predicate<String> isLongName = name -> name.length() > 5;
+        
+        // Function - takes one argument, returns another type
+        Function<String, Integer> getNameLength = String::length;
+        
+        // Consumer - takes one argument, returns void
+        Consumer<String> printName = name -> System.out.println("Name: " + name);
+        
+        // Supplier - takes no arguments, returns a value
+        Supplier<String> getGreeting = () -> "Hello World!";
+        
+        // BiFunction - takes two arguments, returns a value
+        BiFunction<String, String, String> concatenate = (s1, s2) -> s1 + " " + s2;
+        
+        // Using these anonymous functions / استخدام هذه الوظائف المجهولة
+        names.stream()
+             .filter(isLongName)
+             .map(getNameLength)
+             .forEach(System.out::println);
+        
+        names.forEach(printName);
+        System.out.println(getGreeting.get());
+        System.out.println(concatenate.apply("Hello", "World"));
+        
+        // Anonymous function in event handling / وظيفة مجهولة في معالجة الأحداث
+        Button button = new Button();
+        button.setOnClick(() -> System.out.println("Button clicked!"));
+        button.click();
+        
+        // Chaining anonymous functions / ربط الوظائف المجهولة
+        Function<Integer, Integer> multiplyBy2 = x -> x * 2;
+        Function<Integer, Integer> add10 = x -> x + 10;
+        Function<Integer, Integer> chainedFunction = multiplyBy2.andThen(add10);
+        
+        System.out.println("Chained result: " + chainedFunction.apply(5)); // (5*2)+10 = 20
+    }
+    
+    // Custom functional interface / واجهة وظيفية مخصصة
+    @FunctionalInterface
+    interface Calculator {
+        double calculate(double a, double b);
+    }
+    
+    // Simple button class for demonstration / كلاس زر بسيط للتوضيح
+    static class Button {
+        private Runnable onClick;
+        
+        public void setOnClick(Runnable onClick) {
+            this.onClick = onClick;
+        }
+        
+        public void click() {
+            if (onClick != null) {
+                onClick.run();
+            }
+        }
+    }
+}
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What are the benefits of anonymous functions?**
+**س1: ما هي فوائد الوظائف المجهولة؟**
+
+**A1:**
+- **English:** Reduce code verbosity, enable functional programming, improve code readability for simple operations, eliminate need for separate classes for simple functionality.
+- **Arabic:** تقلل إطناب الكود، تمكن البرمجة الوظيفية، تحسن قابلية قراءة الكود للعمليات البسيطة، تلغي الحاجة لكلاسات منفصلة للوظائف البسيطة.
+
+---
+
+## 5. Enums / التعدادات {#enums}
+
+### English Explanation:
+Enums are special classes that represent a group of constants. They're type-safe and can have methods, constructors, and fields.
+
+### Arabic Explanation / الشرح بالعربية:
+التعدادات هي كلاسات خاصة تمثل مجموعة من الثوابت. آمنة من ناحية النوع ويمكن أن تحتوي على طرق ومنشئات وحقول.
+
+### Code Examples / أمثلة الكود:
+
+```java
+// Simple enum / تعداد بسيط
+enum Day {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+// Enum with methods and fields / تعداد مع طرق وحقول
+enum Planet {
+    MERCURY(3.303e+23, 2.4397e6),
+    VENUS(4.869e+24, 6.0518e6),
+    EARTH(5.976e+24, 6.37814e6),
+    MARS(6.421e+23, 3.3972e6);
+    
+    private final double mass;   // in kilograms
+    private final double radius; // in meters
+    
+    // Constructor / المنشئ
+    Planet(double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+    }
+    
+    // Methods / الطرق
+    public double getMass() { return mass; }
+    public double getRadius() { return radius; }
+    
+    // Calculate surface gravity / حساب الجاذبية السطحية
+    public double surfaceGravity() {
+        final double G = 6.67300E-11;
+        return G * mass / (radius * radius);
+    }
+    
+    public double surfaceWeight(double otherMass) {
+        return otherMass * surfaceGravity();
+    }
+}
+
+// Enum implementing interface / تعداد ينفذ واجهة
+interface Operation {
+    double apply(double x, double y);
+}
+
+enum BasicOperation implements Operation {
+    PLUS("+") {
+        public double apply(double x, double y) { return x + y; }
+    },
+    MINUS("-") {
+        public double apply(double x, double y) { return x - y; }
+    },
+    TIMES("*") {
+        public double apply(double x, double y) { return x * y; }
+    },
+    DIVIDE("/") {
+        public double apply(double x, double y) { return x / y; }
+    };
+    
+    private final String symbol;
+    
+    BasicOperation(String symbol) {
+        this.symbol = symbol;
+    }
+    
+    @Override
+    public String toString() {
+        return symbol;
+    }
+}
+
+// Enum with switch case / تعداد مع switch case
+enum Status {
+    ACTIVE, INACTIVE, PENDING, SUSPENDED;
+    
+    public String getDescription() {
+        switch (this) {
+            case ACTIVE: return "User is active";
+            case INACTIVE: return "User is inactive";
+            case PENDING: return "User registration is pending";
+            case SUSPENDED: return "User is suspended";
+            default: return "Unknown status";
+        }
+    }
+}
+
+public class EnumExamples {
+    public static void main(String[] args) {
+        // Basic enum usage / الاستخدام الأساسي للتعداد
+        Day today = Day.MONDAY;
+        System.out.println("Today is: " + today);
+        
+        // Enum with methods / تعداد مع طرق
+        Day[] days = Day.values();
+        System.out.println("All days:");
+        for (Day day : days) {
+            System.out.println(day.ordinal() + ": " + day);
+        }
+        
+        // Planet enum example / مثال تعداد الكواكب
+        double earthWeight = 175.0;
+        double mass = earthWeight / Planet.EARTH.surfaceGravity();
+        
+        System.out.printf("Weight on different planets:%n");
+        for (Planet planet : Planet.values()) {
+            System.out.printf("Weight on %-8s: %f%n", 
+                            planet, planet.surfaceWeight(mass));
+        }
+        
+        // Operation enum / تعداد العمليات
+        double x = 10.0, y = 3.0;
+        for (BasicOperation op : BasicOperation.values()) {
+            System.out.printf("%.1f %s %.1f = %.1f%n", 
+                            x, op, y, op.apply(x, y));
+        }
+        
+        // Status enum with switch / تعداد الحالة مع switch
+        Status userStatus = Status.ACTIVE;
+        System.out.println("Status: " + userStatus.getDescription());
+        
+        // Enum comparison / مقارنة التعدادات
+        if (today == Day.MONDAY) {
+            System.out.println("It's Monday!");
+        }
+        
+        // valueOf method / طريقة valueOf
+        Day parsedDay = Day.valueOf("FRIDAY");
+        System.out.println("Parsed day: " + parsedDay);
+        
+        // EnumSet usage / استخدام EnumSet
+        java.util.EnumSet<Day> weekend = java.util.EnumSet.of(Day.SATURDAY, Day.SUNDAY);
+        System.out.println("Weekend days: " + weekend);
+        
+        // EnumMap usage / استخدام EnumMap
+        java.util.EnumMap<Day, String> activities = new java.util.EnumMap<>(Day.class);
+        activities.put(Day.MONDAY, "Work");
+        activities.put(Day.SATURDAY, "Relax");
+        System.out.println("Activities: " + activities);
+    }
+}
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What are the advantages of enums over constants?**
+**س1: ما مزايا التعدادات على الثوابت؟**
+
+**A1:**
+- **English:** Type safety, namespace protection, built-in methods (values(), ordinal(), valueOf()), can implement interfaces, can have methods and fields, better IDE support.
+- **Arabic:** أمان النوع، حماية مساحة الأسماء، طرق مدمجة (values(), ordinal(), valueOf())، يمكن تنفيذ واجهات، يمكن أن تحتوي على طرق وحقول، دعم أفضل من بيئة التطوير.
+
+**Q2: Can enums have constructors?**
+**س2: هل يمكن للتعدادات أن تحتوي على منشئات؟**
+
+**A2:**
+- **English:** Yes, but they must be private or package-private. Enum constructors are called when enum constants are created.
+- **Arabic:** نعم، ولكن يجب أن تكون خاصة أو على مستوى الحزمة. منشئات التعدادات تُستدعى عند إنشاء ثوابت التعداد.
+
+---
+
+## 6. Generics / الأنواع العامة {#generics}
+
+### English Explanation:
+Generics enable types (classes and interfaces) to be parameters when defining classes, interfaces, and methods. They provide compile-time type safety.
+
+### Arabic Explanation / الشرح بالعربية:
+الأنواع العامة تمكن الأنواع (الكلاسات والواجهات) من أن تكون معاملات عند تعريف الكلاسات والواجهات والطرق. توفر أمان النوع وقت الترجمة.
+
+### Code Examples / أمثلة الكود:
+
+```java
+import java.util.*;
+
+// Generic class / كلاس عام
+class Box<T> {
+    private T content;
+    
+    public void set(T content) {
+        this.content = content;
+    }
+    
+    public T get() {
+        return content;
+    }
+    
+    public boolean isEmpty() {
+        return content == null;
+    }
+}
+
+// Generic class with multiple type parameters / كلاس عام بمعاملات أنواع متعددة
+class Pair<K, V> {
+    private K key;
+    private V value;
+    
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+    
+    public K getKey() { return key; }
+    public V getValue() { return value; }
+    
+    public void setKey(K key) { this.key = key; }
+    public void setValue(V value) { this.value = value; }
+}
+
+// Generic interface / واجهة عامة
+interface Repository<T> {
+    void save(T entity);
+    T findById(Long id);
+    List<T> findAll();
+    void delete(T entity);
+}
+
+// Implementation of generic interface / تنفيذ الواجهة العامة
+class UserRepository implements Repository<User> {
+    private List<User> users = new ArrayList<>();
+    
+    @Override
+    public void save(User user) {
+        users.add(user);
+    }
+    
+    @Override
+    public User findById(Long id) {
+        return users.stream()
+                   .filter(user -> user.getId().equals(id))
+                   .findFirst()
+                   .orElse(null);
+    }
+    
+    @Override
+    public List<User> findAll() {
+        return new ArrayList<>(users);
+    }
+    
+    @Override
+    public void delete(User user) {
+        users.remove(user);
+    }
+}
+
+// Simple User class / كلاس مستخدم بسيط
+class User {
+    private Long id;
+    private String name;
+    
+    public User(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + "'}";
+    }
+}
+
+### Code Examples / أمثلة الكود:
+
+```java
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+public class CollectionsFrameworkExamples {
+    
+    public static void main(String[] args) {
+        
+        System.out.println("=== LIST EXAMPLES ===");
+        System.out.println("أمثلة القوائم");
+        
+        // ArrayList - Dynamic array / مصفوفة ديناميكية
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("Ahmed");
+        arrayList.add("Fatma");
+        arrayList.add("Omar");
+        arrayList.add(1, "Zeinab"); // Insert at index
+        System.out.println("ArrayList: " + arrayList);
+        
+        // LinkedList - Doubly linked list / قائمة مرتبطة مزدوجة
+        List<String> linkedList = new LinkedList<>();
+        linkedList.addAll(arrayList);
+        ((LinkedList<String>) linkedList).addFirst("First");
+        ((LinkedList<String>) linkedList).addLast("Last");
+        System.out.println("LinkedList: " + linkedList);
+        
+        // Vector - Synchronized list / قائمة متزامنة
+        List<String> vector = new Vector<>();
+        vector.addAll(arrayList);
+        System.out.println("Vector: " + vector);
+        
+        System.out.println("\n=== SET EXAMPLES ===");
+        System.out.println("أمثلة المجموعات");
+        
+        // HashSet - Hash table based / على أساس جدول هاش
+        Set<String> hashSet = new HashSet<>();
+        hashSet.add("Apple");
+        hashSet.add("Banana");
+        hashSet.add("Cherry");
+        hashSet.add("Apple"); // Duplicate - won't be added
+        System.out.println("HashSet: " + hashSet);
+        
+        // LinkedHashSet - Maintains insertion order / يحافظ على ترتيب الإدراج
+        Set<String> linkedHashSet = new LinkedHashSet<>();
+        linkedHashSet.add("First");
+        linkedHashSet.add("Second");
+        linkedHashSet.add("Third");
+        System.out.println("LinkedHashSet: " + linkedHashSet);
+        
+        // TreeSet - Sorted set / مجموعة مرتبة
+        Set<String> treeSet = new TreeSet<>();
+        treeSet.add("Zebra");
+        treeSet.add("Apple");
+        treeSet.add("Monkey");
+        System.out.println("TreeSet: " + treeSet);
+        
+        System.out.println("\n=== MAP EXAMPLES ===");
+        System.out.println("أمثلة الخرائط");
+        
+        // HashMap - Hash table based / على أساس جدول هاش
+        Map<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("Ahmed", 25);
+        hashMap.put("Fatma", 30);
+        hashMap.put("Omar", 28);
+        System.out.println("HashMap: " + hashMap);
+        
+        // LinkedHashMap - Maintains insertion order / يحافظ على ترتيب الإدراج
+        Map<String, Integer> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put("First", 1);
+        linkedHashMap.put("Second", 2);
+        linkedHashMap.put("Third", 3);
+        System.out.println("LinkedHashMap: " + linkedHashMap);
+        
+        // TreeMap - Sorted map / خريطة مرتبة
+        Map<String, Integer> treeMap = new TreeMap<>();
+        treeMap.put("Zebra", 26);
+        treeMap.put("Apple", 1);
+        treeMap.put("Monkey", 13);
+        System.out.println("TreeMap: " + treeMap);
+        
+        System.out.println("\n=== QUEUE EXAMPLES ===");
+        System.out.println("أمثلة الطوابير");
+        
+        // PriorityQueue - Priority heap / كومة أولوية
+        Queue<Integer> priorityQueue = new PriorityQueue<>();
+        priorityQueue.offer(5);
+        priorityQueue.offer(2);
+        priorityQueue.offer(8);
+        priorityQueue.offer(1);
+        System.out.println("PriorityQueue: " + priorityQueue);
+        System.out.println("Poll from PriorityQueue: " + priorityQueue.poll());
+        
+        // ArrayDeque - Double-ended queue / طابور ثنائي الطرف
+        Deque<String> deque = new ArrayDeque<>();
+        deque.addFirst("First");
+        deque.addLast("Last");
+        deque.addFirst("New First");
+        System.out.println("Deque: " + deque);
+        
+        System.out.println("\n=== ADVANCED OPERATIONS ===");
+        System.out.println("عمليات متقدمة");
+        
+        // Collections utility methods / طرق مساعدة Collections
+        List<Integer> numbers = Arrays.asList(5, 2, 8, 1, 9, 3);
+        
+        // Sorting / ترتيب
+        Collections.sort(numbers);
+        System.out.println("Sorted: " + numbers);
+        
+        // Reverse / عكس
+        Collections.reverse(numbers);
+        System.out.println("Reversed: " + numbers);
+        
+        // Shuffle / خلط
+        Collections.shuffle(numbers);
+        System.out.println("Shuffled: " + numbers);
+        
+        // Binary search / البحث الثنائي
+        Collections.sort(numbers);
+        int index = Collections.binarySearch(numbers, 5);
+        System.out.println("Index of 5: " + index);
+        
+        // Min and Max / الحد الأدنى والأقصى
+        System.out.println("Min: " + Collections.min(numbers));
+        System.out.println("Max: " + Collections.max(numbers));
+        
+        // Frequency / التكرار
+        List<String> words = Arrays.asList("apple", "banana", "apple", "cherry", "apple");
+        System.out.println("Frequency of 'apple': " + Collections.frequency(words, "apple"));
+        
+        // Unmodifiable collections / مجموعات غير قابلة للتعديل
+        List<String> unmodifiableList = Collections.unmodifiableList(words);
+        System.out.println("Unmodifiable list: " + unmodifiableList);
+        
+        // Synchronized collections / مجموعات متزامنة
+        List<String> synchronizedList = Collections.synchronizedList(new ArrayList<>(words));
+        System.out.println("Synchronized list: " + synchronizedList);
+        
+        System.out.println("\n=== STREAM OPERATIONS WITH COLLECTIONS ===");
+        System.out.println("عمليات التدفق مع المجموعات");
+        
+        List<Person> people = Arrays.asList(
+            new Person("Ahmed", 25),
+            new Person("Fatma", 30),
+            new Person("Omar", 28),
+            new Person("Zeinab", 22)
+        );
+        
+        // Filter and collect / تصفية وجمع
+        List<Person> adults = people.stream()
+            .filter(person -> person.getAge() >= 25)
+            .collect(Collectors.toList());
+        System.out.println("Adults: " + adults);
+        
+        // Group by age / تجميع بالعمر
+        Map<Integer, List<Person>> peopleByAge = people.stream()
+            .collect(Collectors.groupingBy(Person::getAge));
+        System.out.println("People by age: " + peopleByAge);
+        
+        // Collect to different collection types / جمع لأنواع مجموعات مختلفة
+        Set<String> names = people.stream()
+            .map(Person::getName)
+            .collect(Collectors.toSet());
+        System.out.println("Names set: " + names);
+        
+        // Collect to map / جمع لخريطة
+        Map<String, Integer> nameToAge = people.stream()
+            .collect(Collectors.toMap(Person::getName, Person::getAge));
+        System.out.println("Name to age map: " + nameToAge);
+        
+        System.out.println("\n=== CONCURRENT COLLECTIONS ===");
+        System.out.println("مجموعات متزامنة");
+        
+        // ConcurrentHashMap - Thread-safe map / خريطة آمنة للخيوط
+        Map<String, Integer> concurrentMap = new ConcurrentHashMap<>();
+        concurrentMap.put("Key1", 1);
+        concurrentMap.put("Key2", 2);
+        System.out.println("ConcurrentHashMap: " + concurrentMap);
+        
+        // Atomic operations / عمليات ذرية
+        concurrentMap.compute("Key1", (key, value) -> value == null ? 1 : value + 1);
+        concurrentMap.computeIfAbsent("Key3", key -> 3);
+        System.out.println("After atomic operations: " + concurrentMap);
+    }
+}
+
+// Enhanced Person class / كلاس شخص محسن
+class Person {
+    private String name;
+    private int age;
+    
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + "}";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return age == person.age && Objects.equals(name, person.name);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+```
+
+### Performance Comparison / مقارنة الأداء:
+
+```java
+import java.util.*;
+
+public class CollectionsPerformance {
+    public static void main(String[] args) {
+        int size = 100000;
+        
+        System.out.println("=== PERFORMANCE COMPARISON ===");
+        System.out.println("مقارنة الأداء");
+        
+        // ArrayList vs LinkedList for adding / مقارنة ArrayList مع LinkedList للإضافة
+        long start = System.currentTimeMillis();
+        List<Integer> arrayList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            arrayList.add(i);
+        }
+        long arrayListTime = System.currentTimeMillis() - start;
+        
+        start = System.currentTimeMillis();
+        List<Integer> linkedList = new LinkedList<>();
+        for (int i = 0; i < size; i++) {
+            linkedList.add(i);
+        }
+        long linkedListTime = System.currentTimeMillis() - start;
+        
+        System.out.println("ArrayList add time: " + arrayListTime + "ms");
+        System.out.println("LinkedList add time: " + linkedListTime + "ms");
+        
+        // Access time comparison / مقارنة وقت الوصول
+        start = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            arrayList.get(size / 2);
+        }
+        long arrayListAccess = System.currentTimeMillis() - start;
+        
+        start = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            linkedList.get(size / 2);
+        }
+        long linkedListAccess = System.currentTimeMillis() - start;
+        
+        System.out.println("ArrayList access time: " + arrayListAccess + "ms");
+        System.out.println("LinkedList access time: " + linkedListAccess + "ms");
+    }
+}
+```
+
+### Interview Questions & Answers / أسئلة المقابلات والإجابات:
+
+**Q1: What's the difference between ArrayList and LinkedList?**
+**س1: ما الفرق بين ArrayList و LinkedList؟**
+
+**A1:**
+- **English:** ArrayList uses dynamic array (O(1) access, O(n) insertion/deletion). LinkedList uses doubly-linked list (O(n) access, O(1) insertion/deletion at known position). ArrayList is better for frequent access, LinkedList for frequent insertions/deletions.
+- **Arabic:** ArrayList تستخدم مصفوفة ديناميكية (O(1) وصول، O(n) إدراج/حذف). LinkedList تستخدم قائمة مرتبطة مزدوجة (O(n) وصول، O(1) إدراج/حذف في موضع# Complete Java Advanced Topics Guide
+# دليل شامل لموضوعات جافا المتقدمة
+
+---
+# Java 8+ Features Revision Guide
+## Interview Questions & Answers (English & Arabic)
+
+---
+
+## 1. Method References (مراجع الطرق)
+
+### What are Method References?
+**English:** Method references are a shorthand notation of lambda expressions to call a method. They use the `::` operator.
+
+**Arabic:** مراجع الطرق هي اختصار للتعبيرات اللامبدا لاستدعاء طريقة معينة. تستخدم المشغل `::`
+
+### Types of Method References:
+1. **Static Method Reference:** `ClassName::methodName`
+2. **Instance Method Reference:** `object::methodName`  
+3. **Constructor Reference:** `ClassName::new`
+4. **Arbitrary Object Method Reference:** `ClassName::instanceMethod`
+
+### Interview Questions:
+
+**Q1: Convert this lambda to method reference: `list.forEach(x -> System.out.println(x))`**
+- **English Answer:** `list.forEach(System.out::println)`
+- **Arabic Answer:** `list.forEach(System.out::println)`
+
+**Q2: What's the difference between `String::valueOf` and `str -> String.valueOf(str)`?**
+- **English Answer:** No functional difference, method reference is just syntactic sugar for lambda
+- **Arabic Answer:** لا يوجد فرق وظيفي، مرجع الطريقة مجرد اختصار نحوي للتعبير اللامبدا
+
+---
+
+## 2. Optional Class (فئة Optional)
+
+### What is Optional?
+**English:** Optional is a container object that may or may not contain a non-null value. It helps avoid NullPointerException.
+
+**Arabic:** Optional هو كائن حاوي قد يحتوي أو لا يحتوي على قيمة غير فارغة. يساعد في تجنب استثناء المؤشر الفارغ
+
+### Key Methods:
+- `Optional.of(value)` - Creates Optional with non-null value
+- `Optional.ofNullable(value)` - Creates Optional that may be null
+- `Optional.empty()` - Creates empty Optional
+- `isPresent()` - Checks if value exists
+- `get()` - Returns value (throws exception if empty)
+- `orElse(defaultValue)` - Returns value or default
+- `orElseThrow()` - Returns value or throws exception
+- `map()` - Transform value if present
+- `filter()` - Filter value based on condition
+
+### Interview Questions:
+
+**Q3: What's wrong with this code: `Optional.of(null)`?**
+- **English Answer:** It will throw NullPointerException. Use `Optional.ofNullable(null)` instead
+- **Arabic Answer:** سيرمي استثناء المؤشر الفارغ. استخدم `Optional.ofNullable(null)` بدلاً من ذلك
+
+**Q4: How to check if Optional contains a value?**
+- **English Answer:** Use `isPresent()` or better use `ifPresent(consumer)`
+- **Arabic Answer:** استخدم `isPresent()` أو الأفضل استخدام `ifPresent(consumer)`
+
+**Q5: Convert: `if(str != null) return str.length(); else return 0;`**
+- **English Answer:** `Optional.ofNullable(str).map(String::length).orElse(0)`
+- **Arabic Answer:** `Optional.ofNullable(str).map(String::length).orElse(0)`
+
+---
+
+## 3. Try-with-Resources (المحاولة مع الموارد)
+
+### What is Try-with-Resources?
+**English:** Automatic resource management that ensures resources are closed after use. Resources must implement AutoCloseable.
+
+**Arabic:** إدارة تلقائية للموارد تضمن إغلاق الموارد بعد الاستخدام. يجب أن تنفذ الموارد واجهة AutoCloseable
+
+### Syntax:
+```java
+try (ResourceType resource = new ResourceType()) {
+    // use resource
+} catch (Exception e) {
+    // handle exception
+}
+```
+
+### Interview Questions:
+
+**Q6: What happens if both try block and close() method throw exceptions?**
+- **English Answer:** The exception from try block is thrown, close() exception is suppressed and can be accessed via getSuppressed()
+- **Arabic Answer:** يتم رمي استثناء كتلة المحاولة، ويتم قمع استثناء close() ويمكن الوصول إليه عبر getSuppressed()
+
+**Q7: Can you use multiple resources in try-with-resources?**
+- **English Answer:** Yes, separate them with semicolons: `try (Resource1 r1 = ...; Resource2 r2 = ...)`
+- **Arabic Answer:** نعم، افصلهم بالفاصلة المنقوطة: `try (Resource1 r1 = ...; Resource2 r2 = ...)`
+
+---
+
+## 4. Comparable vs Comparator (قابل للمقارنة مقابل المقارن)
+
+### Comparable Interface
+**English:** Used for natural ordering of objects. Class implements Comparable and overrides `compareTo()` method.
+
+**Arabic:** يُستخدم للترتيب الطبيعي للكائنات. الفئة تنفذ Comparable وتعيد تعريف طريقة `compareTo()`
+
+### Comparator Interface
+**English:** Used for custom ordering. External class/lambda that implements `compare()` method.
+
+**Arabic:** يُستخدم للترتيب المخصص. فئة خارجية أو لامبدا تنفذ طريقة `compare()`
+
+### Interview Questions:
+
+**Q8: Difference between Comparable and Comparator?**
+- **English Answer:** 
+  - Comparable: Internal, natural ordering, single sorting sequence
+  - Comparator: External, custom ordering, multiple sorting sequences
+- **Arabic Answer:**
+  - Comparable: داخلي، ترتيب طبيعي، تسلسل ترتيب واحد
+  - Comparator: خارجي، ترتيب مخصص، تسلسلات ترتيب متعددة
+
+**Q9: How to sort in reverse order using Comparator?**
+- **English Answer:** `Collections.sort(list, Comparator.reverseOrder())` or `Comparator.comparing(Function).reversed()`
+- **Arabic Answer:** `Collections.sort(list, Comparator.reverseOrder())` أو `Comparator.comparing(Function).reversed()`
+
+---
+
+## 5. Streams API (واجهة التدفقات)
+
+### What are Streams?
+**English:** Streams provide functional-style operations on collections. They support filter, map, reduce operations.
+
+**Arabic:** التدفقات توفر عمليات بالأسلوب الوظيفي على المجموعات. تدعم عمليات التصفية والتحويل والتقليل
+
+### Key Operations:
+- **Intermediate:** `filter()`, `map()`, `sorted()`, `distinct()`
+- **Terminal:** `forEach()`, `collect()`, `reduce()`, `count()`
+
+### Interview Questions:
+
+**Q10: What's the difference between intermediate and terminal operations?**
+- **English Answer:** Intermediate operations are lazy and return streams, terminal operations trigger processing and return results
+- **Arabic Answer:** العمليات الوسطية كسولة وترجع تدفقات، العمليات النهائية تشغل المعالجة وترجع النتائج
+
+**Q11: How to convert Stream to List?**
+- **English Answer:** `stream.collect(Collectors.toList())`
+- **Arabic Answer:** `stream.collect(Collectors.toList())`
+
+---
+
+## 6. Lambda Expressions (تعبيرات لامبدا)
+
+### What are Lambda Expressions?
+**English:** Anonymous functions that provide a clear and concise way to represent functional interfaces.
+
+**Arabic:** دوال مجهولة توفر طريقة واضحة ومختصرة لتمثيل الواجهات الوظيفية
+
+### Syntax: `(parameters) -> expression`
+
+### Interview Questions:
+
+**Q12: Convert anonymous class to lambda: `new Runnable() { public void run() { System.out.println("Hello"); } }`**
+- **English Answer:** `() -> System.out.println("Hello")`
+- **Arabic Answer:** `() -> System.out.println("Hello")`
+
+**Q13: What is a functional interface?**
+- **English Answer:** Interface with exactly one abstract method, can be annotated with @FunctionalInterface
+- **Arabic Answer:** واجهة بطريقة مجردة واحدة بالضبط، يمكن التعليق عليها بـ @FunctionalInterface
+
+---
+
+## 7. Common Functional Interfaces (الواجهات الوظيفية الشائعة)
+
+### Built-in Functional Interfaces:
+- **Predicate<T>:** `boolean test(T t)` - Testing condition
+- **Function<T,R>:** `R apply(T t)` - Transform input to output  
+- **Consumer<T>:** `void accept(T t)` - Consume input
+- **Supplier<T>:** `T get()` - Supply value
+
+### Interview Questions:
+
+**Q14: Which functional interface to use for `x -> x > 5`?**
+- **English Answer:** `Predicate<Integer>`
+- **Arabic Answer:** `Predicate<Integer>`
+
+**Q15: Which functional interface for `() -> new ArrayList()`?**
+- **English Answer:** `Supplier<ArrayList>`
+- **Arabic Answer:** `Supplier<ArrayList>`
+
+---
+
+## 8. Date and Time API (واجهة التاريخ والوقت)
+
+### New Classes (Java 8):
+- **LocalDate:** Date without time
+- **LocalTime:** Time without date  
+- **LocalDateTime:** Date and time
+- **ZonedDateTime:** Date, time with timezone
+
+### Interview Questions:
+
+**Q16: How to get current date?**
+- **English Answer:** `LocalDate.now()`
+- **Arabic Answer:** `LocalDate.now()`
+
+**Q17: Difference between LocalDateTime and ZonedDateTime?**
+- **English Answer:** ZonedDateTime includes timezone information, LocalDateTime doesn't
+- **Arabic Answer:** ZonedDateTime يتضمن معلومات المنطقة الزمنية، LocalDateTime لا يتضمنها
+
+---
+
+## 9. Default Methods (الطرق الافتراضية)
+
+### What are Default Methods?
+**English:** Methods in interfaces with implementation. Allow adding new methods to interfaces without breaking existing implementations.
+
+**Arabic:** طرق في الواجهات مع التنفيذ. تسمح بإضافة طرق جديدة للواجهات دون كسر التنفيذات الموجودة
+
+### Interview Questions:
+
+**Q18: Can interfaces have method implementations?**
+- **English Answer:** Yes, using default and static methods (Java 8+)
+- **Arabic Answer:** نعم، باستخدام الطرق الافتراضية والثابتة (جافا 8+)
+
+**Q19: What happens if a class implements two interfaces with same default method?**
+- **English Answer:** Compilation error, class must override the method to resolve conflict
+- **Arabic Answer:** خطأ في التجميع، يجب على الفئة إعادة تعريف الطريقة لحل التعارض
+
+---
+
+# Java Annotations Interview Questions & Answers
+
+## Basic Level Questions
+
+### Q1: What are annotations in Java?
+**Answer:** Annotations are a form of metadata that provide information about the program but are not part of the program itself. They don't directly affect program execution but can be used by the compiler, development tools, or at runtime through reflection.
+
+### Q2: What is the difference between @Override and not using @Override?
+**Answer:** 
+- **With @Override**: Compiler checks if the method actually overrides a parent method. If not, compilation fails.
+- **Without @Override**: Code compiles even if there's a typo in method name, creating a new method instead of overriding.
+
+```java
+// With @Override - Safe
+@Override
+public void toString() { return "Safe"; }  // Compiler error if typo
+
+// Without @Override - Risky  
+public void toStrng() { return "Risky"; }   // Creates new method, no override
+```
+
+### Q3: When should you use @Deprecated annotation?
+**Answer:** Use @Deprecated when:
+- A method/class is outdated and shouldn't be used
+- Better alternatives exist
+- You want to gradually phase out old code
+- You need to maintain backward compatibility while discouraging usage
+
+### Q4: What does @SuppressWarnings do and when should you use it?
+**Answer:** @SuppressWarnings suppresses specific compiler warnings. Use it sparingly and only when:
+- You're certain the warning is safe to ignore
+- You understand why the warning occurs
+- You can't fix the code causing the warning
+
+Common values: "unchecked", "deprecation", "unused", "rawtypes"
+
+---
+
+## Intermediate Level Questions
+
+### Q5: What is @FunctionalInterface and what are its rules?
+**Answer:** @FunctionalInterface marks an interface as functional, meaning it has exactly one abstract method. Rules:
+- Must have exactly ONE abstract method
+- Can have multiple default methods
+- Can have multiple static methods
+- Can override Object class methods
+
+```java
+@FunctionalInterface
+public interface Calculator {
+    int calculate(int a, int b);           // One abstract method ✓
+    default void log() { }                 // Default methods allowed ✓
+    static void info() { }                 // Static methods allowed ✓
+    String toString();                     // Object methods allowed ✓
+    // int subtract(int a, int b);         // Would cause compile error ✗
+}
+```
+
+### Q6: What are meta-annotations? Name the important ones.
+**Answer:** Meta-annotations are annotations that can be applied to other annotations. Important ones:
+
+- **@Retention**: Specifies how long annotation is retained (SOURCE, CLASS, RUNTIME)
+- **@Target**: Specifies where annotation can be applied (TYPE, FIELD, METHOD, etc.)
+- **@Inherited**: Allows annotation to be inherited by subclasses
+- **@Documented**: Includes annotation in JavaDoc
+- **@Repeatable**: Allows same annotation to be used multiple times
+
+### Q7: What's the difference between RetentionPolicy.CLASS and RetentionPolicy.RUNTIME?
+**Answer:**
+- **CLASS**: Annotation is in .class file but not available at runtime via reflection
+- **RUNTIME**: Annotation is available at runtime and can be accessed via reflection
+
+```java
+@Retention(RetentionPolicy.RUNTIME)  // Can read at runtime
+public @interface RuntimeAnnotation { }
+
+@Retention(RetentionPolicy.CLASS)    // Not available at runtime
+public @interface CompileTimeAnnotation { }
+```
+
+### Q8: How do you create a custom annotation?
+**Answer:**
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    String value();                    // Required element
+    int priority() default 1;          // Optional with default
+    String[] tags() default {};        // Array with default
+}
+
+// Usage
+@MyAnnotation(value = "test", priority = 2, tags = {"critical", "fast"})
+public void testMethod() { }
+```
+
+---
+
+## Advanced Level Questions
+
+### Q9: How do you read annotations at runtime using reflection?
+**Answer:**
+```java
+// Reading method annotations
+Method method = MyClass.class.getMethod("testMethod");
+if (method.isAnnotationPresent(MyAnnotation.class)) {
+    MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);
+    System.out.println("Value: " + annotation.value());
+    System.out.println("Priority: " + annotation.priority());
+    System.out.println("Tags: " + Arrays.toString(annotation.tags()));
+}
+
+// Reading class annotations
+Class<?> clazz = MyClass.class;
+MyAnnotation classAnnotation = clazz.getAnnotation(MyAnnotation.class);
+
+// Reading field annotations
+Field field = MyClass.class.getDeclaredField("myField");
+MyAnnotation fieldAnnotation = field.getAnnotation(MyAnnotation.class);
+```
+
+### Q10: What happens if you put @Override on a method that doesn't actually override anything?
+**Answer:** Compilation fails with an error message like "method does not override or implement a method from a supertype". This is the safety feature of @Override - it ensures you're actually overriding something.
+
+### Q11: Can you use multiple @SuppressWarnings on the same element?
+**Answer:** No, but you can suppress multiple warnings with an array:
+```java
+// ✗ Wrong - Can't use multiple
+@SuppressWarnings("unchecked")
+@SuppressWarnings("deprecation")
+public void method() { }
+
+// ✓ Correct - Use array
+@SuppressWarnings({"unchecked", "deprecation"})
+public void method() { }
+```
+
+### Q12: What is the difference between @Target(ElementType.TYPE) and @Target(ElementType.CLASS)?
+**Answer:** 
+- **ElementType.TYPE**: Can be applied to classes, interfaces, enums, and annotation types
+- **ElementType.CLASS**: Not a valid ElementType (this is a trick question)
+
+Valid ElementType values include: TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE, etc.
+
+---
+
+## Tricky/Scenario-Based Questions
+
+### Q13: What will happen with this code?
+```java
+@FunctionalInterface
+public interface MyInterface {
+    void method1();
+    void method2();
+}
+```
+**Answer:** Compilation error. @FunctionalInterface requires exactly one abstract method, but this interface has two.
+
+### Q14: Is this valid?
+```java
+@FunctionalInterface  
+public interface MyInterface {
+    void abstractMethod();
+    
+    default void defaultMethod() { }
+    
+    static void staticMethod() { }
+    
+    boolean equals(Object obj);
+}
+```
+**Answer:** Yes, this is valid. Functional interfaces can have:
+- One abstract method ✓
+- Multiple default methods ✓
+- Multiple static methods ✓
+- Methods that override Object class methods ✓
+
+### Q15: What's wrong with this custom annotation?
+```java
+public @interface MyAnnotation {
+    List<String> values();
+}
+```
+**Answer:** Compilation error. Annotation elements can only be:
+- Primitives (int, boolean, etc.)
+- String
+- Class
+- Enums
+- Arrays of the above
+- Other annotations
+
+Collections like List are not allowed.
+
+### Q16: Will this code compile?
+```java
+class Parent {
+    public void display() { }
+}
+
+class Child extends Parent {
+    @Override
+    public void display(String message) { }  // Different parameter
+}
+```
+**Answer:** No, compilation error. The method with parameter doesn't override the parameterless method in parent class. @Override ensures actual overriding.
+
+---
+
+## Expert Level Questions
+
+### Q17: How would you implement a simple validation framework using annotations?
+**Answer:**
+```java
+// 1. Create validation annotations
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NotNull { }
+
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Range {
+    int min() default 0;
+    int max() default Integer.MAX_VALUE;
+}
+
+// 2. Use in a class
+public class User {
+    @NotNull
+    private String name;
+    
+    @Range(min = 18, max = 100)
+    private int age;
+}
+
+// 3. Validator implementation
+public class Validator {
+    public static boolean validate(Object obj) throws Exception {
+        Class<?> clazz = obj.getClass();
+        
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            
+            if (field.isAnnotationPresent(NotNull.class)) {
+                if (field.get(obj) == null) {
+                    return false;
+                }
+            }
+            
+            if (field.isAnnotationPresent(Range.class)) {
+                Range range = field.getAnnotation(Range.class);
+                int value = (Integer) field.get(obj);
+                if (value < range.min() || value > range.max()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+
+### Q18: What are the limitations of Java annotations?
+**Answer:**
+- Cannot extend other annotations
+- Element types are limited (no Collections, no complex objects)
+- Cannot be generic
+- Cannot have null as default value (except for String, Class, and arrays)
+- Cannot be instantiated directly
+- Cannot contain methods with parameters
+
+### Q19: How do annotation processors work at compile time?
+**Answer:** Annotation processors:
+1. Run during compilation phase
+2. Can read source code annotations
+3. Can generate new source files
+4. Cannot modify existing source files
+5. Examples: Lombok, MapStruct, AutoValue
+
+```java
+// Custom processor example structure
+@SupportedAnnotationTypes("com.example.MyAnnotation")
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
+public class MyProcessor extends AbstractProcessor {
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, 
+                          RoundEnvironment roundEnv) {
+        // Process annotations and generate code
+        return true;
+    }
+}
+```
+
+---
+
+## Quick Fire Questions
+
+### Q20: Can annotations have constructors?
+**Answer:** No, annotations cannot have constructors.
+
+### Q21: Can annotation elements be private?
+**Answer:** No, all annotation elements are implicitly public.
+
+### Q22: What's the default retention policy?
+**Answer:** RetentionPolicy.CLASS
+
+### Q23: Can you override annotation elements in implementing classes?
+**Answer:** No, annotations are not inherited like methods. Use @Inherited for class-level annotation inheritance.
+
+### Q24: Is @SafeVarargs allowed on instance methods?
+**Answer:** No, only on static methods, final instance methods, and constructors.
+
+### Q25: Can annotations be used on local variables?
+**Answer:** Yes, with @Target(ElementType.LOCAL_VARIABLE)
+
+---
+
+## Tips for Interview Success
+
+1. **Always explain the "why"** behind using annotations, not just "how"
+2. **Mention reflection** when discussing runtime annotations
+3. **Know the common built-in annotations** and their purposes
+4. **Understand meta-annotations** and their impact
+5. **Be able to write custom annotations** on the spot
+6. **Know the limitations** - what annotations cannot do
+7. **Practice with reflection code** for reading annotations
+
+## 10. Quick Code Examples (أمثلة سريعة للكود)
+
+### Method Reference Example:
+```java
+// Lambda
+list.forEach(x -> System.out.println(x));
+// Method Reference  
+list.forEach(System.out::println);
+```
+
+### Optional Example:
+```java
+Optional<String> optional = Optional.ofNullable(getString());
+String result = optional.orElse("default");
+```
+
+### Try-with-Resources Example:
+```java
+try (FileReader file = new FileReader("file.txt");
+     BufferedReader reader = new BufferedReader(file)) {
+    return reader.readLine();
+}
+```
+
+### Stream Example:
+```java
+List<String> result = list.stream()
+    .filter(s -> s.length() > 3)
+    .map(String::toUpperCase)
+    .collect(Collectors.toList());
+```
+
+### Comparator Example:
+```java
+// Sort by name
+list.sort(Comparator.comparing(Person::getName));
+// Sort by age then name
+list.sort(Comparator.comparing(Person::getAge)
+          .thenComparing(Person::getName));
+```
+
+---
+
+## Common Interview Tips (نصائح المقابلات الشائعة)
+
+**English Tips:**
+- Always explain the benefits of using these features
+- Mention performance implications where relevant
+- Show practical examples
+- Understand when NOT to use certain features
+
+**Arabic Tips:**
+- اشرح دائماً فوائد استخدام هذه الميزات
+- اذكر تأثيرات الأداء عند الحاجة
+- اعرض أمثلة عملية  
+- افهم متى لا نستخدم ميزات معينة
+
+---
+
+*This revision guide covers the most important Java 8+ features commonly asked in interviews. Practice coding examples and understand the underlying concepts!*
+
+*يغطي هذا الدليل أهم ميزات جافا 8+ التي تُسأل عادة في المقابلات. تدرب على أمثلة الكود وافهم المفاهيم الأساسية!*
+
+
+
+
