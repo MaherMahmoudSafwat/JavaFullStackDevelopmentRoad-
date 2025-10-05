@@ -1,0 +1,51 @@
+{
+  // PROJECT INFORMATION (like Spring Boot's artifactId, groupId)
+  "name": "my-angular-app",           // Project name (like Maven artifactId)
+  "version": "0.0.0",                 // Current version (like Maven version)
+  "description": "My Angular App",     // What this project does
+  
+  // COMMAND SHORTCUTS (like Maven goals: mvn clean install)
+  "scripts": {
+    "ng": "ng",                       // Like having "mvn" command available
+    "start": "ng serve",              // Like "mvn spring-boot:run" - starts dev server
+    "build": "ng build",              // Like "mvn clean package" - builds for production
+    "test": "ng test",                // Like "mvn test" - runs unit tests
+    "lint": "ng lint",                // Like "mvn checkstyle:check" - code quality check
+    "e2e": "ng e2e"                   // Like "mvn verify" - integration tests
+  },
+
+  // RUNTIME DEPENDENCIES (like Spring Boot dependencies in pom.xml)
+  "dependencies": {
+    "@angular/core": "^17.0.0",       // Like spring-boot-starter-web
+    "@angular/common": "^17.0.0",     // Like spring-boot-starter (common utilities)
+    "@angular/router": "^17.0.0",     // Like spring-boot-starter-web (routing)
+    "rxjs": "^7.5.0",                 // Like Spring's reactive streams
+    "typescript": "^5.0.0",           // Like Java compiler
+    "zone.js": "^0.14.0"              // Like Spring's AOP (aspect-oriented programming)
+  },
+
+  // DEVELOPMENT-ONLY DEPENDENCIES (like Maven test scope)
+  "devDependencies": {
+    "@angular/cli": "^17.0.0",        // Like Maven itself (build tool)
+    "@types/node": "^18.0.0",         // Like having Javadoc types
+    "jasmine-core": "^4.0.0",         // Like JUnit (testing framework)
+    "karma": "^6.4.0",               // Like Surefire plugin (test runner)
+    "typescript": "^5.0.0"            // Like Java compiler (but for TypeScript)
+  }
+}
+
+
+Complete File Explanation: Angular Configuration Files
+Let me explain each file like I'm talking to someone who knows programming concepts but is new to Angular.
+
+📄 package.json - Your Project's Shopping List & Instructions
+Real Life Analogy:
+Think of this like a recipe card that tells you:
+
+What ingredients to buy (dependencies)
+How to cook the dish (scripts)
+What the dish is called (project info)
+
+Programming Concept:
+Similar to Maven's pom.xml in Spring Boot - it defines your project and its dependencies.
+Detailed Breakdown:

@@ -1,0 +1,21 @@
+<div class="app-container">
+  <!-- Header with Navigation -->
+  <header>
+    <h1>{{title}}</h1>
+    <nav>
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    </nav>
+  </header>
+  
+  <!-- This is where routed components appear! -->
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Angular Routing Example</p>
+  </footer>
+</div>

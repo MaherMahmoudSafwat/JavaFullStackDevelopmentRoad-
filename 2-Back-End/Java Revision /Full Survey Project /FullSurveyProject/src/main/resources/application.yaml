@@ -1,0 +1,116 @@
+spring:
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/FullSurveyProject
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+    # Connection Pool Settings (HikariCP - default in Spring Boot)
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: true
+      pool-name: HikariPool-PostgreSQL
+
+  # JPA/Hibernate Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+    # Show SQL queries in console
+    show-sql: true
+
+    # Format SQL queries for better readability
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+        # Show parameter values in SQL queries
+        type:
+          descriptor:
+            sql: true
+
+        # Database schema generation
+        # create: drops existing tables and creates new ones (DEV only)
+        # create-drop: creates tables, drops them when app stops (DEV only)
+        # update: updates schema without dropping data (DEV/TEST)
+        # validate: validates schema, makes no changes (PRODUCTION)
+        # none: does nothing (PRODUCTION)
+    hibernate:
+      ddl-auto: update
+
+      # Naming strategy - converts camelCase to snake_case
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+  # SQL Script Initialization (optional - for initial data)
+  sql:
+    init:
+      mode: never  # always, never, or embedded
+      # data-locations: classpath:data.sql
+      # schema-locations: classpath:schema.sql
+
+# Logging Configuration
+logging:
+  level:
+    # Root logging level
+    root: INFO
+
+    # Show SQL queries
+    org.hibernate.SQL: DEBUG
+
+    # Show SQL parameter values
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+    # Show Spring Boot startup info
+    org.springframework.boot: INFO
+
+    # Show your application logs
+    com.yourpackage: DEBUG
+
+    # Show database connection info
+    com.zaxxer.hikari: DEBUG
+
+    # Show JPA/Hibernate operations
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
+
+  # Log pattern with colors
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+  # Log file configuration (optional)
+  file:
+    name: logs/application.log
+    max-size: 10MB
+    max-history: 30
+
+# Server Configuration
+server:
+  port: 8080
+
+  # Error handling
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: true
+
+# Application Info (appears in startup banner)
+spring.application:
+  name: Your Application Name
+
+# Actuator endpoints (optional - for monitoring)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

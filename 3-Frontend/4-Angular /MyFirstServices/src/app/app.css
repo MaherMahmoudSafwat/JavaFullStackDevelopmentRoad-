@@ -1,0 +1,142 @@
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h2 {
+  color: #555;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #4CAF50;
+  padding-bottom: 10px;
+}
+
+/* Form Section */
+.form-section {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: bold;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Messages Section */
+.messages-section {
+  margin-top: 40px;
+}
+
+.no-messages {
+  text-align: center;
+  padding: 40px;
+  background: #fff3cd;
+  border-radius: 10px;
+  color: #856404;
+}
+
+.message-card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #4CAF50;
+  transition: transform 0.2s;
+}
+
+.message-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.message-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.email {
+  color: #666;
+  margin: 5px 0;
+}
+
+.message-text {
+  color: #333;
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.message-index {
+  color: #999;
+  font-size: 12px;
+}

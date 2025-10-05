@@ -1,0 +1,58 @@
+<div class="container">
+  <h1>Message Management App</h1>
+  
+  <!-- Form to add messages -->
+  <div class="form-section">
+    <h2>Add New Message</h2>
+    
+    <form (ngSubmit)="addMessage()">
+      <div class="form-group">
+        <label>Name:</label>
+        <input
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          placeholder="Enter your name...">
+      </div>
+      
+      <div class="form-group">
+        <label>Email:</label>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter your email...">
+      </div>
+      
+      <div class="form-group">
+        <label>Message:</label>
+        <textarea
+          [(ngModel)]="message"
+          name="message"
+          placeholder="Enter your message..."
+          rows="4"></textarea>
+      </div>
+      
+      <button type="submit">Add Message</button>
+    </form>
+  </div>
+  
+  <!-- Display messages from service -->
+  <div class="messages-section">
+    <h2>All Messages (Total: {{messages.length}})</h2>
+    
+    <div *ngIf="messages.length === 0" class="no-messages">
+      <p>No messages yet. Add your first message!</p>
+    </div>
+    
+    <div *ngFor="let msg of messages; let i = index" class="message-card">
+      <div class="message-header">
+        <h3>{{msg.name}}</h3>
+        <button (click)="deleteMessage(i)" class="delete-btn">Delete</button>
+      </div>
+      <p class="email">📧 {{msg.email}}</p>
+      <p class="message-text">💬 {{msg.message}}</p>
+      <small class="message-index">Message #{{i + 1}}</small>
+    </div>
+  </div>
+</div>
