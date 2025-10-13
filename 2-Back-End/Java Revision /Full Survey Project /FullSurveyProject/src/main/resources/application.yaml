@@ -114,3 +114,9 @@ management:
   endpoint:
     health:
       show-details: always
+    jpa:
+      properties:
+        hibernate:
+          jdbc:
+            lob:
+              non_contextual_creation: true

@@ -1,8 +1,6 @@
 package com.Survey.FullSurveyProject.Models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,15 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsersImages
-{
-    @Lob
-    @Column(name = "Image")
-    private byte[] ImageFile;
-    @Column(name = "Size")
-    private Long ImageSize;
+public class UsersImages {
+
+    @Column(name = "ImageName")
+    private String imageName;
+
     @Column(name = "image_type")
     private String imageType;
-    @Column(name = "ImageName")
-    private String ImageName;
+
+    @Column(name = "Size")
+    private Long imageSize;
+
+    @Lob
+    @Basic(fetch = FetchType.EAGER)  // Move annotation here
+    @Column(name = "Image")
+    private byte[] imageFile;
 }
