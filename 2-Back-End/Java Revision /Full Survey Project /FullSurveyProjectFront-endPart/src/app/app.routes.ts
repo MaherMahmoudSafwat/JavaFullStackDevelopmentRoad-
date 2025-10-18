@@ -6,7 +6,11 @@ import { DashboardComponent } from './components/dashboard/dashboard';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { EditProfileComponent } from './components/edit-profile/edit-profile';
 import { SurveyComponent } from './components/survey/survey';
-import { MySurveysComponent } from './components/my-surveys/my-surveys'; // Correct path
+import { MySurveysComponent } from './components/my-surveys/my-surveys';
+import { EditSurveyComponent } from './components/edit-survey/edit-survey';
+import { EditQuestionComponent } from './components/edit-question/edit-question';
+import { DeleteSurveyComponent } from './components/delete-survey/delete-survey';
+import { ShowAllSurveysComponent } from './components/show-all-surveys/show-all-surveys';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
@@ -18,7 +22,8 @@ export const routes: Routes = [
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'add-survey', component: SurveyComponent },
   { path: 'my-surveys', component: MySurveysComponent },
-  { path: 'all-surveys', redirectTo: '/dashboard' },
-  { path: 'edit-survey', redirectTo: '/dashboard' },
-  { path: 'delete-survey', redirectTo: '/dashboard' }
+  { path: 'edit-survey', component: EditSurveyComponent },
+  { path: 'edit-question', component: EditQuestionComponent },
+  { path: 'delete-survey', component: DeleteSurveyComponent },
+  { path: 'show-all-surveys', component: ShowAllSurveysComponent }
 ];

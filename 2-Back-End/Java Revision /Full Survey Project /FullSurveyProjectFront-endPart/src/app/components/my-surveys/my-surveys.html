@@ -38,15 +38,14 @@
         
         <!-- Question Number and Question -->
         <div class="question-header">
-          <div class="question-number">Question {{ surveyIndex + 1 }}</div>
-          <h2 class="question-text">{{ survey.surveyQuestionName }}</h2>
+          <h2 class="question-text">{{ surveyIndex + 1 }}) {{ survey.surveyQuestionName }}</h2>
         </div>
 
         <!-- Answers A, B, C, D -->
         <div class="answers-container">
           <div *ngFor="let answer of survey.answer; let answerIndex = index" 
-               class="answer-item" 
-               [style.background]="getAnswerColor(answer.answerPercentage)">
+               class="answer-item"
+               [class.has-votes]="answer.answerPercentage > 0">
             
             <div class="answer-content">
               <div class="answer-left">

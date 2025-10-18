@@ -150,7 +150,18 @@ export class SurveyComponent {
   }
 
   showMySurveys() {
-    this.surveyService.getMySurveys().subscribe({
+    const userStr = sessionStorage.getItem('currentUser');
+    if (!userStr) {
+      this.error = 'User not found. Please sign in again.';
+      return;
+    }
+    const user = JSON.parse(userStr);
+    const userId = user.UserId || user.id || user.userId;
+    if (!userId) {
+      this.error = 'User ID not found.';
+      return;
+    }
+    this.surveyService.getMySurveys(userId).subscribe({
       next: surveys => (this.mySurveys = surveys),
       error: () => (this.error = 'Failed to fetch surveys')
     });

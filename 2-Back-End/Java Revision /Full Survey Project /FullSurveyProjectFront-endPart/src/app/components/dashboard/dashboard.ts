@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   navigateToAllSurveys(): void {
-    this.router.navigate(['/all-surveys']);
+    this.router.navigate(['/show-all-surveys']);
   }
 
   navigateToMySurveys(): void {

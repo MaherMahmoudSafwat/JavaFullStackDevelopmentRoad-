@@ -24,6 +24,13 @@ public class GlobalExceptionHandler
     @ExceptionHandler(Exception.class)
     public ResponseEntity<List<String>> handleExceptionErrors(Exception exp) {
         List<String> errors = new ArrayList<>();
+        
+        // Log the full exception for debugging
+        System.err.println("=== EXCEPTION CAUGHT ===");
+        System.err.println("Exception Type: " + exp.getClass().getName());
+        System.err.println("Exception Message: " + exp.getMessage());
+        exp.printStackTrace();
+        System.err.println("========================");
 
         // Special handling for validation errors
         if (exp instanceof MethodArgumentNotValidException) {

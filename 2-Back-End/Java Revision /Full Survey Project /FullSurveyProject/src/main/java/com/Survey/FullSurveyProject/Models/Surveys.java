@@ -1,6 +1,7 @@
 package com.Survey.FullSurveyProject.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,14 +34,14 @@ public class Surveys
                     allocationSize = 50
             )
     @Column(name = "Id")
-    private Integer SurveyId;
+    private Integer surveyId;
     @Column(name = "Question")
-    private String SurveyQuestionName;
-    @ManyToOne
+    private String surveyQuestionName;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Users user;
-    @OneToMany(mappedBy = "Survey", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Answers> Answer;
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Answers> answer;
 }
 

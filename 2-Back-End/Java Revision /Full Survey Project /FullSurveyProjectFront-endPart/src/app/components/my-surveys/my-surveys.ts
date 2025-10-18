@@ -49,11 +49,14 @@ export class MySurveysComponent implements OnInit {
 
     const user = JSON.parse(userStr);
     console.log('User object from sessionStorage:', user);
+    console.log('User object type:', typeof user);
+    console.log('User object keys:', Object.keys(user));
     
     // Use uppercase UserId to match your DTO
     const userId = user.UserId;
     
     console.log('Extracted UserId:', userId);
+    console.log('UserId type:', typeof userId);
 
     if (!userId) {
       this.error = 'User ID not found. Available properties: ' + Object.keys(user).join(', ');
@@ -61,16 +64,22 @@ export class MySurveysComponent implements OnInit {
       return;
     }
 
+    console.log('Making API call to: http://localhost:8080/Surveys/' + userId);
+
     // Call the service with the correct user ID
     this.surveyService.getMySurveys(userId).subscribe({
       next: (surveys: any) => {
         console.log('Surveys received from backend:', surveys);
+        console.log('Number of surveys:', surveys?.length);
         this.mySurveys = surveys;
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error loading surveys:', err);
-        this.error = 'Failed to load surveys from server. Please check if the backend is running. Error: ' + (err.message || err.statusText);
+        console.error('Error loading surveys - Full error object:', err);
+        console.error('Error status:', err.status);
+        console.error('Error message:', err.message);
+        console.error('Error error:', err.error);
+        this.error = 'Failed to load surveys from server. Status: ' + err.status + ', Error: ' + JSON.stringify(err.error);
         this.isLoading = false;
       }
     });
@@ -82,15 +91,5 @@ export class MySurveysComponent implements OnInit {
 
   getAnswerLetter(index: number): string {
     return String.fromCharCode(65 + index); // A, B, C, D
-  }
-
-  getAnswerColor(percentage: number): string {
-    if (percentage === 0) {
-      return '#2c3e50'; // Dark color for 0%
-    }
-    const colors = [
-      '#3498db', '#e74c3c', '#2ecc71', '#f39c12' // Blue, Red, Green, Orange
-    ];
-    return colors[Math.min(percentage % colors.length, 3)];
   }
 }

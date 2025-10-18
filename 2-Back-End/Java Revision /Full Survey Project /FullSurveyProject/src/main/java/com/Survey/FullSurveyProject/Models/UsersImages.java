@@ -21,7 +21,7 @@ public class UsersImages {
     private Long imageSize;
 
     @Lob
-    @Basic(fetch = FetchType.EAGER)  // Move annotation here
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "Image")
     private byte[] imageFile;
 }

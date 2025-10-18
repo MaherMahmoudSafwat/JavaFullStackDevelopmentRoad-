@@ -177,14 +177,28 @@ export class EditProfileComponent implements OnInit {
           // Fetch latest user profile from backend
           this.authService.getUserProfile(this.currentUser!.Email).subscribe({
             next: (userData) => {
+              console.log('📸 Fresh user data from backend:', userData);
+              console.log('🔍 Detailed userImage from backend:', userData.userImage);
+              console.log('🔍 imageFile exists?', !!userData.userImage?.imageFile);
+              console.log('🔍 All userImage properties:', userData.userImage ? Object.keys(userData.userImage) : 'No userImage');
+              
               // Update session storage with new data (username, image, etc)
+              // IMPORTANT: Backend returns lowercase (userName, userImage) but User model expects uppercase (UserName, UserImage)
               const updatedUser = {
-                ...this.currentUser,
+                UserId: this.currentUser?.UserId,
                 UserName: userData.userName || this.currentUser?.UserName,
-                UserImage: userData.userImage || this.currentUser?.UserImage
+                Email: this.currentUser?.Email,
+                UserImage: userData.userImage ? {
+                  imageName: userData.userImage.imageName,
+                  imageType: userData.userImage.imageType,
+                  imageSize: userData.userImage.imageSize,
+                  imageFile: userData.userImage.imageFile
+                } : this.currentUser?.UserImage
               };
               sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
-              console.log('💾 Session storage updated with latest user data');
+              console.log('💾 Session storage updated with latest user data:', updatedUser);
+              console.log('🖼️ UserImage object:', updatedUser.UserImage);
+              console.log('🖼️ Image updated:', !!updatedUser.UserImage?.imageFile);
               this.isUpdating = false;
               // Navigate back to profile with a flag to refresh data
               this.router.navigate(['/user-profile'], { 

@@ -1,10 +1,12 @@
 package com.Survey.FullSurveyProject.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -21,14 +23,15 @@ public class Answers
                     allocationSize = 50
             )
     @Column(name = "Id")
-    private Integer AnswersId;
+    private Integer answersId;
     @Column(name = "Name")
-    private String AnswerName;
+    private String answerName;
     @Column(name = "Percentage")
-    private Integer AnswerPercentage;
-    @ManyToOne
+    private Double answerPercentage;
+    @Column(name = "VoteCount")
+    private Integer AnswerVoteCount;
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Survey_Id")
-    @JsonIgnore
-    private Surveys Survey;
+    @JsonBackReference
+    private Surveys survey;
 }
-

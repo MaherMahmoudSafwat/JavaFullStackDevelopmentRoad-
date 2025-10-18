@@ -1,12 +1,12 @@
 /* --- Full Page Background --- */
-.surveys-fullpage-bg {
+.edit-survey-fullpage-bg {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
 }
 
 /* --- Header --- */
-.surveys-header {
+.edit-survey-header {
   text-align: center;
   margin-bottom: 40px;
   position: relative;
@@ -26,11 +26,14 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .back-dashboard-btn:hover {
   background: #667eea;
   color: white;
+  transform: translateY(-50%) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .header-content {
@@ -38,23 +41,25 @@
   margin: 0 auto;
 }
 
-.surveys-main-title {
+.edit-survey-main-title {
   font-size: 2.5rem;
   font-weight: 900;
   color: white;
   margin-bottom: 10px;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.5px;
 }
 
-.surveys-subtitle {
+.edit-survey-subtitle {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  font-weight: 500;
 }
 
 /* --- Main Container --- */
-.surveys-container {
-  max-width: 800px;
+.edit-survey-container {
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -65,6 +70,7 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .loading-spinner {
@@ -95,6 +101,7 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .error-icon {
@@ -117,6 +124,13 @@
   border-radius: 25px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
 }
 
 /* --- Empty State --- */
@@ -126,6 +140,7 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .empty-icon {
@@ -136,6 +151,8 @@
 .empty-state h2 {
   color: #667eea;
   margin-bottom: 15px;
+  font-size: 1.8rem;
+  font-weight: 700;
 }
 
 .empty-state p {
@@ -144,12 +161,36 @@
   font-size: 1.1rem;
 }
 
+.create-survey-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.create-survey-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* --- Surveys List --- */
+.surveys-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 /* --- Survey Card --- */
 .survey-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   padding: 30px;
-  margin-bottom: 30px;
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
@@ -157,8 +198,8 @@
 /* --- Question Header --- */
 .question-header {
   text-align: left;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
   border-bottom: 2px solid #f0f0f0;
 }
 
@@ -175,6 +216,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 15px;
 }
 
 /* --- Answer Item (Facebook Style with White Background) --- */
@@ -273,13 +315,39 @@
   box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
 }
 
+/* --- Edit Button --- */
+.edit-button-container {
+  text-align: center;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.edit-survey-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.edit-survey-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
-  .surveys-fullpage-bg {
+  .edit-survey-fullpage-bg {
     padding: 10px;
   }
   
-  .surveys-main-title {
+  .edit-survey-main-title {
     font-size: 2rem;
   }
   
@@ -287,6 +355,10 @@
     position: relative;
     margin-bottom: 20px;
     transform: none;
+  }
+
+  .back-dashboard-btn:hover {
+    transform: translateY(-2px);
   }
   
   .question-text {

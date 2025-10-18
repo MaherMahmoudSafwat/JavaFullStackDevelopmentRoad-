@@ -98,7 +98,6 @@ public class UsersService
             UserUpdateData.setUserPassword(UserUpdateRequestDataDto.UserPassword().trim());
         }
 
-        // Handle image update
         if(userImage != null && !userImage.isEmpty())
         {
             UsersImages UserImage = new UsersImages();
