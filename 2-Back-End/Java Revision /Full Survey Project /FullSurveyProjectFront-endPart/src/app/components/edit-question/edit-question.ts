@@ -108,15 +108,15 @@ export class EditQuestionComponent implements OnInit {
     
     this.answers.forEach(answer => {
       const originalName = this.originalAnswers.get(answer.answerId);
-      if (originalName && originalName !== answer.answerName) {
+      if (originalName && originalName.trim() !== answer.answerName.trim()) {
         // Only include changed answers
-        oldNewAnswers[originalName] = answer.answerName;
+        oldNewAnswers[originalName.trim()] = answer.answerName.trim();
       }
     });
 
     // Prepare the edit DTO
     const editDto = {
-      SurveyQuestion: this.questionName !== this.originalQuestionName ? this.questionName : null,
+      SurveyQuestion: this.questionName.trim() !== this.originalQuestionName.trim() ? this.questionName.trim() : null,
       OldNewAnswers: oldNewAnswers
     };
 
