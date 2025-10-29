@@ -1,0 +1,3672 @@
+# Complete Database Guide for Web Development with Interview Questions & Answers
+## دليل شامل لقواعد البيانات لتطوير الويب مع أسئلة وأجوبة المقابلات
+
+---
+
+## Table of Contents | جدول المحتويات
+
+1. [Introduction to Databases | مقدمة عن قواعد البيانات](#introduction)
+2. [Database Types | أنواع قواعد البيانات](#database-types)
+3. [Relational Database Concepts | مفاهيم قواعد البيانات العلائقية](#relational-concepts)
+4. [SQL Fundamentals | أساسيات SQL](#sql-fundamentals)
+5. [Advanced SQL | SQL المتقدم](#advanced-sql)
+6. [Database Design & Normalization | تصميم قواعد البيانات والتطبيع](#database-design)
+7. [Indexing & Performance | الفهرسة والأداء](#indexing-performance)
+8. [Transactions & Concurrency | المعاملات والتزامن](#transactions-concurrency)
+9. [Database Security | أمان قواعد البيانات](#database-security)
+10. [NoSQL Databases | قواعد البيانات NoSQL](#nosql)
+11. [Data Warehousing & Analytics | مستودعات البيانات والتحليلات](#data-warehousing)
+12. [Database Administration | إدارة قواعد البيانات](#database-administration)
+13. [Interview Questions & Answers | أسئلة وأجوبة المقابلات](#interview-qa)
+
+---
+
+## 1. Introduction to Databases | مقدمة عن قواعد البيانات {#introduction}
+
+### English
+A database is an organized collection of structured information, or data, typically stored electronically in a computer system. A database is usually controlled by a database management system (DBMS).
+
+**Key Components:**
+- **Data**: Raw facts and figures
+- **Database Management System (DBMS)**: Software that manages the database
+- **Database Schema**: Structure of the database
+- **Query Language**: Language used to interact with the database
+
+**Evolution of Databases:**
+1. **Flat File Systems** (1960s): Simple file-based storage
+2. **Hierarchical Databases** (1960s): Tree-like structure
+3. **Network Databases** (1970s): Graph-like structure
+4. **Relational Databases** (1970s): Table-based structure
+5. **Object-Oriented Databases** (1980s): Object-based storage
+6. **NoSQL Databases** (2000s): Non-relational, distributed systems
+
+### العربية
+قاعدة البيانات هي مجموعة منظمة من المعلومات المهيكلة، أو البيانات، والتي يتم تخزينها عادة إلكترونياً في نظام كمبيوتر. قاعدة البيانات عادة ما تكون تحت سيطرة نظام إدارة قاعدة البيانات (DBMS).
+
+**المكونات الرئيسية:**
+- **البيانات**: الحقائق والأرقام الخام
+- **نظام إدارة قاعدة البيانات (DBMS)**: البرنامج الذي يدير قاعدة البيانات
+- **مخطط قاعدة البيانات**: هيكل قاعدة البيانات
+- **لغة الاستعلام**: اللغة المستخدمة للتفاعل مع قاعدة البيانات
+
+---
+
+## 2. Database Types | أنواع قواعد البيانات {#database-types}
+
+### English
+
+#### Relational Databases (RDBMS)
+**MySQL:**
+- Open-source, widely used
+- ACID compliant
+- Supports multiple storage engines (InnoDB, MyISAM)
+- Strong community support
+- Good for web applications
+
+**PostgreSQL:**
+- Advanced open-source RDBMS
+- Full ACID compliance
+- Supports advanced data types (JSON, XML, Arrays)
+- Excellent for complex queries
+- Strong consistency
+
+**Oracle Database:**
+- Enterprise-grade database
+- Advanced security features
+- Excellent performance
+- Comprehensive backup/recovery
+- High availability options
+
+**SQL Server:**
+- Microsoft's enterprise database
+- Integrated with Windows ecosystem
+- Business intelligence features
+- Good scalability
+- Enterprise security
+
+**SQLite:**
+- Lightweight, serverless
+- Self-contained
+- Zero-configuration
+- Good for embedded applications
+- ACID compliant
+
+#### NoSQL Databases
+
+**Document Stores:**
+- **MongoDB**: Flexible schema, JSON-like documents
+- **CouchDB**: Multi-version concurrency control
+- **Amazon DocumentDB**: MongoDB-compatible service
+
+**Key-Value Stores:**
+- **Redis**: In-memory data structure store
+- **Amazon DynamoDB**: Serverless, fully managed
+- **Riak**: Distributed key-value store
+
+**Column-Family:**
+- **Cassandra**: Wide-column store, high availability
+- **HBase**: Hadoop-based, real-time read/write access
+- **Amazon SimpleDB**: Simple, highly available
+
+**Graph Databases:**
+- **Neo4j**: Native graph processing
+- **Amazon Neptune**: Fully managed graph database
+- **ArangoDB**: Multi-model database
+
+### العربية
+
+#### قواعد البيانات العلائقية (RDBMS)
+**MySQL:**
+- مفتوح المصدر، مستخدم على نطاق واسع
+- متوافق مع ACID
+- يدعم محركات تخزين متعددة
+- دعم مجتمعي قوي
+- جيد لتطبيقات الويب
+
+**PostgreSQL:**
+- RDBMS متقدم ومفتوح المصدر
+- امتثال كامل لـ ACID
+- يدعم أنواع بيانات متقدمة
+- ممتاز للاستعلامات المعقدة
+- اتساق قوي
+
+---
+
+## 3. Relational Database Concepts | مفاهيم قواعد البيانات العلائقية {#relational-concepts}
+
+### English
+
+#### Core Concepts
+
+**Table (Relation):**
+- Collection of related data organized in rows and columns
+- Each table represents an entity type
+- Tables are the fundamental building blocks
+
+**Row (Tuple/Record):**
+- Single instance of data in a table
+- Represents one occurrence of the entity
+- Horizontal data organization
+
+**Column (Attribute/Field):**
+- Single data element in a table
+- Represents a property of the entity
+- Vertical data organization
+
+**Domain:**
+- Set of allowable values for an attribute
+- Defines data type and constraints
+- Ensures data integrity
+
+#### Keys
+
+**Primary Key:**
+- Uniquely identifies each row in a table
+- Cannot be NULL
+- Cannot be duplicated
+- Only one per table
+
+**Foreign Key:**
+- References primary key of another table
+- Establishes relationships between tables
+- Maintains referential integrity
+- Can be NULL (optional relationship)
+
+**Composite Key:**
+- Primary key consisting of multiple columns
+- Combination must be unique
+- Used when single column isn't sufficient
+
+**Candidate Key:**
+- Column(s) that could serve as primary key
+- Unique and non-null
+- Table can have multiple candidate keys
+
+**Super Key:**
+- Set of attributes that uniquely identifies rows
+- May contain additional attributes beyond necessary
+- Primary key is minimal super key
+
+**Alternate Key:**
+- Candidate keys not chosen as primary key
+- Unique constraints in implementation
+- Backup identification method
+
+#### Relationships
+
+**One-to-One (1:1):**
+- Each record in Table A relates to exactly one record in Table B
+- Example: Person ↔ Passport
+- Can be implemented with foreign key in either table
+
+**One-to-Many (1:N):**
+- Each record in Table A can relate to multiple records in Table B
+- Example: Customer → Orders
+- Foreign key placed in "many" side table
+
+**Many-to-Many (M:N):**
+- Multiple records in Table A relate to multiple records in Table B
+- Example: Students ↔ Courses
+- Requires junction/bridge table with two foreign keys
+
+### العربية
+
+#### المفاهيم الأساسية
+
+**الجدول (العلاقة):**
+- مجموعة من البيانات ذات الصلة منظمة في صفوف وأعمدة
+- كل جدول يمثل نوع كيان
+- الجداول هي وحدات البناء الأساسية
+
+**الصف (المجموعة/السجل):**
+- مثيل واحد من البيانات في الجدول
+- يمثل حدوث واحد للكيان
+- تنظيم البيانات الأفقي
+
+**العمود (الخاصية/الحقل):**
+- عنصر بيانات واحد في الجدول
+- يمثل خاصية للكيان
+- تنظيم البيانات العمودي
+
+---
+
+## 4. SQL Fundamentals | أساسيات SQL {#sql-fundamentals}
+
+### English
+
+#### Data Definition Language (DDL)
+
+**CREATE Statements:**
+```sql
+-- Create Database
+CREATE DATABASE company_db;
+
+-- Create Table with Constraints
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    hire_date DATE NOT NULL,
+    salary DECIMAL(10,2) CHECK (salary > 0),
+    department_id INT,
+    manager_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id),
+    FOREIGN KEY (manager_id) REFERENCES employees(id)
+);
+
+-- Create Index
+CREATE INDEX idx_employee_email ON employees(email);
+CREATE INDEX idx_employee_name ON employees(first_name, last_name);
+```
+
+**ALTER Statements:**
+```sql
+-- Add Column
+ALTER TABLE employees ADD COLUMN middle_name VARCHAR(50);
+
+-- Modify Column
+ALTER TABLE employees MODIFY COLUMN salary DECIMAL(12,2);
+
+-- Drop Column
+ALTER TABLE employees DROP COLUMN middle_name;
+
+-- Add Constraint
+ALTER TABLE employees ADD CONSTRAINT chk_salary CHECK (salary BETWEEN 1000 AND 1000000);
+
+-- Drop Constraint
+ALTER TABLE employees DROP CONSTRAINT chk_salary;
+```
+
+**DROP Statements:**
+```sql
+-- Drop Index
+DROP INDEX idx_employee_email ON employees;
+
+-- Drop Table
+DROP TABLE employees;
+
+-- Drop Database
+DROP DATABASE company_db;
+```
+
+#### Data Manipulation Language (DML)
+
+**INSERT Statements:**
+```sql
+-- Single Row Insert
+INSERT INTO employees (first_name, last_name, email, hire_date, salary, department_id)
+VALUES ('John', 'Doe', 'john.doe@email.com', '2024-01-15', 75000.00, 1);
+
+-- Multiple Rows Insert
+INSERT INTO employees (first_name, last_name, email, hire_date, salary, department_id)
+VALUES 
+    ('Jane', 'Smith', 'jane.smith@email.com', '2024-02-01', 80000.00, 2),
+    ('Bob', 'Johnson', 'bob.johnson@email.com', '2024-02-15', 70000.00, 1),
+    ('Alice', 'Brown', 'alice.brown@email.com', '2024-03-01', 85000.00, 3);
+
+-- Insert with Subquery
+INSERT INTO archived_employees 
+SELECT * FROM employees WHERE hire_date < '2020-01-01';
+```
+
+**SELECT Statements:**
+```sql
+-- Basic Select
+SELECT first_name, last_name, email FROM employees;
+
+-- Select with WHERE clause
+SELECT * FROM employees 
+WHERE department_id = 1 AND salary > 70000;
+
+-- Select with ORDER BY
+SELECT * FROM employees 
+ORDER BY salary DESC, last_name ASC;
+
+-- Select with LIMIT
+SELECT * FROM employees 
+ORDER BY hire_date DESC 
+LIMIT 5;
+
+-- Select with LIKE pattern matching
+SELECT * FROM employees 
+WHERE first_name LIKE 'J%' OR email LIKE '%@gmail.com';
+
+-- Select with IN clause
+SELECT * FROM employees 
+WHERE department_id IN (1, 2, 3);
+
+-- Select with BETWEEN
+SELECT * FROM employees 
+WHERE salary BETWEEN 60000 AND 90000;
+
+-- Select with NULL checks
+SELECT * FROM employees 
+WHERE manager_id IS NULL;
+```
+
+**UPDATE Statements:**
+```sql
+-- Simple Update
+UPDATE employees 
+SET salary = 82000 
+WHERE id = 1;
+
+-- Update Multiple Columns
+UPDATE employees 
+SET salary = salary * 1.05, updated_at = NOW() 
+WHERE department_id = 1;
+
+-- Update with Subquery
+UPDATE employees 
+SET salary = (
+    SELECT AVG(salary) * 1.1 
+    FROM (SELECT salary FROM employees WHERE department_id = 1) AS dept_avg
+) 
+WHERE department_id = 1 AND performance_rating = 'Excellent';
+```
+
+**DELETE Statements:**
+```sql
+-- Simple Delete
+DELETE FROM employees WHERE id = 1;
+
+-- Delete with Condition
+DELETE FROM employees 
+WHERE hire_date < '2020-01-01' AND department_id = 5;
+
+-- Delete with Subquery
+DELETE FROM employees 
+WHERE id IN (
+    SELECT emp_id FROM performance_reviews 
+    WHERE rating = 'Poor' AND review_date < '2023-01-01'
+);
+```
+
+#### Data Query Language (DQL)
+
+**Aggregate Functions:**
+```sql
+-- Count Records
+SELECT COUNT(*) as total_employees FROM employees;
+SELECT COUNT(DISTINCT department_id) as departments_count FROM employees;
+
+-- Sum and Average
+SELECT 
+    department_id,
+    COUNT(*) as employee_count,
+    SUM(salary) as total_salary,
+    AVG(salary) as average_salary,
+    MIN(salary) as min_salary,
+    MAX(salary) as max_salary
+FROM employees 
+GROUP BY department_id;
+
+-- Having Clause
+SELECT department_id, AVG(salary) as avg_salary
+FROM employees 
+GROUP BY department_id 
+HAVING AVG(salary) > 75000;
+```
+
+### العربية
+
+#### لغة تعريف البيانات (DDL)
+
+**عبارات CREATE:**
+```sql
+-- إنشاء قاعدة البيانات
+CREATE DATABASE company_db;
+
+-- إنشاء جدول مع القيود
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    hire_date DATE NOT NULL,
+    salary DECIMAL(10,2) CHECK (salary > 0),
+    department_id INT,
+    manager_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+```
+
+---
+
+## 5. Advanced SQL | SQL المتقدم {#advanced-sql}
+
+### English
+
+#### Joins
+
+**Inner Join:**
+```sql
+-- Basic Inner Join
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.id;
+
+-- Multiple Table Join
+SELECT 
+    e.first_name, 
+    e.last_name, 
+    d.department_name,
+    p.project_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.id
+INNER JOIN employee_projects ep ON e.id = ep.employee_id
+INNER JOIN projects p ON ep.project_id = p.id;
+```
+
+**Left Join:**
+```sql
+-- Left Outer Join
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.id;
+
+-- Find employees without departments
+SELECT e.first_name, e.last_name
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.id
+WHERE d.id IS NULL;
+```
+
+**Right Join:**
+```sql
+-- Right Outer Join
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+RIGHT JOIN departments d ON e.department_id = d.id;
+```
+
+**Full Outer Join:**
+```sql
+-- Full Outer Join (MySQL doesn't support directly, use UNION)
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.id
+UNION
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+RIGHT JOIN departments d ON e.department_id = d.id;
+```
+
+**Self Join:**
+```sql
+-- Self Join to find manager-employee relationships
+SELECT 
+    e1.first_name as employee_name,
+    e2.first_name as manager_name
+FROM employees e1
+LEFT JOIN employees e2 ON e1.manager_id = e2.id;
+```
+
+**Cross Join:**
+```sql
+-- Cross Join (Cartesian Product)
+SELECT e.first_name, d.department_name
+FROM employees e
+CROSS JOIN departments d;
+```
+
+#### Subqueries
+
+**Scalar Subqueries:**
+```sql
+-- Single value subquery
+SELECT first_name, last_name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+-- Correlated subquery
+SELECT e1.first_name, e1.last_name, e1.salary
+FROM employees e1
+WHERE e1.salary > (
+    SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.department_id = e1.department_id
+);
+```
+
+**Multiple Row Subqueries:**
+```sql
+-- IN operator with subquery
+SELECT first_name, last_name
+FROM employees
+WHERE department_id IN (
+    SELECT id FROM departments 
+    WHERE location = 'New York'
+);
+
+-- ANY/SOME operator
+SELECT first_name, last_name, salary
+FROM employees
+WHERE salary > ANY (
+    SELECT salary FROM employees WHERE department_id = 1
+);
+
+-- ALL operator
+SELECT first_name, last_name, salary
+FROM employees
+WHERE salary > ALL (
+    SELECT salary FROM employees WHERE department_id = 2
+);
+
+-- EXISTS operator
+SELECT d.department_name
+FROM departments d
+WHERE EXISTS (
+    SELECT 1 FROM employees e WHERE e.department_id = d.id
+);
+```
+
+**Table Subqueries:**
+```sql
+-- Subquery in FROM clause
+SELECT dept_stats.department_name, dept_stats.avg_salary
+FROM (
+    SELECT d.department_name, AVG(e.salary) as avg_salary
+    FROM employees e
+    JOIN departments d ON e.department_id = d.id
+    GROUP BY d.department_name
+) as dept_stats
+WHERE dept_stats.avg_salary > 70000;
+```
+
+#### Window Functions
+
+**ROW_NUMBER():**
+```sql
+-- Assign row numbers
+SELECT 
+    first_name, 
+    last_name, 
+    salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) as salary_rank
+FROM employees;
+
+-- Partition by department
+SELECT 
+    first_name, 
+    last_name, 
+    department_id,
+    salary,
+    ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) as dept_rank
+FROM employees;
+```
+
+**RANK() and DENSE_RANK():**
+```sql
+-- RANK with gaps
+SELECT 
+    first_name, 
+    last_name, 
+    salary,
+    RANK() OVER (ORDER BY salary DESC) as salary_rank,
+    DENSE_RANK() OVER (ORDER BY salary DESC) as dense_rank
+FROM employees;
+```
+
+**LAG() and LEAD():**
+```sql
+-- Compare with previous and next values
+SELECT 
+    first_name, 
+    last_name, 
+    salary,
+    LAG(salary, 1) OVER (ORDER BY hire_date) as previous_salary,
+    LEAD(salary, 1) OVER (ORDER BY hire_date) as next_salary
+FROM employees;
+```
+
+**Aggregate Window Functions:**
+```sql
+-- Running totals and moving averages
+SELECT 
+    first_name, 
+    last_name, 
+    salary,
+    SUM(salary) OVER (ORDER BY hire_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as running_total,
+    AVG(salary) OVER (ORDER BY hire_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as moving_avg
+FROM employees;
+```
+
+#### Common Table Expressions (CTEs)
+
+**Basic CTE:**
+```sql
+-- Simple CTE
+WITH high_earners AS (
+    SELECT first_name, last_name, salary, department_id
+    FROM employees
+    WHERE salary > 80000
+)
+SELECT he.first_name, he.last_name, d.department_name
+FROM high_earners he
+JOIN departments d ON he.department_id = d.id;
+```
+
+**Recursive CTE:**
+```sql
+-- Organizational hierarchy
+WITH RECURSIVE employee_hierarchy AS (
+    -- Base case: top-level managers
+    SELECT id, first_name, last_name, manager_id, 0 as level
+    FROM employees
+    WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Recursive case
+    SELECT e.id, e.first_name, e.last_name, e.manager_id, eh.level + 1
+    FROM employees e
+    INNER JOIN employee_hierarchy eh ON e.manager_id = eh.id
+)
+SELECT * FROM employee_hierarchy ORDER BY level, last_name;
+```
+
+**Multiple CTEs:**
+```sql
+-- Multiple CTEs
+WITH 
+dept_avg AS (
+    SELECT department_id, AVG(salary) as avg_salary
+    FROM employees
+    GROUP BY department_id
+),
+high_performers AS (
+    SELECT e.*, da.avg_salary
+    FROM employees e
+    JOIN dept_avg da ON e.department_id = da.department_id
+    WHERE e.salary > da.avg_salary
+)
+SELECT * FROM high_performers;
+```
+
+### العربية
+
+#### الربط (Joins)
+
+**الربط الداخلي:**
+```sql
+-- ربط داخلي أساسي
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.id;
+```
+
+---
+
+## 6. Database Design & Normalization | تصميم قواعد البيانات والتطبيع {#database-design}
+
+### English
+
+#### Database Design Process
+
+**1. Requirements Analysis:**
+- Identify data requirements
+- Define business rules
+- Understand user needs
+- Determine system boundaries
+
+**2. Conceptual Design:**
+- Create Entity-Relationship (ER) model
+- Identify entities, attributes, and relationships
+- Define cardinalities and constraints
+
+**3. Logical Design:**
+- Convert ER model to relational schema
+- Apply normalization rules
+- Define primary and foreign keys
+
+**4. Physical Design:**
+- Choose appropriate data types
+- Design indexes for performance
+- Consider storage and access patterns
+
+#### Entity-Relationship Modeling
+
+**Entities:**
+- Strong Entity: Independent existence (Customer, Product)
+- Weak Entity: Dependent on strong entity (Order Item depends on Order)
+
+**Attributes:**
+- Simple: Single atomic value (Name, Age)
+- Composite: Multiple components (Address = Street + City + Zip)
+- Multi-valued: Multiple values (Phone numbers, Email addresses)
+- Derived: Calculated from other attributes (Age from Birth Date)
+
+**Relationships:**
+- One-to-One (1:1): Person - Passport
+- One-to-Many (1:M): Customer - Orders
+- Many-to-Many (M:N): Students - Courses
+
+#### Database Normalization
+
+**Purpose of Normalization:**
+- Eliminate data redundancy
+- Prevent update anomalies
+- Ensure data consistency
+- Optimize storage space
+
+**First Normal Form (1NF):**
+Rules:
+- Each column contains atomic (indivisible) values
+- Each column contains values of single type
+- Each column has unique name
+- Order of rows and columns doesn't matter
+
+Example violation:
+```sql
+-- Violates 1NF (phone numbers in single column)
+CREATE TABLE customers_bad (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    phones VARCHAR(200)  -- "123-456-7890, 098-765-4321"
+);
+```
+
+1NF Solution:
+```sql
+-- 1NF compliant
+CREATE TABLE customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE customer_phones (
+    customer_id INT,
+    phone VARCHAR(15),
+    phone_type ENUM('home', 'work', 'mobile'),
+    PRIMARY KEY (customer_id, phone),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+```
+
+**Second Normal Form (2NF):**
+Rules:
+- Must be in 1NF
+- All non-key attributes fully depend on entire primary key
+- No partial dependencies
+
+Example violation:
+```sql
+-- Violates 2NF (course_name depends only on course_id, not full key)
+CREATE TABLE student_courses_bad (
+    student_id INT,
+    course_id INT,
+    course_name VARCHAR(100),  -- Partially dependent
+    grade CHAR(2),
+    PRIMARY KEY (student_id, course_id)
+);
+```
+
+2NF Solution:
+```sql
+-- 2NF compliant
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(100)
+);
+
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100)
+);
+
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id INT,
+    grade CHAR(2),
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+```
+
+**Third Normal Form (3NF):**
+Rules:
+- Must be in 2NF
+- No transitive dependencies
+- Non-key attributes depend only on primary key
+
+Example violation:
+```sql
+-- Violates 3NF (department_budget depends on department_name, not employee_id)
+CREATE TABLE employees_bad (
+    employee_id INT PRIMARY KEY,
+    employee_name VARCHAR(100),
+    department_name VARCHAR(50),
+    department_budget DECIMAL(12,2)  -- Transitively dependent
+);
+```
+
+3NF Solution:
+```sql
+-- 3NF compliant
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50),
+    department_budget DECIMAL(12,2)
+);
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    employee_name VARCHAR(100),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+```
+
+**Boyce-Codd Normal Form (BCNF):**
+Rules:
+- Must be in 3NF
+- Every determinant is a candidate key
+- Stricter form of 3NF
+
+**Fourth Normal Form (4NF):**
+- Must be in BCNF
+- No multi-valued dependencies
+
+**Fifth Normal Form (5NF):**
+- Must be in 4NF
+- No join dependencies
+
+#### Denormalization
+
+**When to Denormalize:**
+- Performance requirements
+- Read-heavy workloads
+- Complex join operations
+- Reporting requirements
+
+**Techniques:**
+- Add redundant columns
+- Precompute aggregates
+- Create summary tables
+- Use materialized views
+
+### العربية
+
+#### عملية تصميم قاعدة البيانات
+
+**1. تحليل المتطلبات:**
+- تحديد متطلبات البيانات
+- تعريف قواعد العمل
+- فهم احتياجات المستخدم
+- تحديد حدود النظام
+
+**2. التصميم المفاهيمي:**
+- إنشاء نموذج الكيان-العلاقة (ER)
+- تحديد الكيانات والخصائص والعلاقات
+- تعريف الأساسيات والقيود
+
+#### تطبيع قاعدة البيانات
+
+**الغرض من التطبيع:**
+- إزالة تكرار البيانات
+- منع شذوذ التحديث
+- ضمان اتساق البيانات
+- تحسين مساحة التخزين
+
+---
+
+## 7. Indexing & Performance | الفهرسة والأداء {#indexing-performance}
+
+### English
+
+#### Database Indexing
+
+**What is an Index:**
+An index is a data structure that improves the speed of data retrieval operations on a database table. It creates shortcuts to data based on column values.
+
+**Types of Indexes:**
+
+**1. Primary Index (Clustered):**
+```sql
+-- Automatically created with PRIMARY KEY
+CREATE TABLE users (
+    id INT PRIMARY KEY,  -- Primary index created automatically
+    username VARCHAR(50),
+    email VARCHAR(100)
+);
+```
+
+**2. Secondary Index (Non-Clustered):**
+```sql
+-- Single column index
+CREATE INDEX idx_username ON users(username);
+
+-- Composite index
+CREATE INDEX idx_name_email ON users(username, email);
+
+-- Unique index
+CREATE UNIQUE INDEX idx_email ON users(email);
+
+-- Partial index (with WHERE clause - PostgreSQL)
+CREATE INDEX idx_active_users ON users(username) WHERE status = 'active';
+```
+
+**3. Functional/Expression Index:**
+```sql
+-- PostgreSQL example
+CREATE INDEX idx_upper_email ON users(UPPER(email));
+
+-- MySQL example
+CREATE INDEX idx_email_domain ON users((SUBSTRING_INDEX(email, '@', -1)));
+```
+
+**Index Types by Structure:**
+
+**B-Tree Index (Most Common):**
+- Balanced tree structure
+- Good for equality and range queries
+- Default index type in most databases
+
+```sql
+CREATE INDEX idx_salary ON employees(salary);
+-- Good for: WHERE salary = 50000, WHERE salary BETWEEN 40000 AND 60000
+```
+
+**Hash Index:**
+- Fast for equality comparisons
+- Not suitable for range queries
+- Available in MySQL MEMORY engine
+
+```sql
+-- MySQL MEMORY table with hash index
+CREATE TABLE temp_data (
+    id INT,
+    value VARCHAR(100),
+    INDEX USING HASH (id)
+) ENGINE=MEMORY;
+```
+
+**Bitmap Index:**
+- Efficient for low-cardinality data
+- Good for data warehousing
+- Supported in Oracle
+
+**Full-Text Index:**
+```sql
+-- MySQL full-text index
+CREATE TABLE articles (
+    id INT PRIMARY KEY,
+    title VARCHAR(200),
+    content TEXT,
+    FULLTEXT(title, content)
+);
+
+-- Search using full-text index
+SELECT * FROM articles 
+WHERE MATCH(title, content) AGAINST('database optimization' IN BOOLEAN MODE);
+```
+
+**Spatial Index:**
+```sql
+-- MySQL spatial index for geometric data
+CREATE TABLE locations (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    coordinates POINT,
+    SPATIAL INDEX(coordinates)
+);
+```
+
+#### Index Design Guidelines
+
+**When to Create Indexes:**
+- Columns used in WHERE clauses
+- Columns used in JOIN conditions
+- Columns used in ORDER BY
+- Foreign key columns
+- Columns used in GROUP BY
+
+**When NOT to Create Indexes:**
+- Tables with high INSERT/UPDATE/DELETE rates
+- Small tables (few hundred rows)
+- Columns that change frequently
+- Wide columns (large VARCHAR, TEXT)
+
+**Index Maintenance:**
+```sql
+-- Analyze index usage (MySQL)
+SELECT 
+    TABLE_NAME,
+    INDEX_NAME,
+    CARDINALITY,
+    SUB_PART,
+    NULLABLE
+FROM INFORMATION_SCHEMA.STATISTICS 
+WHERE TABLE_SCHEMA = 'your_database';
+
+-- Check index usage (PostgreSQL)
+SELECT 
+    schemaname,
+    tablename,
+    indexname,
+    idx_scan,
+    idx_tup_read,
+    idx_tup_fetch
+FROM pg_stat_user_indexes;
+
+-- Rebuild index (when fragmented)
+-- MySQL
+ALTER TABLE table_name DROP INDEX index_name;
+CREATE INDEX index_name ON table_name(column_name);
+
+-- PostgreSQL
+REINDEX INDEX index_name;
+
+-- Oracle
+ALTER INDEX index_name REBUILD;
+```
+
+#### Query Optimization
+
+**Query Execution Plan:**
+```sql
+-- MySQL
+EXPLAIN SELECT * FROM employees WHERE salary > 50000;
+EXPLAIN FORMAT=JSON SELECT * FROM employees JOIN departments ON employees.dept_id = departments.id;
+
+-- PostgreSQL
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM employees WHERE salary > 50000;
+
+-- SQL Server
+SET SHOWPLAN_ALL ON;
+SELECT * FROM employees WHERE salary > 50000;
+
+-- Oracle
+EXPLAIN PLAN FOR SELECT * FROM employees WHERE salary > 50000;
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+```
+
+**Optimization Techniques:**
+
+**1. Use Appropriate WHERE Clauses:**
+```sql
+-- Bad: Function in WHERE clause prevents index usage
+SELECT * FROM employees WHERE YEAR(hire_date) = 2024;
+
+-- Good: Range condition allows index usage
+SELECT * FROM employees WHERE hire_date >= '2024-01-01' AND hire_date < '2025-01-01';
+```
+
+**2. Avoid SELECT *:**
+```sql
+-- Bad: Retrieves unnecessary data
+SELECT * FROM employees WHERE department_id = 1;
+
+-- Good: Select only needed columns
+SELECT id, first_name, last_name, email FROM employees WHERE department_id = 1;
+```
+
+**3. Use LIMIT for Large Results:**
+```sql
+-- Pagination with OFFSET
+SELECT * FROM employees ORDER BY hire_date LIMIT 20 OFFSET 100;
+
+-- Better: Cursor-based pagination
+SELECT * FROM employees WHERE id > 1000 ORDER BY id LIMIT 20;
+```
+
+**4. Optimize JOINs:**
+```sql
+-- Ensure JOIN conditions use indexed columns
+SELECT e.name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.id  -- Both should be indexed
+WHERE e.status = 'active';
+```
+
+**5. Use EXISTS instead of IN for subqueries:**
+```sql
+-- Less efficient
+SELECT * FROM employees 
+WHERE department_id IN (SELECT id FROM departments WHERE location = 'NYC');
+
+-- More efficient
+SELECT * FROM employees e
+WHERE EXISTS (SELECT 1 FROM departments d 
+             WHERE d.id = e.department_id AND d.location = 'NYC');
+```
+
+#### Performance Monitoring
+
+**Key Metrics to Monitor:**
+- Query execution time
+- Index usage statistics
+- Lock contention
+- Buffer pool hit ratio
+- Disk I/O operations
+
+**MySQL Performance Monitoring:**
+```sql
+-- Show slow queries
+SET GLOBAL slow_query_log = 'ON';
+SET GLOBAL long_query_time = 1;
+
+-- Check query cache
+SHOW VARIABLES LIKE 'query_cache%';
+SHOW STATUS LIKE 'Qcache%';
+
+-- Monitor connections
+SHOW STATUS LIKE 'Connections';
+SHOW STATUS LIKE 'Threads_connected';
+
+-- Check buffer pool status
+SHOW ENGINE INNODB STATUS;
+```
+
+**PostgreSQL Performance Monitoring:**
+```sql
+-- Enable query logging
+ALTER SYSTEM SET log_statement = 'all';
+ALTER SYSTEM SET log_min_duration_statement = 1000;
+
+-- Check active connections
+SELECT count(*) FROM pg_stat_activity;
+
+-- Monitor table statistics
+SELECT * FROM pg_stat_user_tables;
+
+-- Check buffer cache hit ratio
+SELECT 
+    sum(heap_blks_read) as heap_read,
+    sum(heap_blks_hit) as heap_hit,
+    sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
+FROM pg_statio_user_tables;
+```
+
+### العربية
+
+#### فهرسة قاعدة البيانات
+
+**ما هو الفهرس:**
+الفهرس هو هيكل بيانات يحسن سرعة عمليات استرجاع البيانات في جدول قاعدة البيانات. ينشئ اختصارات للبيانات بناءً على قيم الأعمدة.
+
+**أنواع الفهارس:**
+
+**1. الفهرس الأساسي (المجمع):**
+- ينشأ تلقائياً مع PRIMARY KEY
+- يحدد ترتيب البيانات المادي
+
+**2. الفهرس الثانوي (غير المجمع):**
+- لا يؤثر على ترتيب البيانات المادي
+- يمكن إنشاء عدة فهارس ثانوية
+
+---
+
+## 8. Transactions & Concurrency | المعاملات والتزامن {#transactions-concurrency}
+
+### English
+
+#### Transaction Concepts
+
+**What is a Transaction:**
+A transaction is a logical unit of work that contains one or more SQL statements. All statements in a transaction are executed as a single unit - either all succeed (commit) or all fail (rollback).
+
+**ACID Properties:**
+
+**Atomicity:**
+- All operations in a transaction succeed or fail together
+- No partial execution
+- Example: Money transfer - both debit and credit must succeed
+
+```sql
+START TRANSACTION;
+UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'A123';
+UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'B456';
+COMMIT;
+```
+
+**Consistency:**
+- Database remains in valid state before and after transaction
+- All constraints, triggers, and rules are satisfied
+- Example: Account balance cannot be negative
+
+```sql
+-- This constraint ensures consistency
+ALTER TABLE accounts ADD CONSTRAINT chk_balance CHECK (balance >= 0);
+```
+
+**Isolation:**
+- Concurrent transactions don't interfere with each other
+- Each transaction sees consistent view of data
+- Controlled by isolation levels
+
+**Durability:**
+- Committed changes persist even after system failure
+- Changes are written to permanent storage
+- Guaranteed by transaction log
+
+#### Transaction Control
+
+**Basic Transaction Commands:**
+```sql
+-- MySQL/PostgreSQL
+START TRANSACTION;  -- or BEGIN;
+-- SQL statements here
+COMMIT;             -- Save changes
+-- or
+ROLLBACK;          -- Undo changes
+
+-- SQL Server
+BEGIN TRANSACTION;
+-- SQL statements here
+COMMIT TRANSACTION;
+-- or
+ROLLBACK TRANSACTION;
+
+-- Oracle
+-- Transactions start implicitly
+-- SQL statements here
+COMMIT;
+-- or
+ROLLBACK;
+```
+
+**Savepoints:**
+```sql
+START TRANSACTION;
+
+INSERT INTO orders (customer_id, order_date) VALUES (1, NOW());
+SAVEPOINT order_inserted;
+
+INSERT INTO order_items (order_id, product_id, quantity) VALUES (1, 101, 2);
+SAVEPOINT items_inserted;
+
+-- If this fails, we can rollback to savepoint
+INSERT INTO order_items (order_id, product_id, quantity) VALUES (1, 999, 1);
+
+-- Rollback to savepoint if needed
+ROLLBACK TO SAVEPOINT items_inserted;
+
+COMMIT;
+```
+
+#### Isolation Levels
+
+**1. READ UNCOMMITTED:**
+- Lowest isolation level
+- Allows dirty reads
+- No locks on read operations
+
+```sql
+-- MySQL
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+-- PostgreSQL
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+```
+
+Problems:
+- Dirty Read: Reading uncommitted changes
+- Non-Repeatable Read: Same query returns different results
+- Phantom Read: New rows appear in result set
+
+**2. READ COMMITTED:**
+- Default in PostgreSQL, Oracle, SQL Server
+- Prevents dirty reads
+- Shared locks released after read
+
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+Problems:
+- Non-Repeatable Read
+- Phantom Read
+
+**3. REPEATABLE READ:**
+- Default in MySQL (InnoDB)
+- Prevents dirty and non-repeatable reads
+- Shared locks held until transaction end
+
+```sql
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+```
+
+Problems:
+- Phantom Read (in some databases)
+
+**4. SERIALIZABLE:**
+- Highest isolation level
+- Prevents all phenomena
+- Transactions execute as if serial
+
+```sql
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+```
+
+No problems, but lowest concurrency.
+
+#### Concurrency Problems and Solutions
+
+**Dirty Read Example:**
+```sql
+-- Transaction 1
+START TRANSACTION;
+UPDATE accounts SET balance = 5000 WHERE account_id = 'A123';
+-- Transaction not committed yet
+
+-- Transaction 2 (with READ UNCOMMITTED)
+SELECT balance FROM accounts WHERE account_id = 'A123';  -- Reads 5000
+
+-- Transaction 1
+ROLLBACK;  -- Balance returns to original value
+
+-- Transaction 2 read "dirty" uncommitted data
+```
+
+**Non-Repeatable Read Example:**
+```sql
+-- Transaction 1
+START TRANSACTION;
+SELECT balance FROM accounts WHERE account_id = 'A123';  -- Returns 1000
+
+-- Transaction 2
+UPDATE accounts SET balance = 2000 WHERE account_id = 'A123';
+COMMIT;
+
+-- Transaction 1
+SELECT balance FROM accounts WHERE account_id = 'A123';  -- Returns 2000
+COMMIT;
+
+-- Same query in Transaction 1 returned different values
+```
+
+**Phantom Read Example:**
+```sql
+-- Transaction 1
+START TRANSACTION;
+SELECT COUNT(*) FROM orders WHERE order_date = '2024-01-01';  -- Returns 10
+
+-- Transaction 2
+INSERT INTO orders (customer_id, order_date) VALUES (123, '2024-01-01');
+COMMIT;
+
+-- Transaction 1
+SELECT COUNT(*) FROM orders WHERE order_date = '2024-01-01';  -- Returns 11
+COMMIT;
+
+-- New row appeared (phantom) in Transaction 1
+```
+
+#### Locking Mechanisms
+
+**Lock Types:**
+
+**Shared Lock (S-Lock):**
+- Multiple transactions can hold shared locks
+- Prevents modifications
+- Used for read operations
+
+**Exclusive Lock (X-Lock):**
+- Only one transaction can hold exclusive lock
+- Prevents all other access
+- Used for write operations
+
+**Intent Locks:**
+- Indicate intention to acquire locks at lower level
+- Shared Intent (IS), Exclusive Intent (IX)
+
+**Explicit Locking:**
+```sql
+-- MySQL
+SELECT * FROM accounts WHERE account_id = 'A123' FOR UPDATE;  -- Exclusive lock
+SELECT * FROM accounts WHERE account_id = 'A123' LOCK IN SHARE MODE;  -- Shared lock
+
+-- PostgreSQL
+SELECT * FROM accounts WHERE account_id = 'A123' FOR UPDATE;
+SELECT * FROM accounts WHERE account_id = 'A123' FOR SHARE;
+
+-- SQL Server
+SELECT * FROM accounts WITH (UPDLOCK) WHERE account_id = 'A123';
+SELECT * FROM accounts WITH (HOLDLOCK) WHERE account_id = 'A123';
+```
+
+**Deadlock Detection and Resolution:**
+```sql
+-- Example deadlock scenario
+-- Transaction 1
+START TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE account_id = 'A123';
+-- Waiting for lock on B456
+
+-- Transaction 2
+START TRANSACTION;
+UPDATE accounts SET balance = balance - 200 WHERE account_id = 'B456';
+-- Waiting for lock on A123
+
+-- Transaction 1
+UPDATE accounts SET balance = balance + 100 WHERE account_id = 'B456';  -- Deadlock!
+
+-- Database will detect deadlock and abort one transaction
+```
+
+**Deadlock Prevention:**
+- Always acquire locks in same order
+- Use timeouts
+- Keep transactions short
+- Use appropriate isolation levels
+
+### العربية
+
+#### مفاهيم المعاملات
+
+**ما هي المعاملة:**
+المعاملة هي وحدة عمل منطقية تحتوي على عبارة SQL واحدة أو أكثر. جميع العبارات في المعاملة تُنفذ كوحدة واحدة - إما تنجح جميعها (commit) أو تفشل جميعها (rollback).
+
+**خصائص ACID:**
+
+**الذرية (Atomicity):**
+- جميع العمليات في المعاملة تنجح أو تفشل معاً
+- لا يوجد تنفيذ جزئي
+- مثال: تحويل الأموال - يجب أن ينجح كل من الخصم والإيداع
+
+**الاتساق (Consistency):**
+- قاعدة البيانات تبقى في حالة صالحة قبل وبعد المعاملة
+- جميع القيود والمشغلات والقواعد مستوفاة
+
+**العزل (Isolation):**
+- المعاملات المتزامنة لا تتداخل مع بعضها البعض
+- كل معاملة ترى رؤية متسقة للبيانات
+
+**المتانة (Durability):**
+- التغييرات المؤكدة تستمر حتى بعد فشل النظام
+- التغييرات تُكتب في التخزين الدائم
+
+---
+
+## 9. Database Security | أمان قواعد البيانات {#database-security}
+
+### English
+
+#### Authentication and Authorization
+
+**Authentication Methods:**
+
+**1. Username/Password Authentication:**
+```sql
+-- MySQL - Create user with password
+CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'SecurePass123!';
+CREATE USER 'appuser'@'%' IDENTIFIED BY 'SecurePass123!';
+
+-- PostgreSQL
+CREATE USER appuser WITH PASSWORD 'SecurePass123!';
+
+-- SQL Server
+CREATE LOGIN appuser WITH PASSWORD = 'SecurePass123!';
+CREATE USER appuser FOR LOGIN appuser;
+
+-- Oracle
+CREATE USER appuser IDENTIFIED BY SecurePass123;
+```
+
+**2. Certificate-Based Authentication:**
+```sql
+-- MySQL with SSL certificates
+CREATE USER 'ssluser'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
+CREATE USER 'certuser'@'%' IDENTIFIED BY 'password' REQUIRE X509;
+```
+
+**3. Active Directory Integration:**
+```sql
+-- SQL Server with Windows Authentication
+CREATE LOGIN [DOMAIN\username] FROM WINDOWS;
+```
+
+#### Access Control and Privileges
+
+**Grant Privileges:**
+```sql
+-- MySQL
+GRANT SELECT, INSERT, UPDATE ON mydb.users TO 'appuser'@'localhost';
+GRANT ALL PRIVILEGES ON mydb.* TO 'admin'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.get_user TO 'appuser'@'localhost';
+
+-- PostgreSQL
+GRANT SELECT, INSERT, UPDATE ON users TO appuser;
+GRANT ALL PRIVILEGES ON DATABASE mydb TO admin;
+GRANT USAGE ON SCHEMA public TO appuser;
+
+-- SQL Server
+GRANT SELECT, INSERT, UPDATE ON users TO appuser;
+GRANT CONTROL ON DATABASE::mydb TO admin;
+
+-- Oracle
+GRANT SELECT, INSERT, UPDATE ON users TO appuser;
+GRANT DBA TO admin;
+```
+
+**Revoke Privileges:**
+```sql
+-- MySQL
+REVOKE INSERT, UPDATE ON mydb.users FROM 'appuser'@'localhost';
+
+-- PostgreSQL
+REVOKE INSERT, UPDATE ON users FROM appuser;
+
+-- SQL Server
+REVOKE INSERT, UPDATE ON users FROM appuser;
+```
+
+**Role-Based Access Control (RBAC):**
+```sql
+-- MySQL (8.0+)
+CREATE ROLE 'app_read';
+CREATE ROLE 'app_write';
+GRANT SELECT ON mydb.* TO 'app_read';
+GRANT INSERT, UPDATE, DELETE ON mydb.* TO 'app_write';
+GRANT 'app_read', 'app_write' TO 'appuser'@'localhost';
+
+-- PostgreSQL
+CREATE ROLE app_read;
+CREATE ROLE app_write;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO app_read;
+GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_write;
+GRANT app_read, app_write TO appuser;
+
+-- SQL Server
+CREATE ROLE app_read;
+CREATE ROLE app_write;
+GRANT SELECT ON SCHEMA::dbo TO app_read;
+GRANT INSERT, UPDATE, DELETE ON SCHEMA::dbo TO app_write;
+ALTER ROLE app_read ADD MEMBER appuser;
+ALTER ROLE app_write ADD MEMBER appuser;
+```
+
+#### SQL Injection Prevention
+
+**Vulnerable Code Examples:**
+```sql
+-- Never do this!
+String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+
+-- Attacker input: username = "admin'--" password = "anything"
+-- Resulting query: SELECT * FROM users WHERE username = 'admin'--' AND password = 'anything'
+```
+
+**Safe Practices:**
+
+**1. Prepared Statements:**
+```java
+// Java JDBC
+String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement stmt = connection.prepareStatement(query);
+stmt.setString(1, username);
+stmt.setString(2, password);
+ResultSet rs = stmt.executeQuery();
+```
+
+**2. Stored Procedures:**
+```sql
+-- MySQL stored procedure
+DELIMITER //
+CREATE PROCEDURE GetUser(IN p_username VARCHAR(50), IN p_password VARCHAR(255))
+BEGIN
+    SELECT * FROM users WHERE username = p_username AND password = p_password;
+END //
+DELIMITER ;
+
+-- Call from application
+CALL GetUser(?, ?);
+```
+
+**3. Input Validation:**
+```java
+// Validate and sanitize input
+public boolean isValidUsername(String username) {
+    return username != null && 
+           username.matches("^[a-zA-Z0-9_]{3,20}$") &&
+           !username.contains("'") &&
+           !username.contains("--") &&
+           !username.contains("/*");
+}
+```
+
+**4. Escape Special Characters:**
+```java
+// Apache Commons Lang
+import org.apache.commons.lang3.StringEscapeUtils;
+String safeInput = StringEscapeUtils.escapeSql(userInput);
+```
+
+#### Data Encryption
+
+**Encryption at Rest:**
+```sql
+-- MySQL - Encrypt tablespace
+CREATE TABLESPACE encrypted_ts
+ADD DATAFILE 'encrypted_ts.ibd'
+ENCRYPTION='Y';
+
+CREATE TABLE sensitive_data (
+    id INT PRIMARY KEY,
+    ssn VARCHAR(11),
+    credit_card VARCHAR(16)
+) TABLESPACE=encrypted_ts;
+
+-- PostgreSQL - Column-level encryption using pgcrypto
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50),
+    password_hash TEXT,
+    ssn BYTEA  -- Store encrypted data
+);
+
+-- Insert encrypted data
+INSERT INTO users (username, password_hash, ssn) 
+VALUES ('john_doe', crypt('password', gen_salt('bf')), pgp_sym_encrypt('123-45-6789', 'secret_key'));
+
+-- Retrieve decrypted data
+SELECT username, pgp_sym_decrypt(ssn, 'secret_key') as decrypted_ssn 
+FROM users WHERE username = 'john_doe';
+```
+
+**Encryption in Transit (SSL/TLS):**
+```sql
+-- MySQL - Force SSL connections
+CREATE USER 'ssluser'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
+
+-- Check SSL status
+SHOW STATUS LIKE 'Ssl_cipher';
+```
+
+**Transparent Data Encryption (TDE):**
+```sql
+-- SQL Server TDE
+-- Create master key
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'MasterKeyPassword123!';
+
+-- Create certificate
+CREATE CERTIFICATE TDECert WITH SUBJECT = 'TDE Certificate';
+
+-- Create database encryption key
+USE mydb;
+CREATE DATABASE ENCRYPTION KEY
+WITH ALGORITHM = AES_256
+ENCRYPTION BY SERVER CERTIFICATE TDECert;
+
+-- Enable TDE
+ALTER DATABASE mydb SET ENCRYPTION ON;
+```
+
+#### Auditing and Monitoring
+
+**Enable Auditing:**
+```sql
+-- MySQL - Enable general log
+SET GLOBAL general_log = 'ON';
+SET GLOBAL general_log_file = '/var/log/mysql/general.log';
+
+-- Enable audit plugin
+INSTALL PLUGIN audit_log SONAME 'audit_log.so';
+
+-- PostgreSQL - Enable logging
+ALTER SYSTEM SET log_statement = 'all';
+ALTER SYSTEM SET log_connections = on;
+ALTER SYSTEM SET log_disconnections = on;
+SELECT pg_reload_conf();
+
+-- SQL Server - Create audit
+CREATE SERVER AUDIT ServerAudit
+TO FILE (FILEPATH = 'C:\Audits\');
+
+CREATE SERVER AUDIT SPECIFICATION ServerAuditSpec
+FOR SERVER AUDIT ServerAudit
+ADD (LOGIN_GROUP),
+ADD (LOGOUT_GROUP);
+
+ALTER SERVER AUDIT ServerAudit WITH (STATE = ON);
+ALTER SERVER AUDIT SPECIFICATION ServerAuditSpec WITH (STATE = ON);
+```
+
+**Monitor Failed Login Attempts:**
+```sql
+-- MySQL - Check failed login attempts from error log
+-- grep "Access denied" /var/log/mysql/error.log
+
+-- PostgreSQL - Monitor failed connections
+SELECT * FROM pg_stat_database WHERE datname = 'mydb';
+
+-- SQL Server - Query security log
+SELECT 
+    event_time,
+    succeeded,
+    server_principal_name,
+    client_ip
+FROM sys.fn_get_audit_file('C:\Audits\*.sqlaudit', default, default)
+WHERE action_id = 'LGIS'  -- Login failed
+ORDER BY event_time DESC;
+```
+
+#### Database Backup Security
+
+**Encrypted Backups:**
+```sql
+-- MySQL - Encrypted backup
+mysqldump --single-transaction --routines --triggers mydb | 
+openssl enc -aes-256-cbc -salt -out mydb_backup.sql.enc
+
+-- Restore encrypted backup
+openssl enc -d -aes-256-cbc -in mydb_backup.sql.enc | mysql mydb
+
+-- PostgreSQL - Encrypted backup
+pg_dump mydb | gpg --symmetric --cipher-algo AES256 -o mydb_backup.sql.gpg
+
+-- SQL Server - Encrypted backup
+BACKUP DATABASE mydb 
+TO DISK = 'C:\Backups\mydb.bak'
+WITH ENCRYPTION (
+    ALGORITHM = AES_256,
+    SERVER CERTIFICATE = BackupCertificate
+);
+```
+
+### العربية
+
+#### المصادقة والترخيص
+
+**طرق المصادقة:**
+
+**1. مصادقة اسم المستخدم/كلمة المرور:**
+- الطريقة الأكثر شيوعاً
+- يجب استخدام كلمات مرور قوية
+- تدوير كلمات المرور دورياً
+
+**2. المصادقة القائمة على الشهادات:**
+- أمان أعلى من كلمات المرور
+- يتطلب إدارة الشهادات
+- مناسب للبيئات المؤسسية
+
+#### منع حقن SQL
+
+**الممارسات الآمنة:**
+
+**1. العبارات المحضرة:**
+- تفصل الكود عن البيانات
+- تمنع حقن SQL تلقائياً
+- أفضل ممارسة للأمان
+
+**2. التحقق من صحة المدخلات:**
+- فلترة المدخلات الضارة
+- استخدام التعبيرات المنتظمة
+- رفض المدخلات المشبوهة
+
+---
+
+## 10. NoSQL Databases | قواعد البيانات NoSQL {#nosql}
+
+### English
+
+#### Introduction to NoSQL
+
+**What is NoSQL:**
+NoSQL (Not Only SQL) databases are designed to handle large volumes of unstructured or semi-structured data. They provide flexible schemas and horizontal scalability.
+
+**NoSQL vs SQL:**
+
+| Feature | SQL (RDBMS) | NoSQL |
+|---------|-------------|--------|
+| Schema | Fixed, predefined | Flexible, dynamic |
+| Scalability | Vertical (scale up) | Horizontal (scale out) |
+| ACID | Full ACID compliance | Eventual consistency |
+| Query Language | SQL | Various (API, Query languages) |
+| Data Structure | Tables with rows/columns | Documents, Key-Value, Columns, Graphs |
+| Relationships | Strong relationships with JOINs | Denormalized, embedded data |
+
+#### Document Databases
+
+**MongoDB:**
+
+**Document Structure:**
+```javascript
+// JSON-like document in MongoDB
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30,
+  "address": {
+    "street": "123 Main St",
+    "city": "New York",
+    "zipCode": "10001"
+  },
+  "hobbies": ["reading", "swimming", "coding"],
+  "createdAt": ISODate("2024-01-15T10:30:00Z")
+}
+```
+
+**Basic Operations:**
+```javascript
+// Insert documents
+db.users.insertOne({
+  name: "John Doe",
+  email: "john@example.com",
+  age: 30
+});
+
+db.users.insertMany([
+  {name: "Jane Smith", email: "jane@example.com", age: 25},
+  {name: "Bob Johnson", email: "bob@example.com", age: 35}
+]);
+
+// Find documents
+db.users.find({age: {$gte: 25}});
+db.users.findOne({email: "john@example.com"});
+
+// Update documents
+db.users.updateOne(
+  {email: "john@example.com"},
+  {$set: {age: 31}}
+);
+
+db.users.updateMany(
+  {age: {$lt: 30}},
+  {$inc: {age: 1}}
+);
+
+// Delete documents
+db.users.deleteOne({email: "john@example.com"});
+db.users.deleteMany({age: {$lt: 18}});
+```
+
+**Advanced Queries:**
+```javascript
+// Complex queries with operators
+db.users.find({
+  $and: [
+    {age: {$gte: 25}},
+    {age: {$lte: 40}},
+    {hobbies: {$in: ["coding", "reading"]}}
+  ]
+});
+
+// Text search
+db.articles.find({$text: {$search: "database mongodb"}});
+
+// Geospatial queries
+db.locations.find({
+  coordinates: {
+    $near: {
+      $geometry: {type: "Point", coordinates: [-74.0059, 40.7128]},
+      $maxDistance: 1000
+    }
+  }
+});
+
+// Aggregation pipeline
+db.orders.aggregate([
+  {$match: {status: "completed"}},
+  {$group: {
+    _id: "$customerId",
+    totalAmount: {$sum: "$amount"},
+    orderCount: {$sum: 1}
+  }},
+  {$sort: {totalAmount: -1}},
+  {$limit: 10}
+]);
+```
+
+**Indexing in MongoDB:**
+```javascript
+// Create indexes
+db.users.createIndex({email: 1});  // Ascending
+db.users.createIndex({name: 1, age: -1});  // Compound index
+db.users.createIndex({location: "2dsphere"});  // Geospatial index
+db.articles.createIndex({title: "text", content: "text"});  // Text index
+
+// Check index usage
+db.users.find({email: "john@example.com"}).explain("executionStats");
+```
+
+#### Key-Value Databases
+
+**Redis:**
+
+**Basic Data Types:**
+```bash
+# Strings
+SET user:1:name "John Doe"
+GET user:1:name
+INCR user:1:views
+EXPIRE user:1:session 3600
+
+# Lists
+LPUSH notifications "New message"
+RPUSH notifications "System update"
+LRANGE notifications 0 -1
+LPOP notifications
+
+# Sets
+SADD user:1:skills "JavaScript"
+SADD user:1:skills "Python"
+SADD user:1:skills "MongoDB"
+SMEMBERS user:1:skills
+SISMEMBER user:1:skills "Python"
+
+# Hashes
+HSET user:1 name "John Doe" email "john@example.com" age 30
+HGET user:1 name
+HGETALL user:1
+HINCRBY user:1 age 1
+
+# Sorted Sets
+ZADD leaderboard 1000 "player1"
+ZADD leaderboard 1500 "player2"
+ZADD leaderboard 800 "player3"
+ZRANGE leaderboard 0 -1 WITHSCORES
+ZREVRANGE leaderboard 0 2 WITHSCORES
+```
+
+**Advanced Redis Operations:**
+```bash
+# Transactions
+MULTI
+SET user:1:balance 1000
+DECRBY user:1:balance 100
+INCRBY user:2:balance 100
+EXEC
+
+# Pub/Sub
+# Publisher
+PUBLISH notifications "New order received"
+
+# Subscriber
+SUBSCRIBE notifications
+
+# Lua Scripts for atomic operations
+EVAL "
+  local balance = redis.call('GET', KEYS[1])
+  if tonumber(balance) >= tonumber(ARGV[1]) then
+    redis.call('DECRBY', KEYS[1], ARGV[1])
+    return 1
+  else
+    return 0
+  end
+" 1 user:1:balance 100
+```
+
+#### Column-Family Databases
+
+**Cassandra:**
+
+**Data Modeling:**
+```cql
+-- Create keyspace
+CREATE KEYSPACE ecommerce 
+WITH replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': 3
+};
+
+USE ecommerce;
+
+-- Create column family (table)
+CREATE TABLE users (
+  user_id UUID PRIMARY KEY,
+  email TEXT,
+  name TEXT,
+  age INT,
+  created_at TIMESTAMP
+);
+
+-- Create table with composite primary key
+CREATE TABLE user_posts (
+  user_id UUID,
+  post_id TIMEUUID,
+  title TEXT,
+  content TEXT,
+  created_at TIMESTAMP,
+  PRIMARY KEY (user_id, post_id)
+) WITH CLUSTERING ORDER BY (post_id DESC);
+```
+
+**CRUD Operations:**
+```cql
+-- Insert data
+INSERT INTO users (user_id, email, name, age, created_at)
+VALUES (uuid(), 'john@example.com', 'John Doe', 30, toTimestamp(now()));
+
+-- Select data
+SELECT * FROM users WHERE user_id = 123e4567-e89b-12d3-a456-426614174000;
+
+-- Update data
+UPDATE users SET age = 31 WHERE user_id = 123e4567-e89b-12d3-a456-426614174000;
+
+-- Delete data
+DELETE FROM users WHERE user_id = 123e4567-e89b-12d3-a456-426614174000;
+```
+
+#### Graph Databases
+
+**Neo4j:**
+
+**Graph Model:**
+```cypher
+// Create nodes
+CREATE (john:Person {name: 'John Doe', age: 30})
+CREATE (jane:Person {name: 'Jane Smith', age: 25})
+CREATE (company:Company {name: 'Tech Corp'})
+
+// Create relationships
+CREATE (john)-[:WORKS_FOR {since: '2020-01-01'}]->(company)
+CREATE (jane)-[:WORKS_FOR {since: '2021-06-01'}]->(company)
+CREATE (john)-[:KNOWS {since: '2019-05-01'}]->(jane)
+```
+
+**Graph Queries:**
+```cypher
+// Find all employees of a company
+MATCH (p:Person)-[:WORKS_FOR]->(c:Company {name: 'Tech Corp'})
+RETURN p.name, p.age
+
+// Find friends of friends
+MATCH (john:Person {name: 'John Doe'})-[:KNOWS]->(friend)-[:KNOWS]->(friendOfFriend)
+WHERE friendOfFriend <> john
+RETURN DISTINCT friendOfFriend.name
+
+// Find shortest path between two people
+MATCH path = shortestPath((p1:Person {name: 'John Doe'})-[:KNOWS*]-(p2:Person {name: 'Alice Brown'}))
+RETURN path
+
+// Recommendation: People who work at same company but don't know each other
+MATCH (p1:Person)-[:WORKS_FOR]->(c:Company)<-[:WORKS_FOR]-(p2:Person)
+WHERE p1 <> p2 AND NOT (p1)-[:KNOWS]-(p2)
+RETURN p1.name, p2.name, c.name
+```
+
+#### NoSQL Design Patterns
+
+**Denormalization:**
+```javascript
+// Instead of separate collections (normalized)
+// users: {_id: 1, name: "John"}
+// posts: {_id: 1, userId: 1, title: "My Post"}
+
+// Embed related data (denormalized)
+{
+  _id: 1,
+  name: "John",
+  posts: [
+    {title: "My First Post", content: "..."},
+    {title: "My Second Post", content: "..."}
+  ]
+}
+```
+
+**Bucketing Pattern:**
+```javascript
+// Time series data - group by time periods
+{
+  _id: "sensor1_2024-01-01-00",
+  sensor_id: "sensor1",
+  date: "2024-01-01",
+  hour: 0,
+  measurements: [
+    {time: "00:00", temperature: 25.5, humidity: 60},
+    {time: "00:15", temperature: 25.8, humidity: 58},
+    // ... more measurements for this hour
+  ]
+}
+```
+
+**Polymorphic Pattern:**
+```javascript
+// Different document types in same collection
+// Product documents
+{type: "book", title: "Database Design", author: "John Smith", pages: 300}
+{type: "electronics", name: "Laptop", brand: "TechBrand", specs: {...}}
+{type: "clothing", name: "T-Shirt", size: "M", color: "blue"}
+```
+
+### العربية
+
+#### مقدمة عن NoSQL
+
+**ما هو NoSQL:**
+قواعد بيانات NoSQL (ليس SQL فقط) مصممة للتعامل مع كميات كبيرة من البيانات غير المهيكلة أو شبه المهيكلة. توفر مخططات مرنة وقابلية توسع أفقية.
+
+**NoSQL مقابل SQL:**
+
+| الخاصية | SQL (RDBMS) | NoSQL |
+|---------|-------------|--------|
+| المخطط | ثابت، محدد مسبقاً | مرن، ديناميكي |
+| القابلية للتوسع | عمودي (توسيع لأعلى) | أفقي (توسيع للخارج) |
+| ACID | امتثال كامل لـ ACID | اتساق نهائي |
+| لغة الاستعلام | SQL | متنوعة (API، لغات استعلام) |
+
+---
+
+## 11. Data Warehousing & Analytics | مستودعات البيانات والتحليلات {#data-warehousing}
+
+### English
+
+#### Data Warehouse Concepts
+
+**What is a Data Warehouse:**
+A data warehouse is a centralized repository that stores integrated data from multiple sources, optimized for analytical processing and business intelligence.
+
+**Characteristics:**
+- **Subject-Oriented**: Organized around business subjects
+- **Integrated**: Data from multiple sources combined
+- **Time-Variant**: Historical data preservation
+- **Non-Volatile**: Data is stable, not frequently updated
+
+**OLTP vs OLAP:**
+
+| Feature | OLTP (Online Transaction Processing) | OLAP (Online Analytical Processing) |
+|---------|--------------------------------------|-------------------------------------|
+| Purpose | Day-to-day operations | Analysis and reporting |
+| Data | Current, detailed | Historical, summarized |
+| Queries | Simple, frequent | Complex, infrequent |
+| Users | Many concurrent users | Fewer analytical users |
+| Design | Normalized | Denormalized |
+| Response Time | Milliseconds | Seconds to minutes |
+
+#### Dimensional Modeling
+
+**Star Schema:**
+```sql
+-- Fact table (center of star)
+CREATE TABLE sales_fact (
+    sale_id INT PRIMARY KEY,
+    date_key INT,
+    product_key INT,
+    customer_key INT,
+    store_key INT,
+    quantity INT,
+    unit_price DECIMAL(10,2),
+    total_amount DECIMAL(12,2),
+    FOREIGN KEY (date_key) REFERENCES date_dimension(date_key),
+    FOREIGN KEY (product_key) REFERENCES product_dimension(product_key),
+    FOREIGN KEY (customer_key) REFERENCES customer_dimension(customer_key),
+    FOREIGN KEY (store_key) REFERENCES store_dimension(store_key)
+);
+
+-- Dimension tables (points of star)
+CREATE TABLE date_dimension (
+    date_key INT PRIMARY KEY,
+    full_date DATE,
+    day_of_week VARCHAR(10),
+    day_of_month INT,
+    day_of_year INT,
+    week_of_year INT,
+    month_name VARCHAR(10),
+    month_number INT,
+    quarter INT,
+    year INT,
+    is_holiday BOOLEAN
+);
+
+CREATE TABLE product_dimension (
+    product_key INT PRIMARY KEY,
+    product_id VARCHAR(20),
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    subcategory VARCHAR(50),
+    brand VARCHAR(50),
+    unit_cost DECIMAL(10,2)
+);
+
+CREATE TABLE customer_dimension (
+    customer_key INT PRIMARY KEY,
+    customer_id VARCHAR(20),
+    customer_name VARCHAR(100),
+    age_group VARCHAR(20),
+    gender VARCHAR(10),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    country VARCHAR(50)
+);
+```
+
+**Snowflake Schema:**
+```sql
+-- Further normalize dimension tables
+CREATE TABLE product_dimension (
+    product_key INT PRIMARY KEY,
+    product_id VARCHAR(20),
+    product_name VARCHAR(100),
+    category_key INT,
+    brand_key INT,
+    FOREIGN KEY (category_key) REFERENCES category_dimension(category_key),
+    FOREIGN KEY (brand_key) REFERENCES brand_dimension(brand_key)
+);
+
+CREATE TABLE category_dimension (
+    category_key INT PRIMARY KEY,
+    category_name VARCHAR(50),
+    subcategory_name VARCHAR(50)
+);
+
+CREATE TABLE brand_dimension (
+    brand_key INT PRIMARY KEY,
+    brand_name VARCHAR(50),
+    brand_country VARCHAR(50)
+);
+```
+
+#### ETL Process
+
+**Extract, Transform, Load:**
+
+**Extract:**
+```sql
+-- Extract from source systems
+-- From MySQL operational database
+SELECT 
+    order_id,
+    customer_id,
+    product_id,
+    order_date,
+    quantity,
+    unit_price
+FROM orders 
+WHERE order_date >= '2024-01-01';
+
+-- From PostgreSQL CRM system
+SELECT 
+    customer_id,
+    customer_name,
+    email,
+    registration_date
+FROM customers
+WHERE last_updated >= '2024-01-01';
+```
+
+**Transform:**
+```sql
+-- Data cleansing and transformation
+-- Standardize date formats
+SELECT 
+    order_id,
+    customer_id,
+    product_id,
+    DATE_FORMAT(order_date, '%Y-%m-%d') as order_date,
+    quantity,
+    unit_price,
+    quantity * unit_price as total_amount
+FROM staging_orders;
+
+-- Handle missing values
+SELECT 
+    customer_id,
+    COALESCE(customer_name, 'Unknown') as customer_name,
+    COALESCE(email, 'no-email@unknown.com') as email,
+    CASE 
+        WHEN age IS NULL THEN 'Unknown'
+        WHEN age < 18 THEN 'Minor'
+        WHEN age BETWEEN 18 AND 35 THEN 'Young Adult'
+        WHEN age BETWEEN 36 AND 55 THEN 'Middle Age'
+        ELSE 'Senior'
+    END as age_group
+FROM staging_customers;
+
+-- Data aggregation
+SELECT 
+    product_id,
+    SUM(quantity) as total_quantity,
+    SUM(total_amount) as total_revenue,
+    COUNT(*) as order_count,
+    AVG(unit_price) as avg_price
+FROM staging_orders
+GROUP BY product_id;
+```
+
+**Load:**
+```sql
+-- Load into data warehouse
+-- Slowly Changing Dimension (SCD) Type 2
+INSERT INTO customer_dimension (
+    customer_id,
+    customer_name,
+    email,
+    age_group,
+    effective_date,
+    expiry_date,
+    is_current
+)
+SELECT 
+    customer_id,
+    customer_name,
+    email,
+    age_group,
+    CURRENT_DATE as effective_date,
+    '9999-12-31' as expiry_date,
+    1 as is_current
+FROM staging_customers s
+WHERE NOT EXISTS (
+    SELECT 1 FROM customer_dimension d 
+    WHERE d.customer_id = s.customer_id AND d.is_current = 1
+);
+
+-- Load fact data
+INSERT INTO sales_fact (
+    date_key,
+    product_key,
+    customer_key,
+    quantity,
+    unit_price,
+    total_amount
+)
+SELECT 
+    d.date_key,
+    p.product_key,
+    c.customer_key,
+    s.quantity,
+    s.unit_price,
+    s.total_amount
+FROM staging_sales s
+JOIN date_dimension d ON s.order_date = d.full_date
+JOIN product_dimension p ON s.product_id = p.product_id
+JOIN customer_dimension c ON s.customer_id = c.customer_id AND c.is_current = 1;
+```
+
+#### Analytical Queries
+
+**OLAP Operations:**
+
+**Roll-up (Aggregation):**
+```sql
+-- Monthly sales summary
+SELECT 
+    dd.year,
+    dd.month_name,
+    SUM(sf.total_amount) as monthly_revenue,
+    SUM(sf.quantity) as total_quantity
+FROM sales_fact sf
+JOIN date_dimension dd ON sf.date_key = dd.date_key
+GROUP BY dd.year, dd.month_number, dd.month_name
+ORDER BY dd.year, dd.month_number;
+```
+
+**Drill-down (Detail):**
+```sql
+-- Daily sales for specific month
+SELECT 
+    dd.full_date,
+    pd.product_name,
+    cd.customer_name,
+    sf.quantity,
+    sf.total_amount
+FROM sales_fact sf
+JOIN date_dimension dd ON sf.date_key = dd.date_key
+JOIN product_dimension pd ON sf.product_key = pd.product_key
+JOIN customer_dimension cd ON sf.customer_key = cd.customer_key
+WHERE dd.year = 2024 AND dd.month_number = 1
+ORDER BY dd.full_date;
+```
+
+**Slice and Dice:**
+```sql
+-- Sales by product category and quarter
+SELECT 
+    pd.category,
+    dd.quarter,
+    SUM(sf.total_amount) as revenue
+FROM sales_fact sf
+JOIN product_dimension pd ON sf.product_key = pd.product_key
+JOIN date_dimension dd ON sf.date_key = dd.date_key
+WHERE dd.year = 2024
+GROUP BY pd.category, dd.quarter
+ORDER BY pd.category, dd.quarter;
+```
+
+**Pivot Operations:**
+```sql
+-- Pivot table: Products vs Quarters
+SELECT 
+    pd.product_name,
+    SUM(CASE WHEN dd.quarter = 1 THEN sf.total_amount ELSE 0 END) as Q1,
+    SUM(CASE WHEN dd.quarter = 2 THEN sf.total_amount ELSE 0 END) as Q2,
+    SUM(CASE WHEN dd.quarter = 3 THEN sf.total_amount ELSE 0 END) as Q3,
+    SUM(CASE WHEN dd.quarter = 4 THEN sf.total_amount ELSE 0 END) as Q4
+FROM sales_fact sf
+JOIN product_dimension pd ON sf.product_key = pd.product_key
+JOIN date_dimension dd ON sf.date_key = dd.date_key
+WHERE dd.year = 2024
+GROUP BY pd.product_name;
+```
+
+#### Data Mining Queries
+
+**Customer Segmentation:**
+```sql
+-- RFM Analysis (Recency, Frequency, Monetary)
+WITH customer_metrics AS (
+    SELECT 
+        cd.customer_id,
+        cd.customer_name,
+        DATEDIFF(CURRENT_DATE, MAX(dd.full_date)) as recency_days,
+        COUNT(*) as frequency,
+        SUM(sf.total_amount) as monetary_value
+    FROM sales_fact sf
+    JOIN customer_dimension cd ON sf.customer_key = cd.customer_key
+    JOIN date_dimension dd ON sf.date_key = dd.date_key
+    WHERE dd.full_date >= DATE_SUB(CURRENT_DATE, INTERVAL 365 DAY)
+    GROUP BY cd.customer_id, cd.customer_name
+),
+customer_scores AS (
+    SELECT 
+        *,
+        NTILE(5) OVER (ORDER BY recency_days) as recency_score,
+        NTILE(5) OVER (ORDER BY frequency DESC) as frequency_score,
+        NTILE(5) OVER (ORDER BY monetary_value DESC) as monetary_score
+    FROM customer_metrics
+)
+SELECT 
+    customer_id,
+    customer_name,
+    recency_days,
+    frequency,
+    monetary_value,
+    CASE 
+        WHEN recency_score >= 4 AND frequency_score >= 4 AND monetary_score >= 4 THEN 'Champions'
+        WHEN recency_score >= 3 AND frequency_score >= 3 AND monetary_score >= 3 THEN 'Loyal Customers'
+        WHEN recency_score >= 3 AND frequency_score <= 2 AND monetary_score >= 3 THEN 'Big Spenders'
+        WHEN recency_score <= 2 AND frequency_score >= 3 THEN 'At Risk'
+        ELSE 'Others'
+    END as customer_segment
+FROM customer_scores;
+```
+
+**Market Basket Analysis:**
+```sql
+-- Find frequently bought together products
+WITH product_pairs AS (
+    SELECT 
+        sf1.product_key as product_a,
+        sf2.product_key as product_b,
+        COUNT(*) as frequency
+    FROM sales_fact sf1
+    JOIN sales_fact sf2 ON sf1.date_key = sf2.date_key 
+                        AND sf1.customer_key = sf2.customer_key
+                        AND sf1.product_key < sf2.product_key
+    GROUP BY sf1.product_key, sf2.product_key
+    HAVING COUNT(*) >= 10
+)
+SELECT 
+    pd1.product_name as product_a,
+    pd2.product_name as product_b,
+    pp.frequency,
+    pp.frequency * 100.0 / total_orders.total as support_percentage
+FROM product_pairs pp
+JOIN product_dimension pd1 ON pp.product_a = pd1.product_key
+JOIN product_dimension pd2 ON pp.product_b = pd2.product_key
+CROSS JOIN (SELECT COUNT(DISTINCT date_key, customer_key) as total FROM sales_fact) total_orders
+ORDER BY pp.frequency DESC;
+```
+
+### العربية
+
+#### مفاهيم مستودع البيانات
+
+**ما هو مستودع البيانات:**
+مستودع البيانات هو مستودع مركزي يخزن البيانات المتكاملة من مصادر متعددة، محسن للمعالجة التحليلية وذكاء الأعمال.
+
+**الخصائص:**
+- **موجه نحو الموضوع**: منظم حول مواضيع العمل
+- **متكامل**: بيانات من مصادر متعددة مدمجة
+- **متغير زمنياً**: حفظ البيانات التاريخية
+- **غير متطاير**: البيانات مستقرة، لا تُحدث بشكل متكرر
+
+---
+
+## 12. Database Administration | إدارة قواعد البيانات {#database-administration}
+
+### English
+
+#### Database Installation and Configuration
+
+**MySQL Configuration:**
+```ini
+# /etc/mysql/my.cnf
+[mysqld]
+# Basic settings
+port = 3306
+bind-address = 0.0.0.0
+datadir = /var/lib/mysql
+
+# Performance settings
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 512M
+query_cache_size = 256M
+max_connections = 500
+thread_cache_size = 50
+
+# Security settings
+skip-name-resolve
+ssl-ca = /etc/mysql/ssl/ca.pem
+ssl-cert = /etc/mysql/ssl/server-cert.pem
+ssl-key = /etc/mysql/ssl/server-key.pem
+
+# Logging
+general_log = 1
+general_log_file = /var/log/mysql/general.log
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow-query.log
+long_query_time = 2
+```
+
+**PostgreSQL Configuration:**
+```ini
+# postgresql.conf
+listen_addresses = '*'
+port = 5432
+max_connections = 200
+shared_buffers = 1GB
+effective_cache_size = 3GB
+work_mem = 64MB
+maintenance_work_mem = 512MB
+
+# WAL settings
+wal_level = replica
+max_wal_size = 2GB
+checkpoint_completion_target = 0.9
+
+# Logging
+log_destination = 'stderr'
+log_min_duration_statement = 1000
+log_checkpoints = on
+log_connections = on
+log_disconnections = on
+```
+
+#### Backup and Recovery
+
+**MySQL Backup Strategies:**
+
+**Logical Backup with mysqldump:**
+```bash
+# Full database backup
+mysqldump --single-transaction --routines --triggers mydb > mydb_backup.sql
+
+# Compress backup
+mysqldump --single-transaction --routines --triggers mydb | gzip > mydb_backup.sql.gz
+
+# Backup specific tables
+mysqldump --single-transaction mydb users orders > partial_backup.sql
+
+# Backup with where clause
+mysqldump --single-transaction --where="created_date >= '2024-01-01'" mydb orders > recent_orders.sql
+```
+
+**Physical Backup with MySQL Enterprise Backup:**
+```bash
+# Hot backup
+mysqlbackup --backup-dir=/backup/full --with-timestamp backup
+
+# Incremental backup
+mysqlbackup --backup-dir=/backup/inc1 --incremental --incremental-base=dir:/backup/full backup
+```
+
+**Point-in-Time Recovery:**
+```bash
+# Enable binary logging in my.cnf
+log-bin = /var/log/mysql/mysql-bin
+expire_logs_days = 7
+
+# Restore from backup and apply binary logs
+mysql mydb < mydb_backup.sql
+
+# Apply binary logs for point-in-time recovery
+mysqlbinlog --start-datetime="2024-01-01 10:00:00" \
+           --stop-datetime="2024-01-01 11:30:00" \
+           /var/log/mysql/mysql-bin.000001 | mysql mydb
+```
+
+**PostgreSQL Backup Strategies:**
+
+**Logical Backup with pg_dump:**
+```bash
+# Full database backup
+pg_dump mydb > mydb_backup.sql
+
+# Compressed backup
+pg_dump -Fc mydb > mydb_backup.dump
+
+# Backup specific schema
+pg_dump -n public mydb > public_schema_backup.sql
+
+# Backup with parallel jobs
+pg_dump -j 4 -Fd mydb -f mydb_backup_dir/
+```
+
+**Physical Backup with pg_basebackup:**
+```bash
+# Hot backup
+pg_basebackup -D /backup/base -Ft -z -P
+
+# Streaming replication backup
+pg_basebackup -h replica -D /backup/replica -X stream -P
+```
+
+**Continuous Archiving and PITR:**
+```bash
+# Configure in postgresql.conf
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p /backup/wal_archive/%f'
+
+# Point-in-time recovery
+# 1. Restore base backup
+tar -xf base.tar -C /var/lib/postgresql/data/
+
+# 2. Create recovery.conf
+cat > /var/lib/postgresql/data/recovery.conf << EOF
+restore_command = 'cp /backup/wal_archive/%f %p'
+recovery_target_time = '2024-01-01 11:30:00'
+EOF
+
+# 3. Start PostgreSQL
+systemctl start postgresql
+```
+
+#### Performance Monitoring and Tuning
+
+**MySQL Performance Monitoring:**
+```sql
+-- Check slow queries
+SELECT * FROM mysql.slow_log ORDER BY start_time DESC LIMIT 10;
+
+-- Monitor processlist
+SHOW PROCESSLIST;
+
+-- Check engine status
+SHOW ENGINE INNODB STATUS;
+
+-- Monitor key buffer usage
+SHOW STATUS LIKE 'Key_%';
+
+-- Check connection statistics
+SHOW STATUS LIKE 'Connections';
+SHOW STATUS LIKE 'Threads_%';
+
+-- Query cache statistics
+SHOW STATUS LIKE 'Qcache_%';
+```
+
+**Performance Schema Queries:**
+```sql
+-- Top queries by execution time
+SELECT 
+    DIGEST_TEXT,
+    COUNT_STAR,
+    AVG_TIMER_WAIT/1000000000 AS avg_seconds,
+    SUM_TIMER_WAIT/1000000000 AS total_seconds
+FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC
+LIMIT 10;
+
+-- Table I/O statistics
+SELECT 
+    OBJECT_SCHEMA,
+    OBJECT_NAME,
+    COUNT_READ,
+    COUNT_WRITE,
+    SUM_TIMER_READ/1000000000 AS read_seconds,
+    SUM_TIMER_WRITE/1000000000 AS write_seconds
+FROM performance_schema.table_io_waits_summary_by_table
+WHERE OBJECT_SCHEMA NOT IN ('mysql', 'performance_schema', 'information_schema')
+ORDER BY SUM_TIMER_READ + SUM_TIMER_WRITE DESC;
+```
+
+**PostgreSQL Performance Monitoring:**
+```sql
+-- Check database statistics
+SELECT * FROM pg_stat_database WHERE datname = 'mydb';
+
+-- Monitor table statistics
+SELECT 
+    schemaname,
+    tablename,
+    seq_scan,
+    seq_tup_read,
+    idx_scan,
+    idx_tup_fetch,
+    n_tup_ins,
+    n_tup_upd,
+    n_tup_del
+FROM pg_stat_user_tables;
+
+-- Check index usage
+SELECT 
+    schemaname,
+    tablename,
+    indexname,
+    idx_scan,
+    idx_tup_read,
+    idx_tup_fetch
+FROM pg_stat_user_indexes
+ORDER BY idx_scan DESC;
+
+-- Monitor current activity
+SELECT 
+    pid,
+    usename,
+    application_name,
+    client_addr,
+    state,
+    query_start,
+    query
+FROM pg_stat_activity
+WHERE state != 'idle';
+
+-- Check buffer cache hit ratio
+SELECT 
+    sum(heap_blks_read) as heap_read,
+    sum(heap_blks_hit) as heap_hit,
+    sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) * 100 as hit_ratio
+FROM pg_statio_user_tables;
+```
+
+#### High Availability and Replication
+
+**MySQL Replication Setup:**
+
+**Master Configuration:**
+```ini
+# Master server configuration
+server-id = 1
+log-bin = mysql-bin
+binlog-format = ROW
+gtid-mode = ON
+enforce-gtid-consistency = true
+```
+
+```sql
+-- Create replication user
+CREATE USER 'replication'@'%' IDENTIFIED BY 'secure_password';
+GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
+FLUSH PRIVILEGES;
+
+-- Check master status
+SHOW MASTER STATUS;
+```
+
+**Slave Configuration:**
+```ini
+# Slave server configuration
+server-id = 2
+relay-log = relay-bin
+read-only = 1
+gtid-mode = ON
+enforce-gtid-consistency = true
+```
+
+```sql
+-- Configure slave
+CHANGE MASTER TO
+    MASTER_HOST='master_host',
+    MASTER_USER='replication',
+    MASTER_PASSWORD='secure_password',
+    MASTER_AUTO_POSITION=1;
+
+-- Start replication
+START SLAVE;
+
+-- Check slave status
+SHOW SLAVE STATUS\G
+```
+
+**PostgreSQL Streaming Replication:**
+
+**Primary Server Configuration:**
+```ini
+# postgresql.conf
+wal_level = replica
+max_wal_senders = 3
+wal_keep_segments = 32
+synchronous_commit = on
+```
+
+```bash
+# pg_hba.conf
+host replication replication replica_ip/32 md5
+```
+
+```sql
+-- Create replication user
+CREATE USER replication REPLICATION LOGIN ENCRYPTED PASSWORD 'secure_password';
+```
+
+**Standby Server Setup:**
+```bash
+# Take base backup
+pg_basebackup -h primary_host -D /var/lib/postgresql/data -U replication -W -R -X stream
+
+# recovery.conf is automatically created with -R option
+# Contains:
+# standby_mode = 'on'
+# primary_conninfo = 'host=primary_host port=5432 user=replication'
+```
+
+### العربية
+
+#### إدارة قاعدة البيانات
+
+**تكوين قاعدة البيانات:**
+- تحسين الأداء من خلال إعدادات التكوين
+- تكوين الأمان والمصادقة
+- إعداد السجلات والمراقبة
+- تكوين الشبكة والاتصالات
+
+**النسخ الاحتياطي والاستعادة:**
+- النسخ الاحتياطي المنطقي والمادي
+- استراتيجيات النسخ الاحتياطي
+- الاستعادة من نقطة زمنية محددة
+- اختبار النسخ الاحتياطي
+
+---
+
+## 13. Interview Questions & Answers | أسئلة وأجوبة المقابلات {#interview-qa}
+
+### Beginner Level Questions | أسئلة المستوى المبتدئ
+
+#### Q1: What is a database? | ما هي قاعدة البيانات؟
+
+**English Answer:**
+A database is an organized collection of structured information or data, typically stored electronically in a computer system. It's managed by a Database Management System (DBMS) that provides an interface for users and applications to interact with the data. Databases allow for efficient storage, retrieval, modification, and deletion of data while maintaining data integrity and consistency.
+
+**Arabic Answer:**
+قاعدة البيانات هي مجموعة منظمة من المعلومات أو البيانات المهيكلة، والتي يتم تخزينها عادة إلكترونياً في نظام كمبيوتر. تُدار بواسطة نظام إدارة قاعدة البيانات (DBMS) الذي يوفر واجهة للمستخدمين والتطبيقات للتفاعل مع البيانات. تسمح قواعد البيانات بالتخزين والاسترجاع والتعديل والحذف الفعال للبيانات مع الحفاظ على سلامة واتساق البيانات.
+
+#### Q2: What's the difference between SQL and NoSQL databases? | ما الفرق بين قواعد بيانات SQL و NoSQL؟
+
+**English Answer:**
+- **SQL Databases (Relational)**:
+  - Use structured query language (SQL)
+  - Have predefined, rigid schema
+  - Support ACID properties
+  - Vertically scalable
+  - Examples: MySQL, PostgreSQL, Oracle
+
+- **NoSQL Databases (Non-relational)**:
+  - Don't necessarily use SQL
+  - Have flexible, dynamic schema
+  - Eventually consistent
+  - Horizontally scalable
+  - Examples: MongoDB, Cassandra, Redis
+
+**Arabic Answer:**
+- **قواعد بيانات SQL (العلائقية)**:
+  - تستخدم لغة الاستعلام المهيكلة (SQL)
+  - لها مخطط محدد مسبقاً وصارم
+  - تدعم خصائص ACID
+  - قابلة للتوسع عمودياً
+  - أمثلة: MySQL, PostgreSQL, Oracle
+
+- **قواعد بيانات NoSQL (غير العلائقية)**:
+  - لا تستخدم SQL بالضرورة
+  - لها مخطط مرن وديناميكي
+  - اتساق نهائي
+  - قابلة للتوسع أفقياً
+  - أمثلة: MongoDB, Cassandra, Redis
+
+#### Q3: What is a Primary Key? | ما هو المفتاح الأساسي؟
+
+**English Answer:**
+A Primary Key is a column or combination of columns that uniquely identifies each row in a table. Key characteristics:
+- Must be unique for each row
+- Cannot contain NULL values
+- Each table can have only one primary key
+- Automatically creates a unique index
+- Used to establish relationships with foreign keys
+- Ensures entity integrity
+
+Example:
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR(50),
+    email VARCHAR(100)
+);
+```
+
+**Arabic Answer:**
+المفتاح الأساسي هو عمود أو مجموعة من الأعمدة التي تحدد بشكل فريد كل صف في الجدول. الخصائص الرئيسية:
+- يجب أن يكون فريداً لكل صف
+- لا يمكن أن يحتوي على قيم NULL
+- كل جدول يمكن أن يكون له مفتاح أساسي واحد فقط
+- ينشئ فهرساً فريداً تلقائياً
+- يُستخدم لإقامة علاقات مع المفاتيح الخارجية
+- يضمن سلامة الكيان
+
+#### Q4: What is JDBC and how do you connect to a database? | ما هو JDBC وكيف تتصل بقاعدة البيانات؟
+
+**English Answer:**
+JDBC (Java Database Connectivity) is an API that enables Java applications to interact with databases. It provides methods for querying and updating data.
+
+Basic connection steps:
+1. Load the database driver
+2. Create a connection string
+3. Establish connection
+4. Execute queries
+5. Close resources
+
+Example:
+```java
+String url = "jdbc:mysql://localhost:3306/mydb";
+String username = "root";
+String password = "password";
+
+try (Connection conn = DriverManager.getConnection(url, username, password)) {
+    String sql = "SELECT * FROM users WHERE id = ?";
+    PreparedStatement stmt = conn.prepareStatement(sql);
+    stmt.setInt(1, userId);
+    ResultSet rs = stmt.executeQuery();
+    
+    while (rs.next()) {
+        System.out.println(rs.getString("username"));
+    }
+}
+```
+
+**Arabic Answer:**
+JDBC (اتصال قاعدة البيانات بـ Java) هو API يُمكن تطبيقات Java من التفاعل مع قواعد البيانات. يوفر طرق للاستعلام عن البيانات وتحديثها.
+
+خطوات الاتصال الأساسية:
+1. تحميل مشغل قاعدة البيانات
+2. إنشاء نص الاتصال
+3. إقامة الاتصال
+4. تنفيذ الاستعلامات
+5. إغلاق الموارد
+
+#### Q5: Explain database normalization | اشرح تطبيع قاعدة البيانات
+
+**English Answer:**
+Database normalization is the process of organizing data to reduce redundancy and improve data integrity. The main normal forms are:
+
+**1NF (First Normal Form):**
+- Eliminate duplicate columns
+- Each column contains atomic values
+- Each column has unique name
+
+**2NF (Second Normal Form):**
+- Must be in 1NF
+- All non-key attributes fully depend on primary key
+- No partial dependencies
+
+**3NF (Third Normal Form):**
+- Must be in 2NF
+- No transitive dependencies
+- Non-key attributes depend only on primary key
+
+Example of 1NF violation and correction:
+```sql
+-- Violates 1NF
+CREATE TABLE customers_bad (
+    id INT,
+    name VARCHAR(100),
+    phones VARCHAR(200)  -- "123-456-7890, 098-765-4321"
+);
+
+-- 1NF compliant
+CREATE TABLE customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE customer_phones (
+    customer_id INT,
+    phone VARCHAR(15),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+```
+
+**Arabic Answer:**
+تطبيع قاعدة البيانات هو عملية تنظيم البيانات لتقليل التكرار وتحسين سلامة البيانات. الأشكال العادية الرئيسية هي:
+
+**1NF (الشكل العادي الأول):**
+- إزالة الأعمدة المكررة
+- كل عمود يحتوي على قيم ذرية
+- كل عمود له اسم فريد
+
+**2NF (الشكل العادي الثاني):**
+- يجب أن يكون في 1NF
+- جميع الخصائص غير الأساسية تعتمد كلياً على المفتاح الأساسي
+- لا توجد تبعيات جزئية
+
+**3NF (الشكل العادي الثالث):**
+- يجب أن يكون في 2NF
+- لا توجد تبعيات انتقالية
+- الخصائص غير الأساسية تعتمد فقط على المفتاح الأساسي
+
+### Intermediate Level Questions | أسئلة المستوى المتوسط
+
+#### Q6: What are ACID properties? | ما هي خصائص ACID؟
+
+**English Answer:**
+ACID properties ensure reliable database transactions:
+
+**Atomicity:**
+- All operations in a transaction succeed or fail together
+- "All or nothing" principle
+- If one part fails, entire transaction is rolled back
+
+**Consistency:**
+- Database remains in valid state before and after transaction
+- All constraints and rules are satisfied
+- Data integrity is maintained
+
+**Isolation:**
+- Concurrent transactions don't interfere with each other
+- Each transaction sees consistent view of data
+- Prevents dirty reads, phantom reads, etc.
+
+**Durability:**
+- Committed changes persist even after system failure
+- Changes are written to permanent storage
+- Transaction log ensures recovery
+
+Example:
+```sql
+START TRANSACTION;
+UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'A123';
+UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'B456';
+COMMIT; -- Both operations succeed or both fail
+```
+
+**Arabic Answer:**
+خصائص ACID تضمن موثوقية معاملات قاعدة البيانات:
+
+**الذرية (Atomicity):**
+- جميع العمليات في المعاملة تنجح أو تفشل معاً
+- مبدأ "الكل أو لا شيء"
+- إذا فشل جزء واحد، يتم إلغاء المعاملة بأكملها
+
+**الاتساق (Consistency):**
+- قاعدة البيانات تبقى في حالة صالحة قبل وبعد المعاملة
+- جميع القيود والقواعد مستوفاة
+- سلامة البيانات محفوظة
+
+**العزل (Isolation):**
+- المعاملات المتزامنة لا تتداخل مع بعضها البعض
+- كل معاملة ترى رؤية متسقة للبيانات
+- يمنع القراءات القذرة، القراءات الوهمية، إلخ
+
+**المتانة (Durability):**
+- التغييرات المؤكدة تستمر حتى بعد فشل النظام
+- التغييرات تُكتب في التخزين الدائم
+- سجل المعاملات يضمن الاستعادة
+
+#### Q7: Explain different types of database indexes | اشرح الأنواع المختلفة لفهارس قاعدة البيانات
+
+**English Answer:**
+Database indexes are data structures that improve query performance by creating shortcuts to data:
+
+**Types by Structure:**
+1. **B-Tree Index** (Most common):
+   - Balanced tree structure
+   - Good for equality and range queries
+   - Default in most databases
+
+2. **Hash Index**:
+   - Fast for equality comparisons
+   - Not suitable for range queries
+   - O(1) lookup time
+
+3. **Bitmap Index**:
+   - Efficient for low-cardinality data
+   - Good for data warehousing
+   - Uses bitmaps to represent data
+
+**Types by Content:**
+1. **Single Column Index**:
+   ```sql
+   CREATE INDEX idx_email ON users(email);
+   ```
+
+2. **Composite Index**:
+   ```sql
+   CREATE INDEX idx_name_age ON users(last_name, first_name, age);
+   ```
+
+3. **Unique Index**:
+   ```sql
+   CREATE UNIQUE INDEX idx_username ON users(username);
+   ```
+
+4. **Partial Index**:
+   ```sql
+   CREATE INDEX idx_active_users ON users(email) WHERE status = 'active';
+   ```
+
+5. **Functional Index**:
+   ```sql
+   CREATE INDEX idx_upper_email ON users(UPPER(email));
+   ```
+
+**Arabic Answer:**
+فهارس قاعدة البيانات هي هياكل بيانات تحسن أداء الاستعلامات بإنشاء اختصارات للبيانات:
+
+**الأنواع حسب الهيكل:**
+1. **فهرس B-Tree** (الأكثر شيوعاً):
+   - هيكل شجرة متوازنة
+   - جيد للاستعلامات المتساوية والنطاقية
+   - الافتراضي في معظم قواعد البيانات
+
+2. **فهرس Hash**:
+   - سريع للمقارنات المتساوية
+   - غير مناسب للاستعلامات النطاقية
+   - وقت بحث O(1)
+
+#### Q8: What is the difference between clustered and non-clustered indexes? | ما الفرق بين الفهارس المجمعة وغير المجمعة؟
+
+**English Answer:**
+**Clustered Index:**
+- Physically reorders table data
+- Table data stored in order of clustered index key
+- Only one per table (usually primary key)
+- Faster for range queries
+- Leaf nodes contain actual data rows
+
+**Non-Clustered Index:**
+- Doesn't change physical data order
+- Creates separate structure pointing to data rows
+- Multiple non-clustered indexes per table allowed
+- Faster for specific key lookups
+- Leaf nodes contain pointers to data rows
+
+Example:
+```sql
+-- Clustered index (automatically created with PRIMARY KEY)
+CREATE TABLE users (
+    id INT PRIMARY KEY,  -- Clustered index
+    username VARCHAR(50),
+    email VARCHAR(100)
+);
+
+-- Non-clustered indexes
+CREATE INDEX idx_username ON users(username);  -- Non-clustered
+CREATE INDEX idx_email ON users(email);       -- Non-clustered
+```
+
+**Arabic Answer:**
+**الفهرس المجمع:**
+- يعيد ترتيب بيانات الجدول مادياً
+- بيانات الجدول مخزنة بترتيب مفتاح الفهرس المجمع
+- واحد فقط لكل جدول (عادة المفتاح الأساسي)
+- أسرع للاستعلامات النطاقية
+- العقد الورقية تحتوي على صفوف البيانات الفعلية
+
+**الفهرس غير المجمع:**
+- لا يغير الترتيب المادي للبيانات
+- ينشئ هيكل منفصل يشير لصفوف البيانات
+- يُسمح بعدة فهارس غير مجمعة لكل جدول
+- أسرع للبحث عن مفاتيح محددة
+- العقد الورقية تحتوي على مؤشرات لصفوف البيانات
+
+#### Q9: Explain SQL injection and how to prevent it | اشرح حقن SQL وكيفية منعه
+
+**English Answer:**
+SQL injection is a security vulnerability where malicious SQL code is inserted into application queries, allowing attackers to manipulate the database.
+
+**Example of Vulnerable Code:**
+```java
+String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+// If username = "admin'--" and password = "anything"
+// Query becomes: SELECT * FROM users WHERE username = 'admin'--' AND password = 'anything'
+```
+
+**Prevention Methods:**
+
+1. **Prepared Statements (Best Practice):**
+```java
+String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement stmt = connection.prepareStatement(query);
+stmt.setString(1, username);
+stmt.setString(2, password);
+```
+
+2. **Input Validation:**
+```java
+public boolean isValidInput(String input) {
+    return input != null && 
+           input.matches("^[a-zA-Z0-9_]{3,20}$") &&
+           !input.contains("'") &&
+           !input.contains("--");
+}
+```
+
+3. **Stored Procedures:**
+```sql
+DELIMITER //
+CREATE PROCEDURE GetUser(IN p_username VARCHAR(50), IN p_password VARCHAR(255))
+BEGIN
+    SELECT * FROM users WHERE username = p_username AND password = p_password;
+END //
+DELIMITER ;
+```
+
+4. **Escape Special Characters:**
+```java
+String safeInput = StringEscapeUtils.escapeSql(userInput);
+```
+
+**Arabic Answer:**
+حقن SQL هو ثغرة أمنية حيث يتم إدراج كود SQL ضار في استعلامات التطبيق، مما يسمح للمهاجمين بالتلاعب بقاعدة البيانات.
+
+**طرق الوقاية:**
+
+1. **العبارات المحضرة (أفضل ممارسة)**
+2. **التحقق من صحة المدخلات**
+3. **الإجراءات المخزنة**
+4. **إخفاء الأحرف الخاصة**
+
+#### Q10: What are database transactions and isolation levels? | ما هي معاملات قاعدة البيانات ومستويات العزل؟
+
+**English Answer:**
+**Database Transactions:**
+A transaction is a logical unit of work that contains one or more SQL statements, executed as a single unit (all succeed or all fail).
+
+**Isolation Levels:**
+
+1. **READ UNCOMMITTED:**
+   - Lowest isolation level
+   - Allows dirty reads
+   - Best performance, worst consistency
+
+2. **READ COMMITTED:**
+   - Prevents dirty reads
+   - Default in PostgreSQL, Oracle, SQL Server
+   - Allows non-repeatable reads
+
+3. **REPEATABLE READ:**
+   - Prevents dirty and non-repeatable reads
+   - Default in MySQL
+   - May allow phantom reads
+
+4. **SERIALIZABLE:**
+   - Highest isolation level
+   - Prevents all phenomena
+   - Best consistency, worst performance
+
+**Concurrency Problems:**
+- **Dirty Read**: Reading uncommitted changes
+- **Non-repeatable Read**: Same query returns different results
+- **Phantom Read**: New rows appear in result set
+
+Example:
+```sql
+-- Set isolation level
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+START TRANSACTION;
+SELECT balance FROM accounts WHERE id = 1;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+COMMIT;
+```
+
+**Arabic Answer:**
+**معاملات قاعدة البيانات:**
+المعاملة هي وحدة عمل منطقية تحتوي على عبارة SQL واحدة أو أكثر، تُنفذ كوحدة واحدة (كلها تنجح أو كلها تفشل).
+
+**مستويات العزل:**
+
+1. **READ UNCOMMITTED**: يسمح بالقراءات القذرة
+2. **READ COMMITTED**: يمنع القراءات القذرة
+3. **REPEATABLE READ**: يمنع القراءات القذرة وغير القابلة للتكرار
+4. **SERIALIZABLE**: أعلى مستوى عزل
+
+### Advanced Level Questions | أسئلة المستوى المتقدم
+
+#### Q11: Explain database partitioning and its types | اشرح تقسيم قاعدة البيانات وأنواعه
+
+**English Answer:**
+Database partitioning divides large tables into smaller, manageable pieces while maintaining logical unity.
+
+**Types of Partitioning:**
+
+1. **Horizontal Partitioning (Sharding):**
+   - Splits table rows across multiple tables/servers
+   - Each partition contains subset of rows
+   
+   ```sql
+   -- Range partitioning by date
+   CREATE TABLE sales_2024 PARTITION OF sales
+   FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+   
+   CREATE TABLE sales_2025 PARTITION OF sales
+   FOR VALUES FROM ('2025-01-01') TO ('2026-01-01');
+   ```
+
+2. **Vertical Partitioning:**
+   - Splits table columns across multiple tables
+   - Frequently accessed columns in one table, less frequent in another
+   
+   ```sql
+   -- Hot data (frequently accessed)
+   CREATE TABLE users_hot (
+       id INT PRIMARY KEY,
+       username VARCHAR(50),
+       email VARCHAR(100)
+   );
+   
+   -- Cold data (rarely accessed)
+   CREATE TABLE users_cold (
+       id INT PRIMARY KEY,
+       bio TEXT,
+       preferences JSON,
+       FOREIGN KEY (id) REFERENCES users_hot(id)
+   );
+   ```
+
+3. **Functional Partitioning:**
+   - Splits data by feature/functionality
+   - User data, order data, product data in separate databases
+
+**Benefits:**
+- Improved query performance
+- Better manageability
+- Parallel processing
+- Easier maintenance
+
+**Challenges:**
+- Complex queries across partitions
+- Rebalancing data
+- Maintaining referential integrity
+
+**Arabic Answer:**
+تقسيم قاعدة البيانات يقسم الجداول الكبيرة إلى قطع أصغر قابلة للإدارة مع الحفاظ على الوحدة المنطقية.
+
+**أنواع التقسيم:**
+
+1. **التقسيم الأفقي (Sharding)**: تقسيم صفوف الجدول
+2. **التقسيم العمودي**: تقسيم أعمدة الجدول
+3. **التقسيم الوظيفي**: تقسيم البيانات حسب الوظيفة
+
+#### Q12: What is database replication and its types? | ما هو تكرار قاعدة البيانات وأنواعه؟
+
+**English Answer:**
+Database replication is the process of copying and maintaining database objects in multiple databases across different servers.
+
+**Types of Replication:**
+
+1. **Master-Slave Replication:**
+   - One master (write), multiple slaves (read)
+   - Asynchronous replication
+   - Good for read-heavy workloads
+   
+   ```sql
+   -- MySQL Master setup
+   CREATE USER 'replication'@'%' IDENTIFIED BY 'password';
+   GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
+   
+   -- Slave setup
+   CHANGE MASTER TO
+       MASTER_HOST='master_host',
+       MASTER_USER='replication',
+       MASTER_PASSWORD='password';
+   START SLAVE;
+   ```
+
+2. **Master-Master Replication:**
+   - Multiple masters can accept writes
+   - Bidirectional replication
+   - Risk of conflicts
+
+3. **Synchronous Replication:**
+   - Transaction commits after all replicas confirm
+   - Strong consistency
+   - Higher latency
+
+4. **Asynchronous Replication:**
+   - Transaction commits before replicas confirm
+   - Eventually consistent
+   - Better performance
+
+**Benefits:**
+- High availability
+- Load distribution
+- Geographic distribution
+- Disaster recovery
+
+**Challenges:**
+- Replication lag
+- Conflict resolution
+- Network partitions
+- Complexity
+
+**Arabic Answer:**
+تكرار قاعدة البيانات هو عملية نسخ والحفاظ على كائنات قاعدة البيانات في قواعد بيانات متعددة عبر خوادم مختلفة.
+
+**أنواع التكرار:**
+
+1. **تكرار Master-Slave**: سيد واحد، عبيد متعددون
+2. **تكرار Master-Master**: أسياد متعددون
+3. **التكرار المتزامن**: قوة الاتساق، زمن استجابة أعلى
+4. **التكرار غير المتزامن**: اتساق نهائي، أداء أفضل
+
+#### Q13: Explain CAP theorem and its implications for distributed databases | اشرح نظرية CAP وتأثيرها على قواعد البيانات الموزعة
+
+**English Answer:**
+CAP theorem states that in a distributed database system, you can only guarantee two of the following three properties:
+
+**Consistency (C):**
+- All nodes see the same data simultaneously
+- Strong consistency means immediate consistency
+- Example: ACID-compliant RDBMS
+
+**Availability (A):**
+- System remains operational and responsive
+- Every request receives a response
+- Example: System stays up during network partitions
+
+**Partition Tolerance (P):**
+- System continues despite network failures
+- Can handle communication breakdowns between nodes
+- Essential for distributed systems
+
+**CAP Trade-offs:**
+
+1. **CP Systems (Consistency + Partition Tolerance):**
+   - Examples: MongoDB, HBase, Redis Cluster
+   - Sacrifice availability during network partitions
+   - Strong consistency but may become unavailable
+
+2. **AP Systems (Availability + Partition Tolerance):**
+   - Examples: Cassandra, DynamoDB, CouchDB
+   - Sacrifice consistency for availability
+   - Eventually consistent but always available
+
+3. **CA Systems (Consistency + Availability):**
+   - Examples: Traditional RDBMS (MySQL, PostgreSQL)
+   - Cannot handle network partitions
+   - Not truly distributed
+
+**Practical Implications:**
+- NoSQL databases often choose AP or CP
+- RDBMS traditionally choose CA
+- Modern systems use techniques like eventual consistency
+- BASE (Basically Available, Soft state, Eventual consistency) vs ACID
+
+**Arabic Answer:**
+نظرية CAP تنص على أنه في نظام قاعدة بيانات موزع، يمكنك ضمان خاصيتين فقط من الخصائص الثلاث التالية:
+
+**الاتساق (Consistency):**
+- جميع العقد ترى نفس البيانات في نفس الوقت
+- الاتساق القوي يعني الاتساق الفوري
+
+**التوفر (Availability):**
+- النظام يبقى قيد التشغيل ومتجاوب
+- كل طلب يتلقى استجابة
+
+**تحمل التقسيم (Partition Tolerance):**
+- النظام يستمر رغم فشل الشبكة
+- يمكن التعامل مع انقطاع التواصل بين العقد
+
+#### Q14: What are stored procedures and their advantages/disadvantages? | ما هي الإجراءات المخزنة ومزاياها/عيوبها؟
+
+**English Answer:**
+Stored procedures are precompiled SQL statements stored in the database that can be executed with a single call.
+
+**Example:**
+```sql
+-- MySQL Stored Procedure
+DELIMITER //
+CREATE PROCEDURE GetUserOrders(
+    IN p_user_id INT,
+    IN p_start_date DATE,
+    OUT p_total_orders INT
+)
+BEGIN
+    SELECT COUNT(*) INTO p_total_orders
+    FROM orders 
+    WHERE user_id = p_user_id 
+    AND order_date >= p_start_date;
+    
+    SELECT order_id, order_date, total_amount
+    FROM orders
+    WHERE user_id = p_user_id
+    AND order_date >= p_start_date
+    ORDER BY order_date DESC;
+END //
+DELIMITER ;
+
+-- Call the procedure
+CALL GetUserOrders(123, '2024-01-01', @total);
+SELECT @total;
+```
+
+**Advantages:**
+1. **Performance**: Precompiled, execution plan cached
+2. **Security**: Prevents SQL injection
+3. **Code Reuse**: Centralized business logic
+4. **Network Traffic**: Reduced data transfer
+5. **Consistency**: Same logic across applications
+6. **Access Control**: Can grant execute permissions only
+
+**Disadvantages:**
+1. **Database Lock-in**: Vendor-specific syntax
+2. **Version Control**: Difficult to manage in source control
+3. **Debugging**: Limited debugging capabilities
+4. **Scalability**: Database becomes bottleneck
+5. **Team Skills**: Requires database expertise
+6. **Testing**: Complex to unit test
+
+**When to Use:**
+- Complex business logic
+- High-performance requirements
+- Security-critical operations
+- Data validation rules
+
+**When Not to Use:**
+- Simple CRUD operations
+- Frequently changing business logic
+- Multi-database environments
+- Microservices architecture
+
+**Arabic Answer:**
+الإجراءات المخزنة هي عبارات SQL مُجمعة مسبقاً ومخزنة في قاعدة البيانات يمكن تنفيذها باستدعاء واحد.
+
+**المزايا:**
+1. **الأداء**: مجمعة مسبقاً، خطة التنفيذ محفوظة في الذاكرة المؤقتة
+2. **الأمان**: تمنع حقن SQL
+3. **إعادة الاستخدام**: منطق العمل مركزي
+4. **حركة الشبكة**: تقليل نقل البيانات
+
+**العيوب:**
+1. **ربط قاعدة البيانات**: صيغة خاصة بالمورد
+2. **التحكم في الإصدار**: صعوبة في إدارة التحكم في المصدر
+3. **التصحيح**: قدرات تصحيح محدودة
+4. **القابلية للتوسع**: قاعدة البيانات تصبح عنق زجاجة
+
+#### Q15: Explain database connection pooling and its benefits | اشرح تجميع اتصالات قاعدة البيانات وفوائده
+
+**English Answer:**
+Connection pooling is a technique where a cache of database connections is maintained for reuse across multiple requests, rather than creating and destroying connections for each database operation.
+
+**How it Works:**
+1. Pool initialized with minimum number of connections
+2. Application requests connection from pool
+3. Connection returned to pool after use
+4. Pool manages connection lifecycle
+
+**Implementation Example (HikariCP):**
+```java
+@Configuration
+public class DatabaseConfig {
+    
+    @Bean
+    public DataSource dataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/mydb");
+        config.setUsername("root");
+        config.setPassword("password");
+        
+        // Pool settings
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(20000);
+        config.setIdleTimeout(300000);
+        config.setMaxLifetime(1200000);
+        config.setLeakDetectionThreshold(60000);
+        
+        return new HikariDataSource(config);
+    }
+}
+```
+
+**Key Parameters:**
+- **Maximum Pool Size**: Max concurrent connections
+- **Minimum Idle**: Min connections kept in pool
+- **Connection Timeout**: Time to wait for connection
+- **Idle Timeout**: Time before idle connection removed
+- **Max Lifetime**: Maximum time connection can live
+- **Leak Detection**: Detect connection leaks
+
+**Benefits:**
+1. **Performance**: Eliminates connection creation overhead
+2. **Resource Management**: Controls database connections
+3. **Scalability**: Handles concurrent requests efficiently
+4. **Stability**: Prevents database overload
+5. **Monitoring**: Connection usage statistics
+
+**Best Practices:**
+1. Set appropriate pool size based on workload
+2. Monitor connection usage and tune parameters
+3. Handle connection leaks properly
+4. Use health checks to validate connections
+5. Configure proper timeouts
+
+**Arabic Answer:**
+تجميع اتصالات قاعدة البيانات هو تقنية حيث يتم الاحتفاظ بمخزن من اتصالات قاعدة البيانات لإعادة الاستخدام عبر طلبات متعددة، بدلاً من إنشاء وتدمير الاتصالات لكل عملية قاعدة بيانات.
+
+**الفوائد:**
+1. **الأداء**: يزيل تكلفة إنشاء الاتصال
+2. **إدارة الموارد**: يتحكم في اتصالات قاعدة البيانات
+3. **القابلية للتوسع**: يتعامل مع الطلبات المتزامنة بكفاءة
+4. **الاستقرار**: يمنع تحميل قاعدة البيانات بشكل زائد
+
+---
+
+## Conclusion | الخاتمة
+
+This comprehensive guide covers essential database concepts for full-stack Java web development, from basic principles to advanced topics. The interview questions range from beginner to expert level, providing thorough preparation for database-related technical interviews.
+
+Key areas covered include:
+- Database fundamentals and types
+- SQL and NoSQL technologies
+- Performance optimization
+- Security best practices
+- Advanced concepts like partitioning and replication
+- Real-world implementation examples
+
+هذا الدليل الشامل يغطي المفاهيم الأساسية لقواعد البيانات لتطوير الويب بـ Java، من المبادئ الأساسية إلى المواضيع المتقدمة. تتراوح أسئلة المقابلة من المستوى المبتدئ إلى الخبير، مما يوفر إعداداً شاملاً للمقابلات التقنية المتعلقة بقواعد البيانات.
+
+Remember to practice implementing these concepts in real projects and stay updated with the latest database technologies and best practices.
+
+تذكر أن تمارس تطبيق هذه المفاهيم في مشاريع حقيقية وابق محدثاً بأحدث تقنيات قواعد البيانات وأفضل الممارسات.

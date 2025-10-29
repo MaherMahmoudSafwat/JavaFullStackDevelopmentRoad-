@@ -1,0 +1,93 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <button class="back-btn" (click)="goBack()">← Back</button>
+    
+    <h2 class="signup-title">Create Account</h2>
+    <p class="signup-subtitle">Join our survey community</p>
+
+    <!-- Success Alert -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <!-- Error Alerts -->
+    <div class="alert alert-error" *ngIf="errorMessages.length > 0">
+      <div *ngFor="let error of errorMessages">{{ error }}</div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label for="userName">Username</label>
+        <input
+          type="text"
+          id="userName"
+          name="userName"
+          [(ngModel)]="user.userName"
+          [class.input-error]="fieldErrors['userName']"
+          placeholder="Enter your username (letters and numbers only)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="userEmail">Email</label>
+        <input
+          type="email"
+          id="userEmail"
+          name="userEmail"
+          [(ngModel)]="user.userEmail"
+          [class.input-error]="fieldErrors['userEmail']"
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="userPassword">Password</label>
+        <div class="password-input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="userPassword"
+            name="userPassword"
+            [(ngModel)]="user.userPassword"
+            [class.input-error]="fieldErrors['userPassword']"
+            placeholder="Enter your password"
+          />
+          <button 
+            type="button" 
+            class="password-toggle-btn" 
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+          </button>
+        </div>
+        <small class="hint">Must be 8+ chars with uppercase, lowercase, number, and special char (#$%^&*()_)</small>
+      </div>
+
+      <div class="form-group">
+        <label for="userImage">Profile Picture</label>
+        <input
+          type="file"
+          id="userImage"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          [class.input-error]="fieldErrors['image']"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-submit">
+        Sign Up
+      </button>
+    </form>
+
+    <p class="switch-link">
+      Already have an account? <a routerLink="/sign-in">Sign In</a>
+    </p>
+  </div>
+</div>

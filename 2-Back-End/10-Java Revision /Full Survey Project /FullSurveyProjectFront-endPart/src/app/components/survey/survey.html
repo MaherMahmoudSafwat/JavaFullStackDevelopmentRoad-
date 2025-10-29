@@ -1,0 +1,43 @@
+<div class="survey-fullpage-bg">
+  <button class="back-dashboard-btn" (click)="goToDashboard()">Back to Dashboard</button>
+  <div class="survey-center-card">
+    <h1 class="survey-main-title">Create a Beautiful Survey</h1>
+    <form (ngSubmit)="addSurvey()" #surveyForm="ngForm" class="survey-big-form">
+      <textarea class="survey-big-question" rows="3" placeholder="Type your question here..." [(ngModel)]="question" name="question" required (input)="onQuestionInput()"></textarea>
+      <div class="answers-sequence">
+        <div *ngIf="currentAnswerIndex >= 0" class="answer-row">
+          <div class="answer-label">Answer 1</div>
+          <input class="survey-big-answer" type="text" placeholder="Type answer 1..." [(ngModel)]="answers[0]" name="answer1" [readonly]="currentAnswerIndex < 0" (input)="onAnswerInput(0)" required />
+          <div class="plus-btn-row" *ngIf="canShowPlus(0)">
+            <button type="button" class="plus-btn large-plus" (click)="revealNextAnswer(0)">+</button>
+          </div>
+        </div>
+        <div *ngIf="currentAnswerIndex >= 1" class="answer-row">
+          <div class="answer-label">Answer 2</div>
+          <input class="survey-big-answer" type="text" placeholder="Type answer 2..." [(ngModel)]="answers[1]" name="answer2" [readonly]="currentAnswerIndex < 1" (input)="onAnswerInput(1)" required />
+          <div class="plus-btn-row" *ngIf="canShowPlus(1)">
+            <button type="button" class="plus-btn large-plus" (click)="revealNextAnswer(1)">+</button>
+          </div>
+        </div>
+        <div *ngIf="currentAnswerIndex >= 2" class="answer-row">
+          <div class="answer-label">Answer 3</div>
+          <input class="survey-big-answer" type="text" placeholder="Type answer 3..." [(ngModel)]="answers[2]" name="answer3" [readonly]="currentAnswerIndex < 2" (input)="onAnswerInput(2)" required />
+          <div class="plus-btn-row" *ngIf="canShowPlus(2)">
+            <button type="button" class="plus-btn large-plus" (click)="revealNextAnswer(2)">+</button>
+          </div>
+        </div>
+        <div *ngIf="currentAnswerIndex >= 3" class="answer-row">
+          <div class="answer-label">Answer 4</div>
+          <input class="survey-big-answer" type="text" placeholder="Type answer 4..." [(ngModel)]="answers[3]" name="answer4" [readonly]="currentAnswerIndex < 3" (input)="onAnswerInput(3)" required />
+        </div>
+        <div class="plus-btn-row" *ngIf="question && !showAnswers && currentAnswerIndex === -1">
+          <button type="button" class="plus-btn large-plus" (click)="showAnswers = true; currentAnswerIndex = 0;">+</button>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn large-submit" [disabled]="!canSubmit()">Submit Survey</button>
+    </form>
+    <div *ngIf="success" class="success-message">{{ success }}</div>
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+  </div>
+</div>
+

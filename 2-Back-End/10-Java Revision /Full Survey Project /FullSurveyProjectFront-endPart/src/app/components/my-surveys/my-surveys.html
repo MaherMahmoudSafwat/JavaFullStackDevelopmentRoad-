@@ -1,0 +1,73 @@
+<div class="surveys-fullpage-bg">
+  <!-- Header -->
+  <div class="surveys-header">
+    <button class="back-dashboard-btn" (click)="goToDashboard()">
+      ← Back to Dashboard
+    </button>
+    <div class="header-content">
+      <h1 class="surveys-main-title">My Surveys</h1>
+      <p class="surveys-subtitle">All your created surveys</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="surveys-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading your surveys...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <div class="error-icon">⚠️</div>
+      <p class="error-message">{{ error }}</p>
+      <button class="retry-btn" (click)="loadMySurveys()">Try Again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !error && mySurveys.length === 0" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <h2>No Surveys Yet</h2>
+      <p>You haven't created any surveys yet.</p>
+    </div>
+
+    <!-- Surveys List -->
+    <div *ngIf="!isLoading && !error && mySurveys.length > 0" class="surveys-list">
+      <div *ngFor="let survey of mySurveys; let surveyIndex = index" class="survey-card">
+        
+        <!-- Question Number and Question -->
+        <div class="question-header">
+          <h2 class="question-text">{{ surveyIndex + 1 }}) {{ survey.surveyQuestionName }}</h2>
+        </div>
+
+        <!-- Answers A, B, C, D -->
+        <div class="answers-container">
+          <div *ngFor="let answer of survey.answer; let answerIndex = index" 
+               class="answer-item"
+               [class.has-votes]="answer.answerPercentage > 0">
+            
+            <div class="answer-content">
+              <div class="answer-left">
+                <span class="answer-letter">{{ getAnswerLetter(answerIndex) }}</span>
+                <span class="answer-text">{{ answer.answerName }}</span>
+              </div>
+              
+              <div class="answer-right">
+                <span class="answer-percentage">{{ answer.answerPercentage }}%</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar Background (always visible) -->
+            <div class="progress-background">
+              <!-- Colored progress bar -->
+              <div class="progress-fill" [style.width]="answer.answerPercentage + '%'"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="all-surveys-fullpage-bg">
+  <!-- Header -->
+  <div class="all-surveys-header">
+    <button class="back-dashboard-btn" (click)="goToDashboard()">
+      ← Back to Dashboard
+    </button>
+    <div class="header-content">
+      <h1 class="all-surveys-main-title">All Surveys</h1>
+      <p class="all-surveys-subtitle">Browse all surveys from all users</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="all-surveys-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading all surveys...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <div class="error-icon">⚠️</div>
+      <p class="error-message">{{ error }}</p>
+      <button class="retry-btn" (click)="loadAllSurveys()">Try Again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !error && allSurveys.length === 0" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <h2>No Surveys Available</h2>
+      <p>There are no surveys in the system yet.</p>
+      <button class="dashboard-btn" (click)="goToDashboard()">Go to Dashboard</button>
+    </div>
+
+    <!-- Surveys List -->
+    <div *ngIf="!isLoading && !error && allSurveys.length > 0" class="surveys-list">
+      <div *ngFor="let survey of allSurveys; let surveyIndex = index" class="survey-card">
+        
+        <!-- User Info Header -->
+        <div class="user-info-header">
+          <div class="user-avatar">
+            <img *ngIf="survey.user?.userImage?.imageFile" 
+                 [src]="getUserImageUrl(survey.user.userImage)" 
+                 alt="User Avatar"
+                 class="user-image">
+            <div *ngIf="!survey.user?.userImage?.imageFile" class="user-image-placeholder">
+              {{ getUserInitials(survey.user?.userName) }}
+            </div>
+          </div>
+          <div class="user-details">
+            <h3 class="username">{{ survey.user?.userName || 'Unknown User' }}</h3>
+          </div>
+        </div>
+
+        <!-- Question Header -->
+        <div class="question-header">
+          <h2 class="question-text">{{ surveyIndex + 1 }}) {{ survey.surveyQuestionName }}</h2>
+        </div>
+
+        <!-- Answers Container -->
+        <div class="answers-container">
+          <div *ngFor="let answer of survey.answer; let answerIndex = index" 
+               class="answer-item"
+               [class.has-votes]="answer.answerPercentage > 0"
+               [class.voted]="isAnswerVoted(survey.surveyId, answer.answersId)"
+               [class.clickable]="!votingInProgress.get(survey.surveyId)"
+               (click)="voteOnAnswer(survey, answer)">
+            
+            <div class="answer-content">
+              <div class="answer-left">
+                <span class="answer-letter">{{ getAnswerLetter(answerIndex) }})</span>
+                <span class="answer-text">{{ answer.answerName }}</span>
+                <span *ngIf="isAnswerVoted(survey.surveyId, answer.answersId)" class="voted-badge">✓ Voted</span>
+              </div>
+              
+              <div class="answer-right">
+                <span class="answer-percentage">{{ (answer.answerPercentage || 0).toFixed(1) }}%</span>
+                <span class="vote-count">({{ answer.answerVoteCount || 0 }} votes)</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar Background (always visible) -->
+            <div class="progress-background">
+              <!-- Colored progress bar -->
+              <div class="progress-fill" [style.width]="answer.answerPercentage + '%'"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

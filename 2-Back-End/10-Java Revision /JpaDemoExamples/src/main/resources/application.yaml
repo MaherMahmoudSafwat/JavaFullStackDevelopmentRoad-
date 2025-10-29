@@ -1,0 +1,32 @@
+spring:                                    # Root Spring Boot configuration
+  datasource:                              # Database connection settings
+    url: jdbc:postgresql://localhost:5432/SchoolSystem
+    # ? Database connection URL breakdown:
+    #   - jdbc:postgresql://  ? tells Spring this is a PostgreSQL database
+    #   - localhost          ? database server location (your computer)
+    #   - 5432              ? PostgreSQL default port number
+    #   - SchoolSystem      ? your database name
+
+    username: postgres                     # Database user to connect with
+    password: 1234                         # Password for the database user
+    driver-class-name: org.postgresql.Driver  # Java class that handles PostgreSQL connections
+
+  jpa:                                     # JPA (Java Persistence API) settings
+    hibernate:                             # Hibernate is the JPA implementation Spring Boot uses
+      ddl-auto: update                    # Database schema management
+      # ? Options for ddl-auto:
+      #   - create: Drop existing tables and create new ones every time
+      #   - update: Only add new columns/tables, don't delete existing data
+      #   - validate: Only check if schema matches entities (no changes)
+      #   - create-drop: Create tables on startup, drop on shutdown
+      #   - none: Do nothing (manage schema manually)
+
+    show-sql: true                         # Print all SQL queries to console (for debugging)
+
+    properties:                            # Additional Hibernate properties
+      hibernate:
+        format_sql: true                   # Make SQL queries readable (formatted with indentation)
+
+    database: postgresql                   # Tell Spring what type of database this is
+    database-platform: org.hibernate.dialect.PostgreSQLDialect  # Hibernate dialect for PostgreSQL
+    # ? Dialect tells Hibernate how to generate SQL specific to PostgreSQL

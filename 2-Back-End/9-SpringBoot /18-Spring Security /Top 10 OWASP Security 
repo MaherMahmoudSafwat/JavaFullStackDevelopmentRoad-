@@ -1,0 +1,65 @@
+Simple Summary of the OWASP Top 10 (2021)
+
+1. Broken Access Control (A01)
+
+    What it is: People can see or do things they aren't supposed to. For example, a regular user accessing an admin panel or seeing another user's private data.
+
+    Simple Idea: Lock the doors so users only go into rooms they have permission to enter.
+
+2. Cryptographic Failures (A02)
+
+    What it is: Sensitive data (like passwords or credit card numbers) isn't protected properly. This often means it's not encrypted, or the encryption is weak.
+
+    Simple Idea: If you have a secret, put it in a strong safe. Don't just write it on a post-it note.
+
+3. Injection (A03)
+
+    What it is: An attacker sends malicious commands or data to trick the application. The most common type is SQL Injection, where an attacker can steal or mess with your database.
+
+    Simple Idea: Don't trust what users type in. Check and clean all input before using it.
+
+4. Insecure Design (A04) - NEW CATEGORY
+
+    What it is: The problem is built into the application's blueprint, not a mistake in the code. It's a flaw in "how it was supposed to work" from the very beginning.
+
+    Simple Idea: Plan for security before you start building, not as an afterthought.
+
+5. Security Misconfiguration (A05)
+
+    What it is: The website's settings are not secure. For example, using default passwords, leaving unnecessary features turned on, or having overly detailed error messages that leak information.
+
+    Simple Idea: Don't leave your digital house with the windows open and the key under the mat.
+
+6. Vulnerable and Outdated Components (A06)
+
+    What it is: Using old software "pieces" (libraries, frameworks) that have known security holes.
+
+    Simple Idea: Keep all your software and plugins updated, just like you update your phone's OS to stay safe.
+
+7. Identification and Authentication Failures (A07)
+
+    What it is: Problems with logging in. This includes weak passwords, letting attackers repeatedly guess passwords, or sessions that don't log out properly.
+
+    Simple Idea: Make sure you are really who you say you are when you log in, and that your session is secure.
+
+8. Software and Data Integrity Failures (A08) - NEW CATEGORY
+
+    What it is: Trusting data or software from an outside source without checking it. For example, automatically installing a plugin from an untrusted source or being tricked into using malicious code in an update.
+
+    Simple Idea: Don't automatically trust packages or updates from strangers. Verify their integrity first.
+
+9. Security Logging and Monitoring Failures (A09)
+
+    What it is: Not keeping good records of what happens on your system. If you don't log and watch for suspicious activity, you won't know you're being attacked.
+
+    Simple Idea: Have security cameras and alarms. If you don't, a thief can break in, steal everything, and you'd never know.
+
+10. Server-Side Request Forgery (SSRF) (A10) - NEW CATEGORY
+
+    What it is: Tricking a server into making a connection to a place it shouldn't, like an internal system that is normally hidden from the internet.
+
+    Simple Idea: It's like tricking a security guard into fetching something from the CEO's private office. The guard has access, but shouldn't be using it for that purpose.
+
+
+
+
