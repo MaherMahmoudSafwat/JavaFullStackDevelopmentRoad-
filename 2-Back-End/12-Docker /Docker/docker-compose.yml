@@ -1,0 +1,44 @@
+# Specify the version of Docker Compose file format
+version: "3.7"
+
+# Define our services (containers)
+services:
+  # Our Spring Boot application service
+  app:
+    build: .  # Build the Docker image from current directory using Dockerfile
+    ports:
+      - "8090:8090"  # Map host port 8090 to container port 8090
+    networks:
+      - My-Networks  # Connect to our custom network
+    depends_on:
+      postgres:
+        condition: service_healthy  # Wait until PostgreSQL is healthy
+
+  # PostgreSQL database service
+  postgres:
+    image: postgres:15  # Use PostgreSQL version 15 image
+    environment:
+      POSTGRES_USER: postgres     # Database username
+      POSTGRES_PASSWORD: 1234     # Database password  
+      POSTGRES_DB: DockerTest     # Default database name
+    ports:
+      - "5433:5432"  # Map host port 5433 to container port 5432
+    networks:
+      - My-Networks  # Connect to same network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]  # Check if DB is ready
+      interval: 5s    # Check every 5 seconds
+      timeout: 5s     # Timeout after 5 seconds
+      retries: 10     # Retry 10 times before considering unhealthy
+      start_period: 30s  # Wait 30s before starting health checks
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Persistent storage for DB
+
+# Define custom network for our services
+networks:
+  My-Networks:
+    driver: bridge  # Use bridge network driver
+
+# Define volumes for data persistence
+volumes:
+  postgres-data:  # Named volume that persists even when container stops
