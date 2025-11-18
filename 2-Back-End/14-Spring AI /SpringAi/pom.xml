@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.7</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<!-- Basic project information -->
+	<groupId>SpringAi.example</groupId>
+	<artifactId>SpringAi</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SpringAi</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>17</java.version>
+		<!-- Spring AI version - this is the AI framework we're using -->
+		<spring-ai.version>1.0.3</spring-ai.version>
+	</properties>
+
+	<dependencies>
+		<!-- Spring Boot Web - for creating REST APIs -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Spring AI with Ollama - connects to local AI models -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-ollama</artifactId>
+		</dependency>
+
+		<!-- Spring AI Advisors - adds smart features like memory to AI conversations -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-advisors-vector-store</artifactId>
+		</dependency>
+
+		<!-- ========== VECTOR DATABASE DEPENDENCIES ========== -->
+		<!--
+		VECTOR DATABASES EXPLAINED:
+		- Store text as NUMBERS (embeddings/vectors) instead of text
+		- Each word/sentence becomes an array of numbers like [0.1, -0.2, 0.8, ...]
+		- Can find SIMILAR MEANING by comparing number patterns
+		- Example: "cat" and "kitten" have similar number patterns
+		-->
+
+		<!-- POSTGRESQL + PGVECTOR (COMMENTED OUT - NOT USING) -->
+		<!--
+		PgVector: PostgreSQL with vector extensions
+		- Good for: Complex queries + vector search together
+		- We're NOT using this since we switched to Redis
+		-->
+		<!--
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
+		</dependency>
+		-->
+
+		<!-- REDIS VECTOR DATABASE (CURRENTLY USING) -->
+		<!--
+		Redis: In-memory database with vector search
+		- Good for: Fast performance, simple setup
+		- Stores product data as vectors for semantic search
+		- When you search "wireless headphones", it finds similar products by meaning
+		-->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-vector-store-redis</artifactId>
+		</dependency>
+
+		<!-- Spring Data Redis - connects to Redis database -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Docker Compose - automatically starts Redis in Docker -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-stability-ai</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-openai</artifactId>
+		</dependency>
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- Spring AI Bill of Materials - manages AI dependency versions -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>${spring-ai.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<!-- Spring Boot Maven Plugin - packages app as executable JAR -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+

@@ -1,0 +1,58 @@
+# DOCKER COMPOSE CONFIGURATION FOR VECTOR DATABASES
+# This file defines which databases run in Docker containers
+
+services:
+  # ========== POSTGRESQL + PGVECTOR (COMMENTED OUT - NOT USING) ==========
+  #
+  # PgVector: PostgreSQL database with vector extensions
+  # - Stores data in tables PLUS vector embeddings for AI search
+  # - Good for: Complex SQL queries + vector search together
+  # - We're NOT using this since we switched to Redis
+  #
+  #pgvector:
+  #  image: 'ankane/pgvector'  # Special PostgreSQL with vector support
+  #  container_name: spring-ai-postgres
+  #  environment:
+  #    - 'POSTGRES_DB=SpringAiTest'     # Database name
+  #    - 'POSTGRES_PASSWORD=1234'       # Database password
+  #    - 'POSTGRES_USER=postgres'       # Database username
+  #  ports:
+  #    - '5434:5432'  # Maps host port 5434 to container port 5432
+  #  volumes:
+  #    - postgres_data:/var/lib/postgresql/data  # Persists data between restarts
+  #  healthcheck:
+  #    test: ["CMD-SHELL", "pg_isready -U postgres -d SpringAiTest"]
+  #    interval: 10s
+  #    timeout: 5s
+  #    retries: 5
+
+  # ========== REDIS VECTOR DATABASE (CURRENTLY USING) ==========
+  #
+  # Redis: In-memory database with vector search capabilities
+  # - Stores everything in RAM for super fast access
+  # - Good for: High performance, simple semantic search
+  # - Our Spring AI app connects to this on port 6380
+  #
+  # VECTOR STORAGE EXPLAINED:
+  # - Your products get converted to number arrays (vectors)
+  # - Redis stores these number patterns
+  # - When you search, it finds similar number patterns
+  # - Example: "wireless earbuds" finds similar electronics by meaning
+  #
+  redis:
+    image: 'redis/redis-stack:latest'  # Redis with vector search extensions
+    container_name: spring-ai-redis    # Name for this container
+    ports:
+      # Maps host port 6380 to container port 6379
+      # Why 6380? Because port 6379 is already used by another Redis on your machine
+      - '6380:6379'
+    volumes:
+      - redis_data:/data  # Persists Redis data between container restarts
+
+# VOLUME DEFINITIONS
+# Docker volumes persist data even when containers are stopped/removed
+
+volumes:
+  # postgres_data:  # Commented out since we're not using PostgreSQL
+  redis_data:       # Volume for Redis data persistence
+
