@@ -1,0 +1,25 @@
+# GRPC CLIENT CONFIGURATION
+# =========================
+# Defines gRPC client stubs that connect to remote gRPC servers
+# Each stub configuration corresponds to a @GrpcClient annotation in code
+
+grpc:
+  client:
+    # STOCK MARKET SERVICE CONNECTION
+    # Configuration name: 'StockMarketStub'
+    # Used with: @GrpcClient("StockMarketStub")
+    StockMarketStub:
+      # Server address and port
+      # Format: "static://hostname:port"
+      # 'static://' means fixed address (no service discovery)
+      address: "static://localhost:9090"
+
+      # Connection security type
+      # PLAINTEXT = No encryption (development only)
+      # TLS = Encrypted connection (production)
+      # NEVER use PLAINTEXT in production!
+      negotiationType: PLAINTEXT
+
+      # Optional TLS configuration for production:
+      # negotiationType: TLS
+      # trustCertCollection: file:///path/to/certificate.pem

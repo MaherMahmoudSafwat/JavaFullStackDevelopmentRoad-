@@ -1,0 +1,43 @@
+
+syntax="proto3";
+package StockMarket;
+option java_multiple_files = true;
+option java_package = "com.StockMarket.grpc";
+option java_outer_classname = "StockTradingProto";
+
+service StockMarket
+{
+    rpc GetStockMarketDetails(StockMarketRequest) returns (StockMarketResponse);
+
+    rpc SubscribeStockPrice(StockMarketRequest) returns (stream StockMarketResponse);
+
+    rpc OrderBulk(stream StockMarketRequest) returns (StockMarketResponseOrders);
+
+    rpc LiveTrading(stream OrderQuantity) returns (stream OrderResponse);
+}
+
+message StockMarketRequest
+{
+    string Stock_Symbol = 1;
+}
+
+message StockMarketResponse
+{
+    string Stock_Symbol = 1;
+    double Stock_Price = 2;
+}
+
+message StockMarketResponseOrders
+{
+    int32 Order=1;
+}
+
+message OrderQuantity
+{
+    int32 OrderQuantity=1;
+}
+
+message OrderResponse
+{
+    string status=1;
+}

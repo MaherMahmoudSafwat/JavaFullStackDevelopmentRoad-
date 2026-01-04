@@ -1,0 +1,589 @@
+🏗️ PROJECT STRUCTURE:
+text
+
+microservices-demo/
+├── service-registry/          # Eureka Server
+├── api-gateway/              # Spring Cloud Gateway  
+├── order-service/            # Order Producer
+├── kitchen-service/          # Order Consumer
+└── notification-service/     # Notification Consumer
+
+📋 1. SERVICE REGISTRY (Eureka Server)
+pom.xml
+xml
+
+<!-- Service Registry Dependencies -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+</dependency>
+
+application.yml
+yaml
+
+server:
+  port: 8761  # Eureka default port
+
+eureka:
+  client:
+    register-with-eureka: false  # This service is the registry, don't register itself
+    fetch-registry: false        # Don't fetch registry (it IS the registry)
+    
+spring:
+  application:
+    name: service-registry  # Service name for identification
+
+ServiceRegistryApplication.java
+java
+
+@SpringBootApplication
+@EnableEurekaServer  // ⭐ Enables Eureka Service Registry
+public class ServiceRegistryApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceRegistryApplication.class, args);
+    }
+}
+
+🚪 2. API GATEWAY
+pom.xml
+xml
+
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-gateway</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+
+application.yml
+yaml
+
+server:
+  port: 8080  # API Gateway port
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # Route order requests to order-service
+        - id: order-service
+          uri: lb://order-service  # lb = Load Balancing through Eureka
+          predicates:
+            - Path=/api/orders/**  # Forward /api/orders/* to order-service
+        
+        # Route kitchen requests to kitchen-service  
+        - id: kitchen-service
+          uri: lb://kitchen-service
+          predicates:
+            - Path=/api/kitchen/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka  # Connect to Eureka
+
+ApiGatewayApplication.java
+java
+
+@SpringBootApplication
+@EnableEurekaClient  // ⭐ Register with Eureka
+public class ApiGatewayApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ApiGatewayApplication.class, args);
+    }
+}
+
+🛒 3. ORDER SERVICE (Kafka Producer)
+pom.xml
+xml
+
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot2</artifactId>
+</dependency>
+
+application.yml
+yaml
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+  kafka:
+    # Kafka connection details
+    bootstrap-servers: localhost:9092
+    
+    # PRODUCER CONFIGURATION (Message Sender)
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      # 🎯 IMPORTANT: These tell Kafka how to convert Java objects to bytes
+      
+    # KAFKA TOPIC CONFIGURATION
+    topic:
+      order-events: order-events  # Topic name for order events
+
+# Eureka Service Discovery
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      kitchenService:
+        slidingWindowSize: 10          # Last 10 calls are considered
+        failureRateThreshold: 50        # If 50% fail, circuit opens
+        waitDurationInOpenState: 5s     # Wait 5 seconds before retrying
+        permittedNumberOfCallsInHalfOpenState: 3  # Allow 3 calls in half-open state
+
+# Logging to see what's happening
+logging:
+  level:
+    com.example.orderservice: DEBUG
+    org.apache.kafka: WARN
+
+Order Model
+java
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Order {
+    private String orderId;
+    private String customerName;
+    private String item;        // pizza, burger, etc.
+    private int quantity;
+    private String status;      // PENDING, COOKING, READY
+    private LocalDateTime orderTime;
+}
+
+Kafka Configuration
+java
+
+@Configuration
+public class KafkaConfig {
+    
+    /**
+     * 🎫 CREATE ORDER EVENTS TOPIC
+     * This topic will store all order events
+     * - partitions: 3 (3 parallel processing lanes)
+     * - replicas: 1 (1 copy for development)
+     */
+    @Bean
+    public NewTopic orderTopic() {
+        return TopicBuilder.name("order-events")
+            .partitions(3)    // 🗂️ 3 partitions for parallel processing
+            .replicas(1)      // 📦 1 replica (development only)
+            .build();
+    }
+}
+
+Order Controller
+java
+
+@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+    
+    private final OrderService orderService;
+    
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+    
+    /**
+     * 🛒 CREATE ORDER ENDPOINT
+     * POST http://localhost:8080/api/orders
+     * {
+     *   "customerName": "John",
+     *   "item": "pizza",
+     *   "quantity": 2
+     * }
+     */
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request) {
+        Order order = orderService.createOrder(request);
+        return ResponseEntity.ok(order);
+    }
+}
+
+@Data
+class OrderRequest {
+    private String customerName;
+    private String item;
+    private int quantity;
+}
+
+Order Service with Kafka Producer
+java
+
+@Service
+@Slf4j
+public class OrderService {
+    
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    
+    public OrderService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+    
+    /**
+     * 🚀 CREATE ORDER AND SEND TO KAFKA
+     * 1. Create order object
+     * 2. Save to database (simplified)
+     * 3. Send to Kafka for async processing
+     */
+    public Order createOrder(OrderRequest request) {
+        // Create order
+        Order order = new Order();
+        order.setOrderId(UUID.randomUUID().toString());
+        order.setCustomerName(request.getCustomerName());
+        order.setItem(request.getItem());
+        order.setQuantity(request.getQuantity());
+        order.setStatus("PENDING");
+        order.setOrderTime(LocalDateTime.now());
+        
+        log.info("📦 Created order: {}", order.getOrderId());
+        
+        // 🎯 SEND TO KAFKA TOPIC
+        // Using customer name as key ensures same customer's orders go to same partition
+        kafkaTemplate.send("order-events", order.getCustomerName(), order)
+            .addCallback(
+                result -> {
+                    // ✅ SUCCESS: Message sent to Kafka
+                    log.info("✅ Order sent to Kafka: {}", order.getOrderId());
+                    log.info("   📦 Topic: {}", result.getRecordMetadata().topic());
+                    log.info("   🗂️ Partition: {}", result.getRecordMetadata().partition());
+                },
+                failure -> {
+                    // ❌ FAILURE: Handle send error
+                    log.error("❌ Failed to send order: {}", order.getOrderId(), failure);
+                }
+            );
+        
+        return order;
+    }
+}
+
+OrderServiceApplication.java
+java
+
+@SpringBootApplication
+@EnableEurekaClient
+@EnableFeignClients  // ⭐ Enable OpenFeign for service communication
+public class OrderServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(OrderServiceApplication.class, args);
+    }
+}
+
+👨‍🍳 4. KITCHEN SERVICE (Kafka Consumer)
+application.yml
+yaml
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: kitchen-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    
+    # CONSUMER CONFIGURATION (Message Receiver)
+    consumer:
+      # 🎯 GROUP.ID EXPLANATION:
+      # group-id is MANDATORY and VERY IMPORTANT!
+      # - Tells Kafka which consumer group this service belongs to
+      # - Kafka uses this to track which messages were already processed
+      # - If service restarts, it continues from last processed message
+      # - Multiple instances with SAME group-id share the work
+      # - Different services should have DIFFERENT group-ids
+      group-id: kitchen-service  # 🚨 MANDATORY: Unique group for kitchen service
+      
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      
+      # What to do when no offset is stored (first start):
+      auto-offset-reset: earliest  # Read from beginning of topic
+      # Alternatives: 
+      # - latest: Read only new messages
+      # - none: Throw error if no offset
+      
+      # Safety: Manual offset commits for reliability
+      enable-auto-commit: false
+
+    # LISTENER CONFIGURATION
+    listener:
+      ack-mode: manual      # 👋 Manual acknowledgment
+      concurrency: 3        # 🔥 3 threads for 3 partitions = MAX PARALLELISM!
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+# Trust packages for JSON deserialization
+spring.kafka.consumer.properties.spring.json.trusted.packages: "*"
+
+Kitchen Consumer Service
+java
+
+@Service
+@Slf4j
+public class KitchenService {
+    
+    /**
+     * 👨‍🍳 KITCHEN ORDER PROCESSOR
+     * Listens to order-events topic and processes orders
+     * 
+     * 🎯 GROUP.ID: "kitchen-service" - This service's consumer group
+     * 🎯 CONCURRENCY: 3 - Creates 3 threads for 3 partitions
+     * 🎯 Each thread processes one partition in parallel
+     */
+    @KafkaListener(
+        topics = "order-events",
+        groupId = "kitchen-service",  # 🚨 MANDATORY GROUP.ID
+        concurrency = "3"             # 🔥 3 threads for 3 partitions
+    )
+    public void processOrder(
+            Order order,
+            Acknowledgment ack,           // 👋 Manual offset control
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
+            @Header(KafkaHeaders.OFFSET) long offset) {
+        
+        log.info("👨‍🍳 Kitchen received order:");
+        log.info("   📦 Order ID: {}", order.getOrderId());
+        log.info("   👤 Customer: {}", order.getCustomerName());
+        log.info("   🍕 Item: {}", order.getItem());
+        log.info("   🔢 Quantity: {}", order.getQuantity());
+        log.info("   🗂️ Partition: {}", partition);    // Which partition this came from
+        log.info("   📟 Offset: {}", offset);          // Position in partition
+        
+        try {
+            // 🍳 SIMULATE COOKING PROCESS
+            order.setStatus("COOKING");
+            log.info("   🔥 Cooking {} {}...", order.getQuantity(), order.getItem());
+            
+            // Simulate cooking time (2-5 seconds)
+            int cookTime = 2000 + new Random().nextInt(3000);
+            Thread.sleep(cookTime);
+            
+            // ✅ ORDER READY
+            order.setStatus("READY");
+            log.info("   ✅ {} {} ready for {}!", 
+                    order.getQuantity(), order.getItem(), order.getCustomerName());
+            
+            // 🎯 MANUALLY ACKNOWLEDGE OFFSET
+            // This tells Kafka: "I successfully processed this message"
+            // Kafka will then move to next message
+            ack.acknowledge();
+            log.info("   📝 Offset {} acknowledged", offset);
+            
+        } catch (Exception e) {
+            log.error("💥 Failed to process order: {}", order.getOrderId(), e);
+            // ❌ Don't acknowledge - Kafka will retry this message
+        }
+    }
+    
+    /**
+     * 🔍 GET KITCHEN STATUS (REST endpoint)
+     * GET http://localhost:8080/api/kitchen/status
+     */
+    @GetMapping("/status")
+    public String getStatus() {
+        return "Kitchen service is running and processing orders!";
+    }
+}
+
+📢 5. NOTIFICATION SERVICE (Another Consumer)
+application.yml
+yaml
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      # 🎯 DIFFERENT GROUP.ID - This service gets its own copy of messages!
+      group-id: notification-service  # Different from kitchen-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+      concurrency: 2  # Fewer threads since notifications are lighter work
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring.kafka.consumer.properties.spring.json.trusted.packages: "*"
+
+Notification Consumer
+java
+
+@Service
+@Slf4j
+public class NotificationService {
+    
+    /**
+     * 📢 NOTIFICATION PROCESSOR
+     * Same topic, DIFFERENT group.id = gets same messages independently!
+     */
+    @KafkaListener(
+        topics = "order-events",
+        groupId = "notification-service",  # 🎯 DIFFERENT GROUP = separate copy
+        concurrency = "2"
+    )
+    public void sendNotification(
+            Order order,
+            Acknowledgment ack,
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
+        
+        log.info("📢 Notification for order:");
+        log.info("   👤 Customer: {}", order.getCustomerName());
+        log.info("   🍕 Item: {}", order.getItem());
+        log.info("   📊 Status: {}", order.getStatus());
+        log.info("   🗂️ Partition: {}", partition);
+        
+        try {
+            // 📧 SIMULATE SENDING NOTIFICATION
+            log.info("   📨 Sending notification to {}...", order.getCustomerName());
+            Thread.sleep(1000); // Quick notification
+            
+            log.info("   ✅ Notification sent to {}", order.getCustomerName());
+            
+            ack.acknowledge(); // ✅ Acknowledge processing
+            
+        } catch (Exception e) {
+            log.error("💥 Failed to send notification", e);
+            // Don't acknowledge - will retry
+        }
+    }
+}
+
+🐳 6. DOCKER-COMPOSE FOR KAFKA & ZOOKEEPER
+docker-compose.yml
+yaml
+
+version: '3.8'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+🚀 HOW TO RUN THE PROJECT:
+Step 1: Start Infrastructure
+bash
+
+# Start Kafka and Zookeeper
+docker-compose up -d
+
+Step 2: Start Services in Order
+
+    Service Registry (port 8761)
+
+    API Gateway (port 8080)
+
+    Order Service (port 8081)
+
+    Kitchen Service (port 8082)
+
+    Notification Service (port 8083)
+
+Step 3: Test the System
+bash
+
+# Create an order
+curl -X POST http://localhost:8080/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerName": "John",
+    "item": "pizza",
+    "quantity": 2
+  }'
+
+🎯 WHAT YOU'LL SEE IN LOGS:
+Order Service Log:
+text
+
+📦 Created order: 12345
+✅ Order sent to Kafka: 12345
+   📦 Topic: order-events
+   🗂️ Partition: 1
+
+Kitchen Service Log:
+text
+
+👨‍🍳 Kitchen received order:
+   📦 Order ID: 12345
+   👤 Customer: John
+   🍕 Item: pizza
+   🔥 Cooking 2 pizza...
+   ✅ 2 pizza ready for John!
+   📝 Offset 15 acknowledged
+
+Notification Service Log:
+text
+
+📢 Notification for order:
+   👤 Customer: John  
+   🍕 Item: pizza
+   📨 Sending notification to John...
+   ✅ Notification sent to John
+
+🔥 KEY TAKEAWAYS:
+
+    🎯 GROUP.ID IS MANDATORY - Kafka needs it to track message processing
+
+    👥 DIFFERENT GROUP.ID = SEPARATE COPIES - Each service gets all messages
+
+    🔢 CONCURRENCY = PARALLEL PROCESSING - Match to partitions for max speed
+
+    🚀 KAFKA = ASYNC COMMUNICATION - Services don't wait for each other
+
+    🏗️ MICROSERVICES ARCHITECTURE - Loose coupling, independent scaling
+

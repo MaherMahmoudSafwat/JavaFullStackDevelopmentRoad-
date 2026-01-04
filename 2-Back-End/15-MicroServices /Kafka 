@@ -1,0 +1,986 @@
+COMPLETE APACHE KAFKA GUIDE - From Zero to Hero 🎯
+📚 Table of Contents
+
+    What is Kafka?
+
+    Core Concepts
+
+    Architecture
+
+    Setup & Configuration
+
+    Producers & Consumers
+
+    Real-World Examples
+
+    Advanced Patterns
+
+🍕 1. WHAT IS KAFKA?
+The Pizza Factory Analogy 🏭
+text
+
+TRADITIONAL SYSTEM (Without Kafka):
+Customer → Call Restaurant → Wait on Phone → Give Order → Wait for Delivery
+❌ SLOW ❌ SINGLE THREAD ❌ BLOCKING
+
+KAFKA SYSTEM (With Kafka):
+Customer → Write Order → Put in Order Box → Go Play Games → Pizza Arrives!
+✅ FAST ✅ ASYNC ✅ NON-BLOCKING
+
+What Problem Kafka Solves
+java
+
+// WITHOUT KAFKA - Synchronous calls
+public void processOrder(Order order) {
+    paymentService.process(order);     // ❌ Wait for payment
+    inventoryService.update(order);    // ❌ Wait for inventory  
+    notificationService.send(order);   // ❌ Wait for email
+    // ❌ If any service down, entire order fails!
+}
+
+// WITH KAFKA - Asynchronous events
+public void processOrder(Order order) {
+    kafkaTemplate.send("orders", order); // ✅ Fire and forget!
+    // ✅ All services process independently!
+    // ✅ If services down, orders wait in Kafka!
+}
+
+🏗️ 2. CORE CONCEPTS
+Architecture Diagram
+text
+
+┌─────────────────────────────────────────────────┐
+│                   KAFKA CLUSTER                 │
+│                                                 │
+│  ┌─────────────┐  ┌─────────────┐              │
+│  │   BROKER 1  │  │   BROKER 2  │              │
+│  │ ┌─────────┐ │  │ ┌─────────┐ │              │
+│  │ │ TOPIC A │ │  │ │ TOPIC A │ │              │
+│  │ │ PART 0  │ │  │ │ PART 0  │ │ ← REPLICAS   │
+│  │ │ OFFSET  │ │  │ │ OFFSET  │ │              │
+│  │ │ 0,1,2,3 │ │  │ │ 0,1,2,3 │ │              │
+│  │ └─────────┘ │  │ └─────────┘ │              │
+│  └─────────────┘  └─────────────┘              │
+│          │                │                    │
+│  ┌───────┴───────┐┌───────┴───────┐            │
+│  │   PRODUCER    ││   CONSUMER    │            │
+│  │  (Order App)  ││ (Chef Service)│            │
+│  └───────────────┘└───────────────┘            │
+└─────────────────────────────────────────────────┘
+
+Core Components Explained
+📦 TOPIC = Order Box
+java
+
+// Topic = Category/container for messages
+// Like different boxes for different order types
+
+// Examples:
+"pizza-orders"     // 🍕 All pizza orders
+"drink-orders"     // 🥤 All drink orders  
+"payment-events"   // 💰 All payment notifications
+
+🏢 BROKER = Pizza Factory
+java
+
+// Broker = One Kafka server (physical/virtual machine)
+// Multiple brokers form a cluster for reliability
+
+Broker 1 = kafka-server-1:9092  // 🏢 New York Factory
+Broker 2 = kafka-server-2:9092  // 🏢 Chicago Factory
+Broker 3 = kafka-server-3:9092  // 🏢 LA Factory
+
+🗂️ PARTITION = Assembly Line
+java
+
+// Partition = Division of topic for parallel processing
+// Each partition is an ordered, immutable sequence of messages
+
+// Topic with 3 partitions = 3 parallel assembly lines:
+Partition 0 → Handles orders for customers A-L
+Partition 1 → Handles orders for customers M-R  
+Partition 2 → Handles orders for customers S-Z
+
+📋 ZOOKEEPER = Factory Manager
+java
+
+// Zookeeper = Coordination service for Kafka cluster
+// Manages: Which broker is leader for which partition
+//          Broker health monitoring
+//          Topic configuration
+//          Consumer group coordination
+
+// You don't directly interact with Zookeeper
+// It works automatically in the background!
+
+📦 REPLICA = Backup Pizza
+java
+
+// Replica = Copy of partition data on different brokers
+// For fault tolerance and high availability
+
+// Topic with replication factor 3:
+Partition 0: Original on Broker 1, Copy on Broker 2, Copy on Broker 3
+// ✅ If Broker 1 dies, Broker 2 or 3 can take over!
+
+🎫 EVENT = Order Ticket
+java
+
+// Event = Individual message with data
+// Immutable once written to Kafka
+
+Event example:
+{
+  "orderId": "12345",
+  "customer": "John Doe", 
+  "pizzaType": "Pepperoni",
+  "timestamp": "2024-01-15T14:30:00Z"
+}
+
+📟 OFFSET = Order Number
+java
+
+// Offset = Sequential ID number for each message in a partition
+// Used to track consumer position
+
+Partition 0:
+Offset 0 → First message ever
+Offset 1 → Second message  
+Offset 2 → Third message
+// ✅ Consumers remember their offset for crash recovery!
+
+👥 CONSUMER GROUP = Team of Chefs
+java
+
+// Consumer Group = Multiple consumers working together
+// Each partition is consumed by only ONE consumer in the group
+
+Consumer Group "chef-team":
+- Consumer 1 → Reads Partition 0
+- Consumer 2 → Reads Partition 1  
+- Consumer 3 → Reads Partition 2
+// ✅ Parallel processing within consumer group!
+
+⚙️ 4. SETUP & CONFIGURATION
+Docker Setup for Development
+yaml
+
+# docker-compose.yml - FREE local Kafka cluster!
+version: '3.8'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+# Run: docker-compose up -d
+# Now you have Kafka running on localhost:9092! 🎉
+
+Spring Boot Configuration
+yaml
+
+# application.yml - Complete Kafka configuration
+spring:
+  kafka:
+    # Kafka cluster connection details
+    bootstrap-servers: localhost:9092
+    
+    # PRODUCER CONFIGURATION (Message Senders)
+    producer:
+      # How to convert Java objects to bytes for Kafka
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
+      # Reliability settings
+      acks: all                           # ✅ Wait for all replicas to confirm
+      retries: 3                          # ✅ Retry 3 times if send fails
+      batch-size: 16384                   # ✅ Send messages in batches for efficiency
+      linger-ms: 1                        # ✅ Wait up to 1ms to batch messages
+      buffer-memory: 33554432             # ✅ 32MB buffer for unsent messages
+      
+      # Idempotent producer (prevent duplicates)
+      enable-idempotence: true            # ✅ Exactly-once semantics
+    
+    # CONSUMER CONFIGURATION (Message Receivers)  
+    consumer:
+      # How to convert Kafka bytes to Java objects
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      
+      # Consumer group - multiple consumers can work together
+      group-id: order-service-group       # 🎯 Unique group for this service
+      
+      # What to do when no offset is stored (first start or invalid offset)
+      auto-offset-reset: earliest         # 📖 Read from beginning of topic
+      # Alternatives: 
+      # - earliest: Read from first message
+      # - latest: Read only new messages
+      # - none: Throw exception if no offset
+      
+      # Message processing guarantees
+      enable-auto-commit: false           # 🚨 Manual offset commits for reliability
+      auto-commit-interval: 100           # If auto-commit true, commit every 100ms
+      
+      # Safety settings
+      properties:
+        spring.json.trusted.packages: "*" # ✅ Allow all packages for JSON deserialization
+        isolation.level: read_committed   # ✅ Don't read uncommitted messages
+    
+    # LISTENER CONFIGURATION (Message processing)
+    listener:
+      ack-mode: manual                    # 👋 Manual acknowledgment for reliability
+      # Alternatives:
+      # - batch: Commit offsets in batches
+      # - record: Commit after each message
+      # - manual: Manual commit via Acknowledgment
+      
+      concurrency: 3                      # 🔥 3 concurrent listener threads
+      # Matches topic partitions for optimal parallelism!
+      
+      # Error handling
+      type: batch                         # 📦 Receive messages in batches for efficiency
+
+# Custom topic configurations
+kafka:
+  topics:
+    orders:
+      name: pizza-orders
+      partitions: 3
+      replicas: 1
+    payments:
+      name: payment-events  
+      partitions: 2
+      replicas: 1
+
+Topic Configuration Bean
+java
+
+@Configuration
+public class KafkaTopicConfig {
+
+    /**
+     * 🍕 PIZZA ORDERS TOPIC configuration
+     * - partitions: 3 (3 parallel processing lanes)
+     * - replicas: 1 (1 copy for development)  
+     * - This topic will store all pizza order events
+     */
+    @Bean
+    public NewTopic pizzaOrdersTopic() {
+        return TopicBuilder.name("pizza-orders")
+            .partitions(3)      // 🗂️ 3 partitions for parallel processing
+            .replicas(1)        // 📦 1 replica (development only - production: 3)
+            .config("retention.ms", "604800000") // 🕐 Keep messages for 7 days
+            .config("cleanup.policy", "delete")  // 🧹 Delete old messages automatically
+            .build();
+    }
+
+    /**
+     * 💰 PAYMENT EVENTS TOPIC configuration  
+     * - partitions: 2 (2 parallel processing lanes)
+     * - replicas: 1 (1 copy for development)
+     * - This topic will store payment processing events
+     */
+    @Bean
+    public NewTopic paymentEventsTopic() {
+        return TopicBuilder.name("payment-events")
+            .partitions(2)      // 🗂️ 2 partitions
+            .replicas(1)        // 📦 1 replica
+            .config("retention.ms", "2592000000") // 🕐 Keep messages for 30 days
+            .build();
+    }
+
+    /**
+     * 🥤 DRINK ORDERS TOPIC configuration
+     * - partitions: 2 (fewer partitions for lower volume)
+     * - replicas: 1 (1 copy for development)
+     * - This topic will store drink order events
+     */
+    @Bean  
+    public NewTopic drinkOrdersTopic() {
+        return TopicBuilder.name("drink-orders")
+            .partitions(2)      // 🗂️ 2 partitions
+            .replicas(1)        // 📦 1 replica
+            .build();
+    }
+}
+
+📨 5. PRODUCERS & CONSUMERS
+Event Models (Message Structures)
+java
+
+/**
+ * 🎫 PIZZA ORDER EVENT
+ * This is the data structure sent to Kafka when someone orders pizza
+ * Must be serializable to JSON for Kafka messaging
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PizzaOrderEvent {
+    private String orderId;          // 🔑 Unique order identifier
+    private String customerName;     // 👤 Who placed the order
+    private String pizzaType;        // 🍕 Type of pizza (pepperoni, cheese, etc.)
+    private int quantity;            // 🔢 How many pizzas
+    private BigDecimal price;        // 💵 Order total price
+    private LocalDateTime orderTime; // 🕐 When order was placed
+    private String status;           // 📊 Order status (PENDING, COOKING, READY)
+}
+
+/**
+ * 💰 PAYMENT EVENT  
+ * This is sent when payment is processed for an order
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaymentEvent {
+    private String paymentId;        // 🔑 Unique payment identifier
+    private String orderId;          // 🔗 Which order this payment is for
+    private String customerName;     // 👤 Who made the payment
+    private BigDecimal amount;       // 💵 Payment amount
+    private String paymentMethod;    // 💳 How they paid (CARD, CASH, etc.)
+    private String status;           // 📊 Payment status (SUCCESS, FAILED, PENDING)
+    private LocalDateTime paymentTime; // 🕐 When payment was processed
+}
+
+/**
+ * 🥤 DRINK ORDER EVENT
+ * This is sent when someone orders drinks
+ */
+@Data
+@NoArgsConstructor  
+@AllArgsConstructor
+public class DrinkOrderEvent {
+    private String orderId;          // 🔑 Unique order identifier
+    private String customerName;     // 👤 Who ordered
+    private String drinkType;        // 🥤 Type of drink (Coke, Sprite, etc.)
+    private int quantity;            // 🔢 How many drinks
+    private LocalDateTime orderTime; // 🕐 When ordered
+}
+
+Producer Service (Message Sender)
+java
+
+@Service
+@Slf4j
+public class OrderProducerService {
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public OrderProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    /**
+     * 🍕 SEND PIZZA ORDER TO KAFKA
+     * This method is called when a customer places a pizza order
+     * It sends the order to Kafka and returns immediately (async)
+     * 
+     * @param order The pizza order details
+     */
+    public void sendPizzaOrder(PizzaOrderEvent order) {
+        // Generate unique order ID if not provided
+        if (order.getOrderId() == null) {
+            order.setOrderId(UUID.randomUUID().toString());
+        }
+        order.setOrderTime(LocalDateTime.now());
+        order.setStatus("PENDING");
+
+        log.info("📤 Sending pizza order to Kafka: {}", order.getOrderId());
+
+        // 🎯 Send to Kafka topic with customer name as key
+        // Key ensures same customer's orders go to same partition
+        CompletableFuture<SendResult<String, Object>> future = 
+            kafkaTemplate.send("pizza-orders", order.getCustomerName(), order);
+
+        // 📞 Handle send result asynchronously
+        future.whenComplete((result, exception) -> {
+            if (exception == null) {
+                // ✅ SUCCESS: Message successfully sent to Kafka
+                log.info("✅ Pizza order sent successfully! Order ID: {}", order.getOrderId());
+                log.info("   📦 Topic: {}", result.getRecordMetadata().topic());
+                log.info("   🗂️ Partition: {}", result.getRecordMetadata().partition());
+                log.info("   📟 Offset: {}", result.getRecordMetadata().offset());
+            } else {
+                // ❌ FAILURE: Message failed to send
+                log.error("❌ Failed to send pizza order: {}", order.getOrderId(), exception);
+                // In production, you might:
+                // - Retry the send
+                // - Save to database for later retry
+                // - Alert administrators
+            }
+        });
+    }
+
+    /**
+     * 💰 SEND PAYMENT EVENT TO KAFKA
+     * This is called when payment is processed for an order
+     * 
+     * @param payment The payment details
+     */
+    public void sendPaymentEvent(PaymentEvent payment) {
+        payment.setPaymentTime(LocalDateTime.now());
+
+        log.info("💰 Sending payment event: {}", payment.getPaymentId());
+
+        // Send with order ID as key for consistent partitioning
+        kafkaTemplate.send("payment-events", payment.getOrderId(), payment)
+            .addCallback(
+                result -> {
+                    log.info("✅ Payment event sent successfully for order: {}", 
+                            payment.getOrderId());
+                },
+                failure -> {
+                    log.error("❌ Failed to send payment event: {}", 
+                             payment.getOrderId(), failure);
+                }
+            );
+    }
+
+    /**
+     * 🥤 SEND DRINK ORDER TO KAFKA
+     * This is called when a customer orders drinks
+     * 
+     * @param drinkOrder The drink order details  
+     */
+    public void sendDrinkOrder(DrinkOrderEvent drinkOrder) {
+        if (drinkOrder.getOrderId() == null) {
+            drinkOrder.setOrderId(UUID.randomUUID().toString());
+        }
+        drinkOrder.setOrderTime(LocalDateTime.now());
+
+        log.info("🥤 Sending drink order: {}", drinkOrder.getOrderId());
+
+        kafkaTemplate.send("drink-orders", drinkOrder.getCustomerName(), drinkOrder)
+            .addCallback(
+                result -> log.info("✅ Drink order sent: {}", drinkOrder.getOrderId()),
+                failure -> log.error("❌ Failed to send drink order: {}", 
+                                   drinkOrder.getOrderId(), failure)
+            );
+    }
+
+    /**
+     * 🔄 SEND MESSAGE WITH TRANSACTION
+     * For critical operations that must succeed together
+     * Either all messages sent or none (atomic operation)
+     */
+    @Transactional
+    public void sendOrderWithTransaction(PizzaOrderEvent order, PaymentEvent payment) {
+        // Both sends happen in same transaction
+        sendPizzaOrder(order);
+        sendPaymentEvent(payment);
+        
+        // If any send fails, both will be rolled back
+        // ✅ Atomic operation guarantee
+    }
+}
+
+Consumer Services (Message Receivers)
+java
+
+@Service
+@Slf4j
+public class PizzaOrderConsumerService {
+
+    /**
+     * 👨‍🍳 PIZZA CHEF CONSUMER
+     * This method listens to pizza orders and processes them
+     * It's automatically called when new pizza orders arrive in Kafka
+     * 
+     * @param order The pizza order from Kafka
+     * @param ack Manual acknowledgment handle
+     * @param key The Kafka message key (customer name)
+     */
+    @KafkaListener(
+        topics = "pizza-orders",          // 🎯 Listen to pizza orders topic
+        groupId = "pizza-chef-service",   // 👥 Consumer group for chefs
+        concurrency = "3"                 // 🔥 3 concurrent threads (matches partitions)
+    )
+    public void processPizzaOrder(
+            PizzaOrderEvent order,
+            Acknowledgment ack,           // 👋 Manual offset commit control
+            @Header(KafkaHeaders.RECEIVED_KEY) String key,
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
+            @Header(KafkaHeaders.OFFSET) long offset) {
+
+        log.info("👨‍🍳 Chef received pizza order:");
+        log.info("   📦 Order ID: {}", order.getOrderId());
+        log.info("   👤 Customer: {}", order.getCustomerName());
+        log.info("   🍕 Pizza Type: {}", order.getPizzaType());
+        log.info("   🔢 Quantity: {}", order.getQuantity());
+        log.info("   🗂️ Partition: {}", partition);
+        log.info("   📟 Offset: {}", offset);
+
+        try {
+            // 🍕 SIMULATE PIZZA MAKING PROCESS
+            log.info("   🔥 Cooking {} pizza for {}...", order.getPizzaType(), order.getCustomerName());
+            Thread.sleep(2000); // Simulate 2 seconds cooking time
+            
+            // 🎯 UPDATE ORDER STATUS
+            order.setStatus("COOKING");
+            log.info("   ✅ Pizza is being cooked!");
+
+            // More cooking simulation...
+            Thread.sleep(3000);
+            order.setStatus("READY");
+            log.info("   🎉 Pizza ready for {}!", order.getCustomerName());
+
+            // ✅ SUCCESS: Manually acknowledge the message
+            // This commits the offset to Kafka
+            // Only do this AFTER successful processing!
+            ack.acknowledge();
+            log.info("   📝 Offset {} acknowledged for partition {}", offset, partition);
+
+        } catch (Exception e) {
+            // ❌ FAILURE: Don't acknowledge - Kafka will retry
+            log.error("💥 Failed to process pizza order: {}", order.getOrderId(), e);
+            // In production, you might:
+            // - Send to dead letter queue
+            // - Retry with exponential backoff
+            // - Alert monitoring system
+        }
+    }
+}
+
+@Service
+@Slf4j
+public class PaymentConsumerService {
+
+    /**
+     * 💳 PAYMENT PROCESSOR CONSUMER
+     * Listens to payment events and processes payments
+     * Runs in separate consumer group from pizza chefs
+     */
+    @KafkaListener(
+        topics = "payment-events",
+        groupId = "payment-service",      // 👥 Different consumer group
+        concurrency = "2"                 // 🔥 2 threads for 2 partitions
+    )
+    public void processPayment(
+            PaymentEvent payment,
+            Acknowledgment ack,
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
+            @Header(KafkaHeaders.OFFSET) long offset) {
+
+        log.info("💳 Processing payment:");
+        log.info("   💰 Payment ID: {}", payment.getPaymentId());
+        log.info("   📦 Order ID: {}", payment.getOrderId());
+        log.info("   👤 Customer: {}", payment.getCustomerName());
+        log.info("   💵 Amount: ${}", payment.getAmount());
+        log.info("   🗂️ Partition: {}", partition);
+        log.info("   📟 Offset: {}", offset);
+
+        try {
+            // 💸 SIMULATE PAYMENT PROCESSING
+            log.info("   🔄 Processing {} payment...", payment.getPaymentMethod());
+            Thread.sleep(1500); // Simulate payment processing time
+
+            // 🎯 SIMULATE PAYMENT SUCCESS/FAILURE
+            boolean paymentSuccess = Math.random() > 0.1; // 90% success rate
+            
+            if (paymentSuccess) {
+                payment.setStatus("SUCCESS");
+                log.info("   ✅ Payment successful for order: {}", payment.getOrderId());
+            } else {
+                payment.setStatus("FAILED");
+                log.error("   ❌ Payment failed for order: {}", payment.getOrderId());
+            }
+
+            // ✅ ACKNOWLEDGE regardless of success/failure
+            // We've processed the payment event, even if payment failed
+            ack.acknowledge();
+            log.info("   📝 Payment event processed, offset acknowledged");
+
+        } catch (Exception e) {
+            log.error("💥 Error processing payment: {}", payment.getPaymentId(), e);
+            // Don't acknowledge - let Kafka retry
+        }
+    }
+}
+
+@Service  
+@Slf4j
+public class DrinkOrderConsumerService {
+
+    /**
+     * 🍹 DRINK PREPARATION CONSUMER
+     * Listens to drink orders and prepares drinks
+     */
+    @KafkaListener(
+        topics = "drink-orders",
+        groupId = "drink-service",
+        concurrency = "2"
+    )
+    public void prepareDrink(
+            DrinkOrderEvent drinkOrder,
+            Acknowledgment ack,
+            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
+            @Header(KafkaHeaders.OFFSET) long offset) {
+
+        log.info("🍹 Preparing drink:");
+        log.info("   🥤 Order ID: {}", drinkOrder.getOrderId());
+        log.info("   👤 Customer: {}", drinkOrder.getCustomerName());
+        log.info("   🧃 Drink Type: {}", drinkOrder.getDrinkType());
+        log.info("   🔢 Quantity: {}", drinkOrder.getQuantity());
+        log.info("   🗂️ Partition: {}", partition);
+        log.info("   📟 Offset: {}", offset);
+
+        try {
+            // 🧃 SIMULATE DRINK PREPARATION
+            log.info("   🧊 Preparing {} {}...", drinkOrder.getQuantity(), drinkOrder.getDrinkType());
+            Thread.sleep(1000); // Drinks are faster than pizzas!
+            
+            log.info("   ✅ Drinks ready for {}!", drinkOrder.getCustomerName());
+
+            // ✅ ACKNOWLEDGE successful processing
+            ack.acknowledge();
+            log.info("   📝 Drink order completed, offset acknowledged");
+
+        } catch (Exception e) {
+            log.error("💥 Error preparing drinks: {}", drinkOrder.getOrderId(), e);
+            // Don't acknowledge - Kafka will retry
+        }
+    }
+}
+
+🌟 6. REAL-WORLD EXAMPLES
+Complete E-commerce System
+java
+
+@RestController
+public class OrderController {
+
+    private final OrderProducerService orderProducer;
+
+    public OrderController(OrderProducerService orderProducer) {
+        this.orderProducer = orderProducer;
+    }
+
+    /**
+     * 🛒 PLACE PIZZA ORDER API
+     * Customer places order via REST API
+     * Order is sent to Kafka for async processing
+     */
+    @PostMapping("/orders/pizza")
+    public ResponseEntity<Map<String, String>> placePizzaOrder(@RequestBody PizzaOrderRequest request) {
+        // 🎫 Create pizza order event
+        PizzaOrderEvent order = new PizzaOrderEvent();
+        order.setCustomerName(request.getCustomerName());
+        order.setPizzaType(request.getPizzaType());
+        order.setQuantity(request.getQuantity());
+        order.setPrice(request.getPrice());
+
+        // 🚀 Send to Kafka (async - returns immediately)
+        orderProducer.sendPizzaOrder(order);
+
+        // 📞 Return immediate response to customer
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "ORDER_RECEIVED");
+        response.put("orderId", order.getOrderId());
+        response.put("message", "Your pizza order has been received and is being processed!");
+
+        log.info("📝 Order received via API: {}", order.getOrderId());
+
+        return ResponseEntity.accepted().body(response);
+        // ✅ Customer doesn't wait for pizza to be cooked!
+        // ✅ System can handle high traffic!
+    }
+
+    /**
+     * 💳 PROCESS PAYMENT API
+     * Process payment for an existing order
+     */
+    @PostMapping("/orders/{orderId}/payment")
+    public ResponseEntity<Map<String, String>> processPayment(
+            @PathVariable String orderId,
+            @RequestBody PaymentRequest request) {
+
+        // 🎫 Create payment event
+        PaymentEvent payment = new PaymentEvent();
+        payment.setPaymentId(UUID.randomUUID().toString());
+        payment.setOrderId(orderId);
+        payment.setCustomerName(request.getCustomerName());
+        payment.setAmount(request.getAmount());
+        payment.setPaymentMethod(request.getPaymentMethod());
+
+        // 🚀 Send to Kafka
+        orderProducer.sendPaymentEvent(payment);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "PAYMENT_PROCESSING");
+        response.put("paymentId", payment.getPaymentId());
+        response.put("message", "Payment is being processed");
+
+        return ResponseEntity.accepted().body(response);
+    }
+}
+
+// 📋 Request DTOs
+@Data
+class PizzaOrderRequest {
+    private String customerName;
+    private String pizzaType;
+    private int quantity;
+    private BigDecimal price;
+}
+
+@Data
+class PaymentRequest {
+    private String customerName;
+    private BigDecimal amount;
+    private String paymentMethod;
+}
+
+Demo Runner to Test the System
+java
+
+@Component
+public class KafkaDemoRunner implements CommandLineRunner {
+
+    private final OrderProducerService orderProducer;
+
+    public KafkaDemoRunner(OrderProducerService orderProducer) {
+        this.orderProducer = orderProducer;
+    }
+
+    /**
+     * 🎪 DEMO: Simulate multiple customers placing orders
+     * This runs when application starts to demonstrate Kafka in action
+     */
+    @Override
+    public void run(String... args) throws Exception {
+        log.info("🎪 Starting Kafka Demo...");
+
+        // Wait for Kafka to be ready
+        Thread.sleep(5000);
+
+        // 👥 SIMULATE MULTIPLE CUSTOMERS PLACING ORDERS
+        simulateCustomerOrder("John", "Pepperoni", 2, new BigDecimal("24.99"));
+        Thread.sleep(1000);
+
+        simulateCustomerOrder("Sarah", "Cheese", 1, new BigDecimal("12.99"));
+        Thread.sleep(1000);
+
+        simulateCustomerOrder("Mike", "Veggie", 3, new BigDecimal("37.47"));
+        Thread.sleep(1000);
+
+        simulateCustomerOrder("Lisa", "Hawaiian", 1, new BigDecimal("14.99"));
+        Thread.sleep(1000);
+
+        simulateCustomerOrder("Tom", "Pepperoni", 2, new BigDecimal("24.99"));
+
+        log.info("🎪 Demo orders sent to Kafka! Watch the consumers process them!");
+    }
+
+    private void simulateCustomerOrder(String customer, String pizzaType, int quantity, BigDecimal price) {
+        // 🍕 Create pizza order
+        PizzaOrderEvent order = new PizzaOrderEvent();
+        order.setCustomerName(customer);
+        order.setPizzaType(pizzaType);
+        order.setQuantity(quantity);
+        order.setPrice(price);
+
+        // 💰 Create payment
+        PaymentEvent payment = new PaymentEvent();
+        payment.setOrderId(order.getOrderId());
+        payment.setCustomerName(customer);
+        payment.setAmount(price);
+        payment.setPaymentMethod("CREDIT_CARD");
+
+        // 🚀 Send both order and payment
+        orderProducer.sendPizzaOrder(order);
+        orderProducer.sendPaymentEvent(payment);
+
+        log.info("👤 {} ordered {} {} pizzas for ${}", customer, quantity, pizzaType, price);
+    }
+}
+
+🔧 7. ADVANCED PATTERNS
+Error Handling & Dead Letter Queue
+java
+
+@Service
+@Slf4j
+public class ErrorHandlingConsumer {
+
+    /**
+     * 🚨 DEAD LETTER QUEUE HANDLER
+     * Processes messages that failed too many times
+     */
+    @KafkaListener(topics = "pizza-orders.DLT") // Dead Letter Topic
+    public void handleFailedOrders(PizzaOrderEvent failedOrder) {
+        log.error("🚨 Processing failed order from DLT: {}", failedOrder.getOrderId());
+        
+        // 🛠️ Take corrective action:
+        // - Notify administrators
+        // - Refund payment
+        // - Log for manual intervention
+        // - Update order status to FAILED
+        
+        log.warn("🔔 Alert: Manual intervention required for order: {}", failedOrder.getOrderId());
+    }
+
+    /**
+     * 🔄 RETRY WITH EXPONENTIAL BACKOFF
+     * Advanced error handling with retry logic
+     */
+    @KafkaListener(topics = "pizza-orders")
+    public void processWithRetry(PizzaOrderEvent order, Acknowledgment ack) {
+        int maxRetries = 3;
+        int attempt = 0;
+        
+        while (attempt < maxRetries) {
+            try {
+                attempt++;
+                log.info("🔄 Attempt {}/{} for order: {}", attempt, maxRetries, order.getOrderId());
+                
+                processOrderSafely(order);
+                
+                // ✅ SUCCESS: Acknowledge and break retry loop
+                ack.acknowledge();
+                log.info("✅ Order processed successfully on attempt {}", attempt);
+                return;
+                
+            } catch (Exception e) {
+                log.warn("⚠️ Attempt {} failed for order: {}", attempt, order.getOrderId(), e);
+                
+                if (attempt == maxRetries) {
+                    // ❌ MAX RETRIES EXCEEDED: Send to Dead Letter Queue
+                    log.error("💀 Max retries exceeded for order: {}, sending to DLT", order.getOrderId());
+                    kafkaTemplate.send("pizza-orders.DLT", order.getCustomerName(), order);
+                    ack.acknowledge(); // Acknowledge to move past this message
+                } else {
+                    // ⏳ RETRY: Wait with exponential backoff
+                    try {
+                        long waitTime = (long) (Math.pow(2, attempt) * 1000); // 2^attempt seconds
+                        Thread.sleep(waitTime);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void processOrderSafely(PizzaOrderEvent order) {
+        // Simulate occasional failures for demo
+        if (Math.random() < 0.3) { // 30% failure rate for demo
+            throw new RuntimeException("Simulated processing failure");
+        }
+        
+        // Actual order processing logic
+        log.info("🍕 Processing order: {}", order.getOrderId());
+    }
+}
+
+Monitoring & Metrics
+java
+
+@Service
+@Slf4j
+public class KafkaMonitoringService {
+
+    /**
+     * 📊 MONITOR KAFKA HEALTH & METRICS
+     * Regularly check Kafka cluster health and performance
+     */
+    @Scheduled(fixedRate = 30000) // Every 30 seconds
+    public void monitorKafkaHealth() {
+        log.info("📊 Kafka Health Check:");
+        
+        // In production, you would:
+        // - Check broker connectivity
+        // - Monitor topic lag
+        // - Alert on consumer group issues
+        // - Track message throughput
+        // - Monitor disk usage
+        
+        log.info("   ✅ Kafka connection healthy");
+        log.info("   📈 Messages processed successfully");
+        log.info("   🚀 All consumers running normally");
+    }
+}
+
+🎯 SUMMARY & BEST PRACTICES
+✅ DOs:
+
+    Use meaningful topic names (pizza-orders, payment-events)
+
+    Configure adequate partitions for parallel processing
+
+    Use replication factor 3 in production
+
+    Implement proper error handling and dead letter queues
+
+    Use manual acknowledgment for reliability
+
+    Monitor consumer lag and system health
+
+❌ DON'Ts:
+
+    Don't use Kafka as a database (use for messaging, not storage)
+
+    Don't create too many topics unnecessarily
+
+    Don't ignore consumer group rebalancing
+
+    Don't forget to handle failures gracefully
+
+    Don't use auto-commit for critical applications
+
+🚀 PRODUCTION READY CONFIG:
+yaml
+
+spring:
+  kafka:
+    producer:
+      acks: all                           # Wait for all replicas
+      retries: 10                         # Ample retries
+      enable-idempotence: true            # Prevent duplicates
+    consumer:
+      auto-offset-reset: latest           # Start from latest on new group
+      enable-auto-commit: false           # Manual commits for reliability
+      isolation-level: read_committed     # Read only committed messages
+
+🎉 CONGRATULATIONS!
+
+You now have a complete understanding of Apache Kafka! 🚀
+
+You've learned:
+
+    Kafka architecture and core concepts
+
+    Setup and configuration
+
+    Producers and consumers with Spring Boot
+
+    Real-world patterns and best practices
+
+    Error handling and monitoring
+
+Next Steps:
+
+    Run the Docker setup and try the examples
+
+    Experiment with different configurations
+
+    Build your own Kafka-based application
+
+    Explore advanced features like Kafka Streams
+

@@ -1,0 +1,135 @@
+// =============================================
+// PROTOCOL BUFFERS VERSION DECLARATION
+// =============================================
+// Specifies we're using proto3 syntax (latest version)
+// Proto3 is simpler than proto2: no required fields, no extensions
+syntax = "proto3";
+
+// =============================================
+// JAVA-SPECIFIC OPTIONS
+// =============================================
+// Generate each message/enum as separate Java class file
+// Without this, all classes would be nested in one big Java class
+option java_multiple_files = true;
+
+// The Java package where generated classes will be placed
+// Must match your actual Java package structure
+option java_package = "com.grpc";
+
+// Name of the wrapper class if java_multiple_files = false
+// Since we use java_multiple_files=true, this is less important
+option java_outer_classname = "EmployeeProto";
+
+// =============================================
+// IMPORT STATEMENTS
+// =============================================
+// Import Google's well-known type for timestamps
+// This gives us proper timestamp support instead of using strings
+import "google/protobuf/timestamp.proto";
+
+// =============================================
+// PACKAGE DECLARATION
+// =============================================
+// Namespace for your proto definitions
+// Helps prevent naming conflicts between different .proto files
+package com.GRPC;
+
+// =============================================
+// MESSAGE DEFINITIONS - These are your DATA STRUCTURES
+// =============================================
+
+// Department message - A nested/reusable data structure
+message Department {
+    // Field number 1: unique identifier for protobuf binary encoding
+    // Field numbers 1-15 use 1 byte, 16-2047 use 2 bytes
+    int32 id = 1;
+
+    // Field number 2: department name
+    string name = 2;
+    // Note: In proto3, all fields are optional by default
+    // Missing fields get default values: 0 for numbers, "" for strings
+}
+
+// Employee message - Main data structure
+message Employee {
+    // FIELD 1: Unique ID for the employee
+    // int32: 32-bit signed integer (-2^31 to 2^31-1)
+    int32 id = 1;
+
+    // FIELD 2: Employee's name
+    // string: UTF-8 encoded text
+    string name = 2;
+
+    // FIELD 3: Salary with decimal precision
+    // double: 64-bit floating point number
+    double salary = 3;
+
+    // FIELD 4: List/Array of departments
+    // 'repeated' means this can have 0 or more Department objects
+    // In Java, this becomes List<Department>
+    repeated Department departments = 4;
+
+    // FIELD 5: Key-value map for addresses
+    // Useful for storing various addresses: "home", "office", etc.
+    // In Java: Map<String, String>
+    map<string, string> addressMap = 5;
+
+    // FIELD 6: Boolean flag
+    // Default value is false if not provided
+    bool isActive = 6;
+
+    // FIELD 7: Binary data (like images, PDFs)
+    // Use for files, images, or any binary content
+    bytes profilePicture = 7;
+
+    // FIELD 8: Imported timestamp type
+    // Much better than using string for dates - includes timezone support
+    google.protobuf.Timestamp joinDate = 8;
+
+    // COMMON FIELD TYPES NOT USED HERE:
+    // int64, float, enum, oneof (mutually exclusive fields)
+    // google.protobuf.Duration, google.protobuf.Any (for any type)
+}
+
+// EmployeeList - Wrapper for multiple employees
+message EmployeeList {
+    // A list containing multiple Employee objects
+    repeated Employee employees = 1;
+}
+
+// Empty message - Used for RPC methods that need no input
+// Some gRPC methods might not require parameters
+message Empty {
+    // Intentionally empty - just a placeholder
+}
+
+// =============================================
+// SERVICE DEFINITION - This defines your RPC API
+// =============================================
+
+// EmployeeService - Your gRPC service interface
+// This defines what methods clients can call remotely
+service EmployeeService {
+    // RPC METHOD 1: Get an employee
+    // Client sends an Employee (probably with just id populated)
+    // Server returns the full Employee object
+    // This is UNARY RPC: single request → single response
+    rpc getEmployee(Employee) returns (Employee);
+
+    // RPC METHOD 2: Add a new employee
+    // Client sends a complete Employee object
+    // Server returns the created Employee (maybe with generated ID)
+    // Also UNARY RPC
+    rpc addEmployee(Employee) returns (Employee);
+
+    // RPC METHOD 3: Get all employees
+    // Client sends Empty (no parameters needed)
+    // Server returns EmployeeList containing all employees
+    // UNARY RPC
+    rpc getAllEmployees(Empty) returns (EmployeeList);
+
+    // OTHER RPC TYPES YOU COULD ADD LATER:
+    // 1. Server Streaming: rpc streamEmployees(Empty) returns (stream Employee);
+    // 2. Client Streaming: rpc addManyEmployees(stream Employee) returns (EmployeeList);
+    // 3. Bidirectional Streaming: rpc chat(stream Message) returns (stream Message);
+}

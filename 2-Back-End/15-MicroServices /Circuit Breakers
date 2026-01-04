@@ -1,0 +1,884 @@
+🛡️ WHAT IS RESILIENCE4J & CIRCUIT BREAKER?
+CIRCUIT BREAKER PATTERN:
+
+Analogy: Like an electrical circuit breaker - when there's too much "current" (failures), it "trips" to prevent damage.
+RESILIENCE4J:
+
+    A Java library that implements circuit breaker and other resilience patterns
+
+    Prevents cascade failures in microservices
+
+🔥 WHY WE USE IT vs EXCEPTION HANDLING:
+SCENARIO: Service A calls Service B
+text
+
+Service A → Service B (DOWN!)
+
+WITH NORMAL EXCEPTION HANDLING:
+java
+
+try {
+    response = callServiceB(); // Service B is down!
+} catch (Exception e) {
+    return "Service B is unavailable"; // Shows error to user
+}
+
+PROBLEM: Every user request still WAITS for timeout then sees error. System gets slower and slower.
+WITH CIRCUIT BREAKER:
+java
+
+@CircuitBreaker(name = "serviceB", fallbackMethod = "fallback")
+public String callServiceB() {
+    return restTemplate.getForObject(...);
+}
+
+public String fallback(Exception e) {
+    return "Please try again later"; // IMMEDIATE response!
+}
+
+🚀 KEY DIFFERENCES:
+Normal Exception Handling	Circuit Breaker
+Every request tries and fails	After failures, stops trying
+Users wait for timeouts	Immediate fallback response
+Wastes resources	Conserves resources
+Can cause system collapse	Prevents cascade failures
+💡 WHY NOT SHOW RAW ERRORS TO USERS:
+User Experience:
+
+    Technical: "Service unavailable: Connection timeout after 5000ms" ❌
+
+    User-friendly: "System busy, please try again" ✅
+
+Security:
+
+    Technical: "Database connection failed: java.sql.SQLException" ❌
+
+    User-friendly: "Unable to process request" ✅
+
+🎯 CIRCUIT BREAKER STATES:
+
+    CLOSED: Normal operation
+
+    OPEN: Stopped calling failing service (immediate fallback)
+
+    HALF-OPEN: Occasionally testing if service recovered
+
+🔧 REAL-WORLD EXAMPLE:
+java
+
+@Service
+public class PaymentService {
+    
+    @CircuitBreaker(name = "payment", fallbackMethod = "paymentFallback")
+    @Retry(name = "payment", fallbackMethod = "paymentFallback")
+    @RateLimiter(name = "payment")
+    public Payment processPayment(Order order) {
+        // Call external payment gateway
+        return paymentClient.process(order);
+    }
+    
+    public Payment paymentFallback(Order order, Exception e) {
+        // Return cached response or default behavior
+        return new Payment("PENDING", "System busy, will retry");
+    }
+}
+
+🎉 BOTTOM LINE:
+
+Circuit Breaker = "Stop banging on a broken door and use the backup entrance instead of waiting forever"
+
+Exception Handling = "Keep banging on the broken door until someone tells you it's broken"
+
+I'll provide detailed code examples with comprehensive comments for all Resilience4J patterns:
+🛡️ 1. CIRCUIT BREAKER CONFIGURATION
+java
+
+@Configuration
+public class CircuitBreakerConfig {
+    
+    @Bean
+    public CircuitBreakerRegistry circuitBreakerRegistry() {
+        // Create custom configuration for circuit breaker
+        CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+            .slidingWindowType(SlidingWindowType.COUNT_BASED) // Type of window to track calls
+            .slidingWindowSize(10) // Last 10 calls are considered for failure rate calculation
+            .failureRateThreshold(50.0f) // If 50% of calls fail, circuit opens
+            .waitDurationInOpenState(Duration.ofSeconds(60)) // Wait 60s before trying again
+            .permittedNumberOfCallsInHalfOpenState(3) // How many calls to allow in half-open state
+            .slowCallRateThreshold(50.0f) // If 50% of calls are slow, circuit opens
+            .slowCallDurationThreshold(Duration.ofSeconds(2)) // Calls slower than 2s are "slow"
+            .minimumNumberOfCalls(5) // Minimum calls needed before calculating failure rate
+            .recordExceptions(IOException.class, TimeoutException.class) // Which exceptions count as failures
+            .ignoreExceptions(BusinessException.class) // Which exceptions to ignore
+            .build();
+        
+        return CircuitBreakerRegistry.of(circuitBreakerConfig);
+    }
+}
+
+@Service
+public class PaymentService {
+    
+    private final CircuitBreaker paymentCircuitBreaker;
+    private final RestTemplate restTemplate;
+    
+    public PaymentService(CircuitBreakerRegistry circuitBreakerRegistry) {
+        // Create circuit breaker instance for payment service
+        this.paymentCircuitBreaker = circuitBreakerRegistry.circuitBreaker("paymentService");
+    }
+    
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "processPaymentFallback")
+    public Payment processPayment(PaymentRequest request) {
+        // This method is automatically wrapped with circuit breaker
+        // If circuit is OPEN, this method won't be called - fallback will be used directly
+        // If circuit is CLOSED, method executes normally
+        // If circuit is HALF_OPEN, only permitted number of calls go through
+        
+        ResponseEntity<Payment> response = restTemplate.postForEntity(
+            "http://payment-gateway/process", 
+            request, 
+            Payment.class
+        );
+        return response.getBody();
+    }
+    
+    // Fallback method - same parameters plus Exception as last parameter
+    public Payment processPaymentFallback(PaymentRequest request, Exception e) {
+        // This method is called when:
+        // 1. Circuit breaker is OPEN (service is down)
+        // 2. Circuit breaker is OPEN and method is called
+        // 3. Any exception occurs that triggers circuit breaker
+        
+        log.warn("Payment service unavailable, using fallback. Error: {}", e.getMessage());
+        
+        return Payment.builder()
+            .status("PENDING")
+            .message("Payment processing delayed. We'll retry shortly.")
+            .transactionId("FALLBACK-" + UUID.randomUUID())
+            .build();
+    }
+    
+    // Manual usage without annotations
+    public Payment manualProcessPayment(PaymentRequest request) {
+        return paymentCircuitBreaker.executeSupplier(() -> {
+            // This lambda is protected by circuit breaker
+            ResponseEntity<Payment> response = restTemplate.postForEntity(
+                "http://payment-gateway/process", 
+                request, 
+                Payment.class
+            );
+            return response.getBody();
+        });
+    }
+}
+
+🔄 2. RETRY CONFIGURATION
+java
+
+@Configuration
+public class RetryConfig {
+    
+    @Bean
+    public RetryRegistry retryRegistry() {
+        RetryConfig retryConfig = RetryConfig.custom()
+            .maxAttempts(3) // Maximum number of retry attempts (including initial call)
+            .waitDuration(Duration.ofSeconds(2)) // Fixed wait time between retries
+            .retryOnResult(response -> ((PaymentResponse)response).getStatus().equals("PENDING")) // Retry on specific results
+            .retryExceptions(IOException.class, TimeoutException.class) // Which exceptions trigger retry
+            .ignoreExceptions(BusinessException.class) // Which exceptions to NOT retry
+            .failAfterMaxAttempts(true) // Throw MaxRetriesExceededException after max attempts
+            .build();
+        
+        return RetryRegistry.of(retryConfig);
+    }
+}
+
+@Service
+public class OrderService {
+    
+    @Retry(name = "orderService", fallbackMethod = "createOrderFallback")
+    public Order createOrder(OrderRequest request) {
+        // This method will be automatically retried if it fails
+        // Retry logic: 1st call → if fails → wait 2s → 2nd call → if fails → wait 2s → 3rd call
+        
+        log.info("Attempting to create order...");
+        ResponseEntity<Order> response = restTemplate.postForEntity(
+            "http://order-service/orders", 
+            request, 
+            Order.class
+        );
+        return response.getBody();
+    }
+    
+    // Advanced retry with exponential backoff
+    @Retry(name = "orderServiceExponential", fallbackMethod = "createOrderFallback")
+    public Order createOrderWithBackoff(OrderRequest request) {
+        // Exponential backoff configuration would be in application.yml
+        return createOrder(request);
+    }
+    
+    public Order createOrderFallback(OrderRequest request, Exception e) {
+        // This is called after ALL retry attempts have been exhausted
+        log.error("All {} retry attempts failed for order creation", 3);
+        
+        return Order.builder()
+            .status("FAILED")
+            .errorMessage("Unable to process order after multiple attempts")
+            .build();
+    }
+    
+    // Manual retry with custom logic
+    public Order manualRetryOrder(OrderRequest request) {
+        Retry retry = retryRegistry.retry("manualOrderRetry");
+        
+        return retry.executeSupplier(() -> {
+            log.info("Manual retry attempt...");
+            return restTemplate.postForObject("http://order-service/orders", request, Order.class);
+        });
+    }
+}
+
+🚦 3. RATE LIMITER CONFIGURATION
+java
+
+@Configuration
+public class RateLimiterConfig {
+    
+    @Bean
+    public RateLimiterRegistry rateLimiterRegistry() {
+        RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
+            .limitForPeriod(10) // Maximum 10 calls per refresh period
+            .limitRefreshPeriod(Duration.ofSeconds(1)) // Refresh limit every 1 second
+            .timeoutDuration(Duration.ofMillis(500)) // Wait max 500ms for permission
+            .build();
+        
+        return RateLimiterRegistry.of(rateLimiterConfig);
+    }
+}
+
+@Service 
+public class NotificationService {
+    
+    @RateLimiter(name = "notificationService", fallbackMethod = "sendNotificationFallback")
+    public void sendNotification(Notification notification) {
+        // This method is rate-limited to 10 calls per second
+        // If rate limit is exceeded, it will wait up to 500ms for a slot
+        // If no slot becomes available within 500ms, fallback is called
+        
+        restTemplate.postForEntity("http://notification-service/send", notification, Void.class);
+    }
+    
+    public void sendNotificationFallback(Notification notification, RateLimiterFullException e) {
+        // This is called when rate limit is exceeded and timeout occurs
+        log.warn("Rate limit exceeded for notifications. Notification queued for later delivery.");
+        
+        // Queue the notification for later processing
+        notificationQueue.add(notification);
+    }
+    
+    // Different rate limits for different methods
+    @RateLimiter(name = "bulkNotificationService", fallbackMethod = "bulkSendFallback")
+    public void sendBulkNotifications(List<Notification> notifications) {
+        // This might have a different rate limit (e.g., 2 calls per second)
+        notifications.forEach(this::sendNotification);
+    }
+    
+    public void bulkSendFallback(List<Notification> notifications, RateLimiterFullException e) {
+        log.warn("Bulk notification rate limit exceeded. Queuing {} notifications.", notifications.size());
+        notificationQueue.addAll(notifications);
+    }
+}
+
+📁 4. APPLICATION.YML CONFIGURATION
+yaml
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 60s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+      userService:
+        slidingWindowSize: 20
+        failureRateThreshold: 30
+        waitDurationInOpenState: 30s
+  
+  retry:
+    instances:
+      orderService:
+        maxAttempts: 3
+        waitDuration: 2s
+        enableExponentialBackoff: false
+        exponentialBackoffMultiplier: 2
+      inventoryService:
+        maxAttempts: 5
+        waitDuration: 1s
+  
+  ratelimiter:
+    instances:
+      notificationService:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 500ms
+      reportService:
+        limitForPeriod: 2
+        limitRefreshPeriod: 10s
+        timeoutDuration: 2s
+  
+  timelimiter:
+    instances:
+      externalService:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+
+🔧 5. COMBINING MULTIPLE PATTERNS
+java
+
+@Service
+public class ExternalApiService {
+    
+    // Combine Circuit Breaker + Retry + Rate Limiter + Time Limiter
+    @CircuitBreaker(name = "externalApi", fallbackMethod = "apiFallback")
+    @Retry(name = "externalApi", fallbackMethod = "apiFallback") 
+    @RateLimiter(name = "externalApi", fallbackMethod = "apiFallback")
+    @Bulkhead(name = "externalApi", fallbackMethod = "apiFallback")
+    public ApiResponse callExternalApi(ApiRequest request) {
+        // This method is protected by:
+        // 1. Circuit Breaker - stops calling if service is down
+        // 2. Retry - automatically retries on failure
+        // 3. Rate Limiter - limits call frequency
+        // 4. Bulkhead - limits concurrent executions
+        
+        ResponseEntity<ApiResponse> response = restTemplate.exchange(
+            "https://external-api.com/data",
+            HttpMethod.POST,
+            new HttpEntity<>(request),
+            ApiResponse.class
+        );
+        return response.getBody();
+    }
+    
+    // Single fallback for all resilience patterns
+    public ApiResponse apiFallback(ApiRequest request, Exception e) {
+        log.warn("External API call failed after resilience patterns. Error: {}", e.getClass().getSimpleName());
+        
+        return ApiResponse.builder()
+            .status("DEGRADED")
+            .data(getCachedData())
+            .message("Service temporarily unavailable. Using cached data.")
+            .build();
+    }
+}
+
+🎯 KEY POINTS:
+
+    Circuit Breaker - Prevents cascade failures by stopping calls to failing services
+
+    Retry - Automatically retries failed calls with configurable strategies
+
+    Rate Limiter - Controls the frequency of method calls to prevent overload
+
+    Fallback - Provides graceful degradation when resilience patterns activate
+
+I'll continue with detailed explanations and code examples for Cache, Bulkhead, and Time Limiter:
+💾 1. CACHE PATTERN
+java
+
+@Configuration
+public class CacheConfig {
+    
+    @Bean
+    public CacheRegistry cacheRegistry() {
+        // Create cache configuration
+        CacheConfig cacheConfig = CacheConfig.custom()
+            .ttl(Duration.ofMinutes(30)) // Time to live - entries expire after 30 minutes
+            .capacity(1000) // Maximum number of cache entries
+            .evictionPolicy(CacheConfig.EvictionPolicy.LEAST_RECENTLY_USED) // LRU eviction
+            .build();
+        
+        return CacheRegistry.of(cacheConfig);
+    }
+}
+
+@Service
+public class ProductService {
+    
+    private final CacheManager cacheManager; // Spring Cache abstraction
+    private final Cache productCache; // Resilience4J Cache
+    
+    public ProductService(CacheRegistry cacheRegistry) {
+        // Create cache instance for products
+        this.productCache = cacheRegistry.cache("productCache",
+            CacheConfig.custom()
+                .ttl(Duration.ofMinutes(15))
+                .capacity(500)
+                .build()
+        );
+    }
+    
+    @Cacheable(value = "products", key = "#productId") // Spring Cache annotation
+    public Product getProductSpringCache(String productId) {
+        // Spring will automatically cache the result
+        // Subsequent calls with same productId will return cached value
+        log.info("Fetching product {} from database (uncached)", productId);
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException(productId));
+    }
+    
+    // Resilience4J Cache with manual control
+    @Cache(name = "productCache", fallbackMethod = "getProductFallback")
+    public Product getProductWithResilience4j(String productId) {
+        // This method is automatically cached by Resilience4J
+        // Cache key is automatically generated from method parameters
+        log.info("Fetching product {} from database (Resilience4J cache)", productId);
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException(productId));
+    }
+    
+    // Manual cache usage
+    public Product getProductManual(String productId) {
+        // Try to get from cache first
+        Try<Product> cachedProduct = Try.of(() -> productCache.get(productId, () -> {
+            // This supplier is only called if cache is empty
+            log.info("Cache miss - fetching product {} from database", productId);
+            return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        }));
+        
+        return cachedProduct.get();
+    }
+    
+    // Manual cache management
+    public void updateProductCache(String productId, Product product) {
+        // Explicitly put value in cache
+        productCache.put(productId, product);
+    }
+    
+    public void evictProductFromCache(String productId) {
+        // Remove specific entry from cache
+        productCache.remove(productId);
+    }
+    
+    public void clearProductCache() {
+        // Clear entire cache
+        productCache.invalidateAll();
+    }
+    
+    public Product getProductFallback(String productId, Exception e) {
+        log.warn("Product cache failure for {}. Error: {}", productId, e.getMessage());
+        // Fallback to database or default value
+        return productRepository.findById(productId)
+            .orElse(Product.createDefault(productId));
+    }
+    
+    // Cache with conditional caching
+    @Cache(name = "productCache", resultFilter = CacheResultFilter.class)
+    public Product getProductConditional(String productId) {
+        // Only cache if product is active
+        return productRepository.findById(productId).orElse(null);
+    }
+    
+    public static class CacheResultFilter implements ResultFilter<Product> {
+        @Override
+        public boolean test(Product result) {
+            // Only cache if product is not null and active
+            return result != null && "ACTIVE".equals(result.getStatus());
+        }
+    }
+}
+
+🚪 2. BULKHEAD PATTERN
+java
+
+@Configuration
+public class BulkheadConfig {
+    
+    @Bean
+    public BulkheadRegistry bulkheadRegistry() {
+        // Create bulkhead configuration for different resource types
+        BulkheadConfig threadPoolBulkheadConfig = BulkheadConfig.custom()
+            .maxConcurrentCalls(5) // Maximum 5 concurrent executions
+            .maxWaitDuration(Duration.ofMillis(200)) // Max wait time for permission
+            .build();
+            
+        BulkheadConfig semaphoreBulkheadConfig = BulkheadConfig.custom()
+            .maxConcurrentCalls(10) // Maximum 10 concurrent executions
+            .maxWaitDuration(Duration.ofMillis(100)) // Max wait time for permission
+            .build();
+        
+        return BulkheadRegistry.of(threadPoolBulkheadConfig);
+    }
+    
+    @Bean
+    public ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry() {
+        ThreadPoolBulkheadConfig config = ThreadPoolBulkheadConfig.custom()
+            .maxThreadPoolSize(4) // Maximum threads in pool
+            .coreThreadPoolSize(2) // Core threads in pool
+            .queueCapacity(10) // Task queue capacity
+            .keepAliveDuration(Duration.ofSeconds(10)) // Thread keep-alive time
+            .build();
+            
+        return ThreadPoolBulkheadRegistry.of(config);
+    }
+}
+
+@Service
+@Slf4j
+public class ReportService {
+    
+    private final Bulkhead reportBulkhead;
+    private final ThreadPoolBulkhead heavyOperationBulkhead;
+    
+    public ReportService(BulkheadRegistry bulkheadRegistry, 
+                        ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry) {
+        // Semaphore-based bulkhead (limits concurrent executions in same thread pool)
+        this.reportBulkhead = bulkheadRegistry.bulkhead("reportService",
+            BulkheadConfig.custom()
+                .maxConcurrentCalls(3) // Only 3 concurrent report generations
+                .maxWaitDuration(Duration.ofSeconds(1)) // Wait max 1 second
+                .build()
+        );
+        
+        // Thread pool bulkhead (isolates operations in separate thread pool)
+        this.heavyOperationBulkhead = threadPoolBulkheadRegistry.bulkhead("heavyOperations",
+            ThreadPoolBulkheadConfig.custom()
+                .maxThreadPoolSize(2)
+                .coreThreadPoolSize(1)
+                .queueCapacity(5)
+                .build()
+        );
+    }
+    
+    // Semaphore Bulkhead - limits concurrent executions
+    @Bulkhead(name = "reportService", type = Bulkhead.Type.SEMAPHORE, 
+              fallbackMethod = "generateReportFallback")
+    public Report generateReport(ReportRequest request) {
+        // This method is protected by semaphore bulkhead
+        // Only 3 concurrent executions allowed
+        // If 4th request comes, it waits up to 1 second, then falls back
+        
+        log.info("Generating report for {} - Thread: {}", 
+                 request.getType(), Thread.currentThread().getName());
+        
+        // Simulate heavy processing
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        return reportGenerator.generate(request);
+    }
+    
+    // Thread Pool Bulkhead - isolates heavy operations in separate thread pool
+    public CompletableFuture<HeavyReport> generateHeavyReport(ReportRequest request) {
+        return heavyOperationBulkhead.executeSupplier(() -> {
+            // This runs in a separate thread pool (max 2 threads)
+            // If all threads are busy, tasks queue up (max 5)
+            // If queue is full, BulkheadFullException is thrown
+            
+            log.info("Generating heavy report in isolated thread pool - Thread: {}", 
+                     Thread.currentThread().getName());
+            
+            // Simulate very heavy processing
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            
+            return heavyReportGenerator.generate(request);
+        });
+    }
+    
+    // Manual bulkhead usage
+    public Report manualGenerateReport(ReportRequest request) {
+        return reportBulkhead.executeSupplier(() -> {
+            log.info("Manual bulkhead execution - Thread: {}", Thread.currentThread().getName());
+            return reportGenerator.generate(request);
+        });
+    }
+    
+    public Report generateReportFallback(ReportRequest request, BulkheadFullException e) {
+        // Called when bulkhead is full (too many concurrent requests)
+        log.warn("Bulkhead full for report generation. Request queued for later processing.");
+        
+        // Queue the request for later processing
+        reportQueue.add(request);
+        
+        return Report.builder()
+            .status("QUEUED")
+            .message("System busy. Your report will be generated shortly.")
+            .estimatedTime("5 minutes")
+            .build();
+    }
+    
+    // Different bulkheads for different operations
+    @Bulkhead(name = "quickReportService", fallbackMethod = "quickReportFallback")
+    public QuickReport generateQuickReport(ReportRequest request) {
+        // This has different limits - maybe 10 concurrent executions
+        return quickReportGenerator.generate(request);
+    }
+    
+    public QuickReport quickReportFallback(ReportRequest request, BulkheadFullException e) {
+        return QuickReport.createDefault("System busy - please try again");
+    }
+}
+
+⏰ 3. TIME LIMITER PATTERN
+java
+
+@Configuration
+public class TimeLimiterConfig {
+    
+    @Bean
+    public TimeLimiterRegistry timeLimiterRegistry() {
+        TimeLimiterConfig timeLimiterConfig = TimeLimiterConfig.custom()
+            .timeoutDuration(Duration.ofSeconds(5)) // Maximum execution time
+            .cancelRunningFuture(true) // Cancel running future when timeout occurs
+            .build();
+        
+        return TimeLimiterRegistry.of(timeLimiterConfig);
+    }
+}
+
+@Service  
+@Slf4j
+public class ExternalIntegrationService {
+    
+    private final TimeLimiter externalApiTimeLimiter;
+    private final AsyncTaskExecutor taskExecutor;
+    
+    public ExternalIntegrationService(TimeLimiterRegistry timeLimiterRegistry) {
+        this.externalApiTimeLimiter = timeLimiterRegistry.timeLimiter("externalApi",
+            TimeLimiterConfig.custom()
+                .timeoutDuration(Duration.ofSeconds(10)) // 10 second timeout
+                .cancelRunningFuture(true) // Cancel if timeout
+                .build()
+        );
+    }
+    
+    // TimeLimiter with CompletableFuture (asynchronous)
+    @TimeLimiter(name = "externalApi", fallbackMethod = "callExternalApiFallback")
+    public CompletableFuture<ApiResponse> callExternalApiAsync(ApiRequest request) {
+        // This method must return CompletableFuture
+        // TimeLimiter will cancel if it takes longer than timeoutDuration
+        
+        return CompletableFuture.supplyAsync(() -> {
+            log.info("Calling external API asynchronously");
+            
+            // Simulate external API call
+            try {
+                // Random delay between 1-15 seconds
+                int delay = new Random().nextInt(15000) + 1000;
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                log.warn("External API call interrupted due to timeout");
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Operation interrupted", e);
+            }
+            
+            return externalApiClient.call(request);
+        }, taskExecutor);
+    }
+    
+    // TimeLimiter with synchronous execution
+    public ApiResponse callExternalApiSync(ApiRequest request) {
+        // Wrap synchronous call in CompletableFuture for TimeLimiter
+        CompletableFuture<ApiResponse> future = CompletableFuture.supplyAsync(() -> {
+            log.info("Calling external API synchronously in separate thread");
+            return externalApiClient.call(request);
+        }, taskExecutor);
+        
+        // Apply time limiter to the future
+        try {
+            return TimeLimiter.decorateFutureSupplier(externalApiTimeLimiter, () -> future)
+                .get();
+        } catch (Exception e) {
+            log.warn("External API call timed out");
+            return callExternalApiFallback(request, e);
+        }
+    }
+    
+    // Manual TimeLimiter usage
+    public ApiResponse manualTimeLimitedCall(ApiRequest request) {
+        // For synchronous methods that don't return CompletableFuture
+        // We need to run them in a separate thread
+        
+        Callable<ApiResponse> callable = () -> {
+            log.info("Manual time-limited external API call");
+            return externalApiClient.call(request);
+        };
+        
+        try {
+            return externalApiTimeLimiter.executeCallable(callable);
+        } catch (Exception e) {
+            log.warn("Manual time-limited call failed: {}", e.getMessage());
+            return callExternalApiFallback(request, e);
+        }
+    }
+    
+    // Fallback method for TimeLimiter
+    public ApiResponse callExternalApiFallback(ApiRequest request, Exception e) {
+        // Called when:
+        // 1. Timeout occurs (TimeoutException)
+        // 2. Future is cancelled (CancellationException)
+        // 3. Any other exception
+        
+        if (e instanceof TimeoutException) {
+            log.warn("External API call timed out after 10 seconds");
+        } else if (e instanceof CancellationException) {
+            log.warn("External API call was cancelled due to timeout");
+        }
+        
+        return ApiResponse.builder()
+            .status("TIMEOUT")
+            .message("External service response timeout. Please try again.")
+            .retryAfter("30 seconds")
+            .build();
+    }
+    
+    // Combining TimeLimiter with other patterns
+    @TimeLimiter(name = "externalApi")
+    @CircuitBreaker(name = "externalApi")
+    @Retry(name = "externalApi")
+    @Bulkhead(name = "externalApi")
+    public CompletableFuture<ApiResponse> callExternalApiResilient(ApiRequest request) {
+        // This method is protected by:
+        // - TimeLimiter: 10 second timeout
+        // - CircuitBreaker: stops calling if service is down
+        // - Retry: automatically retries on failure
+        // - Bulkhead: limits concurrent executions
+        
+        return CompletableFuture.supplyAsync(() -> {
+            log.info("Resilient external API call");
+            return externalApiClient.call(request);
+        }, taskExecutor);
+    }
+}
+
+📊 4. APPLICATION.YML CONFIGURATION FOR ALL PATTERNS
+yaml
+
+resilience4j:
+  cache:
+    instances:
+      productCache:
+        ttl: 15m
+        capacity: 500
+        eviction-policy: LEAST_RECENTLY_USED
+      userCache:
+        ttl: 30m
+        capacity: 1000
+  
+  bulkhead:
+    instances:
+      reportService:
+        max-concurrent-calls: 3
+        max-wait-duration: 1000ms
+      quickReportService:
+        max-concurrent-calls: 10
+        max-wait-duration: 500ms
+  
+  thread-pool-bulkhead:
+    instances:
+      heavyOperations:
+        max-thread-pool-size: 2
+        core-thread-pool-size: 1
+        queue-capacity: 5
+        keep-alive-duration: 10s
+  
+  timelimiter:
+    instances:
+      externalApi:
+        timeout-duration: 10s
+        cancel-running-future: true
+      internalApi:
+        timeout-duration: 5s
+        cancel-running-future: false
+  
+  # Previous configurations continue...
+  circuitbreaker:
+    instances:
+      # ... existing configs
+  
+  retry:
+    instances:
+      # ... existing configs
+  
+  ratelimiter:
+    instances:
+      # ... existing configs
+
+🔧 5. COMPREHENSIVE EXAMPLE COMBINING ALL PATTERNS
+java
+
+@Service
+@Slf4j
+public class ComprehensiveService {
+    
+    // This service demonstrates using ALL resilience patterns together
+    
+    @Cache(name = "userDataCache")
+    @CircuitBreaker(name = "userService")
+    @Retry(name = "userService") 
+    @RateLimiter(name = "userService")
+    @Bulkhead(name = "userService")
+    @TimeLimiter(name = "userService")
+    public CompletableFuture<UserData> getUserDataWithAllPatterns(String userId) {
+        // This method is protected by ALL resilience patterns:
+        // 1. CACHE - Returns cached result if available
+        // 2. CIRCUIT BREAKER - Stops calling if service is down
+        // 3. RETRY - Automatically retries on failure
+        // 4. RATE LIMITER - Limits call frequency  
+        // 5. BULKHEAD - Limits concurrent executions
+        // 6. TIME LIMITER - Enforces maximum execution time
+        
+        return CompletableFuture.supplyAsync(() -> {
+            log.info("Fetching user data for {} with full resilience", userId);
+            return userDataService.fetchUserData(userId);
+        });
+    }
+    
+    // Universal fallback for all patterns
+    public CompletableFuture<UserData> getUserDataFallback(String userId, Exception e) {
+        log.warn("All resilience patterns activated for user {}. Error: {}", userId, e.getClass().getSimpleName());
+        
+        // Return default data or cached stale data
+        return CompletableFuture.completedFuture(
+            UserData.createDefault(userId, "Service temporarily unavailable")
+        );
+    }
+}
+
+🎯 KEY BENEFITS OF EACH PATTERN:
+CACHE:
+
+    Reduces latency - Faster responses from cache
+
+    Reduces load - Fewer calls to backend services
+
+    Improves availability - Works even when backend is down
+
+BULKHEAD:
+
+    Prevents resource exhaustion - Limits concurrent executions
+
+    Isolates failures - Problems in one area don't affect others
+
+    Provides graceful degradation - Better than complete failure
+
+TIME LIMITER:
+
+    Prevents hanging requests - Enforces maximum wait time
+
+    Improves responsiveness - Quick fallback instead of waiting
+
+    Resource cleanup - Cancels long-running operations
+
+
