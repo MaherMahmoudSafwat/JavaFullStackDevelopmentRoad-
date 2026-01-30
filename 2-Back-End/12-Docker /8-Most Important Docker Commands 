@@ -1,0 +1,102 @@
+# ============================================================================
+# COMMAND 26: Build a Docker image from the current directory
+# ----------------------------------------------------------------------------
+# docker build: Creates a Docker image from Dockerfile and context
+# -t admin-services:1.0.0: Tags image with name 'admin-services' and version '1.0.0'
+# . : Build context (current directory where Dockerfile is located)
+# Image is built locally and stored in your Docker image registry
+# ============================================================================
+docker build -t admin-services:1.0.0 .
+
+# ============================================================================
+# COMMAND 27: Create a custom Docker network
+# ----------------------------------------------------------------------------
+# docker network create: Creates a new Docker network for container communication
+# Postgresql_AdminServices: Custom name for the new network
+# Containers on same network can communicate using container names as hostnames
+# Bridge network by default (isolated from host and other networks)
+# ============================================================================
+docker network create Postgresql_AdminServices
+
+# ============================================================================
+# COMMAND 28: List all Docker networks
+# ----------------------------------------------------------------------------
+# docker network ls: Shows all networks (bridge, host, none, and custom)
+# Network ID, name, driver (bridge/host/none), and scope (local/swarm)
+# Default networks: bridge (default), host (uses host network), none (isolated)
+# ============================================================================
+docker network ls
+
+# ============================================================================
+# COMMAND 29: Connect a container to a network
+# ----------------------------------------------------------------------------
+# docker network connect: Adds an existing container to a network
+# Postgresql_AdminServices: Target network name
+# postgresql-Sqls_Anonymaus: Container name to connect (must exist and be running)
+# Container gets IP on new network, can communicate with other containers on same network
+# ============================================================================
+docker network connect Postgresql_AdminServices postgresql-Sqls_Anonymaus
+
+# ============================================================================
+# COMMAND 30: Run container on a specific network
+# ----------------------------------------------------------------------------
+# docker run: Creates and starts a container
+# --net Postgresql_AdminServices: Places container on specified network
+# admin-services:1.0.0: Image to run (note: original had typo '1.0.0.0')
+# Container uses network's DNS, can reach other containers by name
+# ============================================================================
+docker run --net Postgresql_AdminServices admin-services:1.0.0
+
+# ============================================================================
+# COMMAND 31: Start Docker Compose services in background
+# ----------------------------------------------------------------------------
+# docker compose up: Reads docker-compose.yml and starts all defined services
+# -d: Detached mode - runs services in background, returns terminal control
+# Services start in dependency order, creates networks/volumes as needed
+# Use 'docker compose down' to stop and remove
+# ============================================================================
+docker compose up -d
+
+# ============================================================================
+# COMMAND 32: Login to Docker Hub
+# ----------------------------------------------------------------------------
+# docker login: Authenticates with Docker registry (default: Docker Hub)
+# -u MaherMsSoftware@gmail.com: Your Docker Hub username/email
+# -p 'MaherMs?2001': Password (quotes needed for special character ?)
+# Credentials stored in ~/.docker/config.json for future operations
+# ============================================================================
+docker login -u MaherMsSoftware@gmail.com -p 'MaherMs?2001'
+
+# ============================================================================
+# COMMAND 33: Tag a local image for Docker Hub
+# ----------------------------------------------------------------------------
+# docker tag: Creates a new reference/tag for an existing image
+# admin-services:1.0.0: Source image (local name:tag)
+# maher2001/admin-services:1.0.0: Destination (username/repository:tag)
+# Doesn't create new image, just adds alias pointing to same image layers
+# Required format for pushing to Docker Hub: username/repository:tag
+# ============================================================================
+docker tag admin-services:1.0.0 maher2001/admin-services:1.0.0
+
+# ============================================================================
+# COMMAND 34: Pull image from Docker Hub
+# ----------------------------------------------------------------------------
+# docker pull: Downloads image from registry to local machine
+# maher2001/admin-services:1.0.0: Image in format username/repository:tag
+# Downloads all layers, verifies checksums, stores in local image cache
+# Can be run from any machine with Docker installed and network access
+# ============================================================================
+docker pull maher2001/admin-services:1.0.0
+
+# ============================================================================
+# COMMAND 35: Build and push Docker image using Jib
+# ----------------------------------------------------------------------------
+# mvn compile jib:build: Maven command using Google Jib plugin
+# compile: Compiles Java source code
+# jib:build: Builds Docker image and pushes directly to registry
+# Requires jib-maven-plugin configuration in pom.xml
+# Bypasses Docker daemon, builds images directly from Maven
+# ============================================================================
+mvn compile jib:build
+
+

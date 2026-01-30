@@ -1,0 +1,70 @@
+# Docker Compose Configuration Version
+version: '3.8'
+
+services:
+  # PostgreSQL Database Service
+  postgresql:
+    # Use PostgreSQL Docker image (avoid 'latest' in production)
+    image: postgres:latest
+    # Name for the PostgreSQL container
+    container_name: Postgresql1_Admin_Services
+    # Environment variables for PostgreSQL configuration
+    environment:
+      # Database superuser name
+      POSTGRES_USER: postgres
+      # Database password (insecure for production - use secrets)
+      POSTGRES_PASSWORD: 12345
+      # Default database to create on startup
+      POSTGRES_DB: UsersDatabase
+    # Map host port 5432 to container port 5432 (database access)
+    ports:
+      - '5432:5432'
+    # Connect to custom Docker network
+    networks:
+      - Spring-Boot-Network
+    # Health check to verify PostgreSQL is ready
+    healthcheck:
+      # Command to check if PostgreSQL is accepting connections
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      # Run health check every 10 seconds
+      interval: 10s
+      # Wait 5 seconds for response before timing out
+      timeout: 5s
+      # Mark as unhealthy after 5 consecutive failures
+      retries: 5
+    # Persistent storage for database files
+    volumes:
+      # Named volume 'postgres' mapped to PostgreSQL data directory
+      - postgres:/var/lib/postgresql/data
+  
+  # Spring Boot Admin Services Application
+  admin-services:
+    # Custom Spring Boot application image (must be built first)
+    image: admin-services:1.0.0
+    # Name for the Spring Boot container
+    container_name: Admin_Services
+    # Map host port 8083 to container port 8083 (application access)
+    ports:
+      - '8083:8083'
+    # Wait for PostgreSQL to be healthy before starting
+    depends_on:
+      postgresql:
+        # Only start when PostgreSQL health check passes
+        condition: service_healthy
+    # Connect to same Docker network as PostgreSQL
+    networks:
+      - Spring-Boot-Network
+
+# Define persistent volumes
+volumes:
+  # Named volume for PostgreSQL data persistence
+  postgres:
+    # Uses default Docker volume driver
+
+# Define Docker networks
+networks:
+  # Custom bridge network for service communication
+  Spring-Boot-Network:
+    # Standard Docker bridge network driver
+    driver: bridge
+

@@ -1,0 +1,68 @@
+# ============================================================================
+# PRODUCTION-READY SPRING BOOT DOCKERFILE - ALPINE VERSION
+# ============================================================================
+
+# 1. BASE IMAGE: Start with Java Development Kit version 21 (Alpine Linux)
+#    Alpine is a minimal Linux distribution (~5MB) making images much smaller
+#    Contains: Alpine Linux + Java JDK pre-installed
+#    Note: Alpine uses musl libc instead of glibc, and BusyBox instead of GNU tools
+FROM openjdk:21-alpine
+
+# 2. WORKDIR: Set the working directory inside the container
+#    Creates /app directory and makes it the current directory
+#    All subsequent commands execute relative to /app
+WORKDIR /app
+
+# 3. ARG: Define a build-time argument with default value
+#    JAR_FILE can be overridden during build: docker build --build-arg JAR_FILE=custom.jar
+#    This makes the Dockerfile flexible for different build scenarios
+ARG JAR_FILE=target/*.jar
+
+# 4. RUN: Execute command inside container during image build (ALPINE SYNTAX)
+#    Alpine Linux uses BusyBox with different command syntax:
+#    addgroup -S SpringUser: Creates a system group (-S) named SpringUser
+#    &&: Only runs second command if first succeeds
+#    adduser -S -G SpringUser SpringUser: Creates system user (-S) in group (-G) SpringUser
+#    System users have no password, home directory, or shell login capability
+#    This is a SECURITY BEST PRACTICE to prevent container escape attacks
+RUN addgroup -S SpringUser && adduser -S -G SpringUser SpringUser
+
+# 5. USER: Switch the runtime user for subsequent commands
+#    Changes from root (default) to SpringUser:SpringUser (user:group)
+#    From this point, all commands run with SpringUser's limited permissions
+#    This prevents malicious code from having root access if app is compromised
+USER SpringUser:SpringUser
+
+# 6. COPY: Copy files from host machine to container filesystem
+#    --chown=SpringUser:SpringUser: Changes file ownership during copy
+#    ${JAR_FILE}: Uses the build argument defined earlier (target/*.jar by default)
+#    /app/Admin-Services.jar: Destination path inside container
+#    The JAR file will be owned by SpringUser, not root, ensuring it can be executed
+COPY --chown=SpringUser:SpringUser ${JAR_FILE} /app/Admin-Services.jar
+
+# 7. EXPOSE: Document which port the application listens on
+#    This is METADATA only - doesn't actually open the port
+#    Informs users that this container's app listens on port 8088 internally
+#    Users must still use -p flag in docker run to map host port to container port
+EXPOSE 8088
+
+# 8. ENTRYPOINT: Define the main executable command when container starts
+#    This becomes the container's primary process (PID 1)
+#    ["java","-jar"] means: java -jar (executable + base argument)
+#    Using exec form (JSON array) for better signal handling
+ENTRYPOINT ["java","-jar"]
+
+# 9. CMD: Provide default arguments to the ENTRYPOINT command
+#    When container starts without arguments, it runs: java -jar Admin-Services.jar
+#    Users can override by providing arguments: docker run my-image custom.jar
+#    The combination of ENTRYPOINT + CMD provides flexibility
+CMD ["Admin-Services.jar"]
+
+# ============================================================================
+# FINAL COMMAND WHEN CONTAINER STARTS:
+# java -jar Admin-Services.jar
+# Running as SpringUser (non-root) on port 8088 inside container
+# Alpine advantage: Smaller image size (~150MB vs ~300MB for Debian)
+# ============================================================================
+
+
