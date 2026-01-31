@@ -1,70 +1,168 @@
-# Docker Compose Configuration Version
-version: '3.8'
+# ============================================================================
+# UNIVERSITY MANAGEMENT SYSTEM - DOCKER COMPOSE CONFIGURATION
+# ============================================================================
+# This file orchestrates a multi-service microservices architecture for
+# a University Management System with separate admin and courses services.
+# 
+# ARCHITECTURE OVERVIEW:
+# - PostgreSQL Database: Shared by both microservices
+# - Admin Service: Handles user management and administration (Ports: 8083/9090)
+# - Courses Service: Manages courses and enrollments (Ports: 8089/9091)
+#
+# NETWORKING: All services communicate via internal Docker network
+# SECURITY: For production, move passwords to .env file
+# ============================================================================
+
+version: '3.8'  # Using Docker Compose schema version 3.8
+
+# ============================================================================
+# SERVICE DEFINITIONS
+# ============================================================================
 
 services:
-  # PostgreSQL Database Service
+  # --------------------------------------------------------------------------
+  # POSTGRESQL DATABASE SERVICE
+  # --------------------------------------------------------------------------
   postgresql:
-    # Use PostgreSQL Docker image (avoid 'latest' in production)
-    image: postgres:latest
-    # Name for the PostgreSQL container
-    container_name: Postgresql1_Admin_Services
-    # Environment variables for PostgreSQL configuration
+    image: postgres:17                    # Official PostgreSQL 17 image
+    container_name: Postgresql_AdminServices_CoursesServices  # Descriptive container name
+    
+    # Environment variables for database configuration
     environment:
-      # Database superuser name
-      POSTGRES_USER: postgres
-      # Database password (insecure for production - use secrets)
-      POSTGRES_PASSWORD: 12345
-      # Default database to create on startup
-      POSTGRES_DB: UsersDatabase
-    # Map host port 5432 to container port 5432 (database access)
+      POSTGRES_USER: postgres             # Default superuser username
+      POSTGRES_PASSWORD: 12345            # ⚠️ WARNING: Hardcoded password - use .env in production!
+      POSTGRES_DB: UsersDatabase          # Primary database created on startup
+    
+    # Port mapping: HostPort:ContainerPort
+    # Exposes PostgreSQL on standard port 5432 to host machine
     ports:
       - '5432:5432'
-    # Connect to custom Docker network
+    
+    # Connect to custom Docker network for service discovery
     networks:
-      - Spring-Boot-Network
-    # Health check to verify PostgreSQL is ready
+      - Spring-Networks-System
+    
+    # Health check ensures PostgreSQL is ready before dependent services start
     healthcheck:
-      # Command to check if PostgreSQL is accepting connections
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      # Run health check every 10 seconds
-      interval: 10s
-      # Wait 5 seconds for response before timing out
-      timeout: 5s
-      # Mark as unhealthy after 5 consecutive failures
-      retries: 5
-    # Persistent storage for database files
+      test: >
+        bash -c "
+          # 1. Check if PostgreSQL server is accepting connections
+          pg_isready -U postgres || exit 1
+          
+          # 2. Create CoursesDatabase if it doesn't exist (idempotent operation)
+          #    - 2>/dev/null silences 'already exists' errors
+          #    - || true prevents healthcheck failure if command errors
+          psql -U postgres -c 'CREATE DATABASE \"CoursesDatabase\"' 2>/dev/null || true 
+          
+          # 3. Verify we can connect to UsersDatabase with a simple query
+          #    - >/dev/null 2>&1 suppresses all output
+          psql -U postgres -d UsersDatabase -c 'SELECT 1' >/dev/null 2>&1
+        "
+      interval: 5s     # How often to run health check
+      timeout: 5s      # Maximum time allowed for check to complete
+      retries: 5       # Number of consecutive failures before marking unhealthy
+    
+    # Persistent storage for database data
     volumes:
-      # Named volume 'postgres' mapped to PostgreSQL data directory
+      # Named volume preserves database data across container restarts
       - postgres:/var/lib/postgresql/data
   
-  # Spring Boot Admin Services Application
+  # --------------------------------------------------------------------------
+  # ADMIN SERVICE (User Management & Administration)
+  # --------------------------------------------------------------------------
   admin-services:
-    # Custom Spring Boot application image (must be built first)
-    image: admin-services:1.0.0
-    # Name for the Spring Boot container
-    container_name: Admin_Services
-    # Map host port 8083 to container port 8083 (application access)
+    image: maher2001/admin-services:3.0.0  # Custom Spring Boot application image
+    container_name: Admin_Services123       # Descriptive container name
+    
+    # Port mapping for REST API (8083) and gRPC (9090)
     ports:
-      - '8083:8083'
-    # Wait for PostgreSQL to be healthy before starting
+      - '8083:8083'    # HTTP/REST API port
+      - '9090:9090'    # gRPC service port
+    
+    # Service dependencies with health condition
     depends_on:
       postgresql:
-        # Only start when PostgreSQL health check passes
-        condition: service_healthy
-    # Connect to same Docker network as PostgreSQL
+        condition: service_healthy  # Wait for PostgreSQL to pass health check
+    
+    # Application configuration via environment variables
+    environment:
+      # Database connection URL using Docker service discovery
+      # 'postgresql' resolves to PostgreSQL container IP via Docker DNS
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/UsersDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345  # ⚠️ Should use secrets in production
+    
+    # Network configuration
     networks:
-      - Spring-Boot-Network
+      - Spring-Networks-System  # Connect to same network as PostgreSQL
+  
+  # --------------------------------------------------------------------------
+  # COURSES SERVICE (Course Management & Enrollment)
+  # --------------------------------------------------------------------------
+  courses-services:
+    image: maher2001/courses-services:1.0.0  # Custom Spring Boot application image
+    container_name: Courses_Services777       # Descriptive container name
+    
+    # Application configuration via environment variables
+    environment:
+      # Connects to separate database within same PostgreSQL instance
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/CoursesDatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345  # ⚠️ Should use secrets in production
+    
+    # Port mapping for REST API (8089) and gRPC (9091)
+    ports:
+      - '8089:8089'    # HTTP/REST API port
+      - '9091:9091'    # gRPC service port (different from admin service)
+    
+    # Service dependencies with health condition
+    depends_on:
+      postgresql:
+        condition: service_healthy  # Wait for PostgreSQL to pass health check
+    
+    # Network configuration
+    networks:
+      - Spring-Networks-System  # Connect to same network as other services
 
-# Define persistent volumes
+# ============================================================================
+# VOLUME DEFINITIONS
+# ============================================================================
+
 volumes:
   # Named volume for PostgreSQL data persistence
+  # Data persists even when containers are removed
   postgres:
-    # Uses default Docker volume driver
+    # Docker manages this volume automatically
+    # For production: Consider external volumes with backups
 
-# Define Docker networks
+# ============================================================================
+# NETWORK DEFINITIONS
+# ============================================================================
+
 networks:
-  # Custom bridge network for service communication
-  Spring-Boot-Network:
-    # Standard Docker bridge network driver
-    driver: bridge
+  # Custom bridge network for all services
+  Spring-Networks-System:
+    driver: bridge  # Default Docker network driver
+    # Bridge network provides:
+    # - Service discovery via container names
+    # - Internal DNS resolution
+    # - Network isolation from host
+
+# ============================================================================
+# DEPLOYMENT COMMANDS
+# ============================================================================
+# To deploy:
+# 1. Build images: docker build -t maher2001/admin-services:3.0.0 .
+# 2. Start services: docker-compose up -d
+# 3. Check status: docker-compose ps
+# 4. View logs: docker-compose logs -f
+#
+# To stop:
+# 1. Stop services: docker-compose down
+#
+# SECURITY NOTES:
+# 1. Replace hardcoded passwords with .env file
+# 2. Consider adding SSL/TLS for database connections
+# 3. Add resource limits for production
+# ============================================================================
 
