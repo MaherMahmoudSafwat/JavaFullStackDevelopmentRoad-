@@ -1,0 +1,235 @@
+# ====================
+# 1. VERSION CHECK
+# ====================
+# Check which version of Git is installed
+# Shows the current Git version number on your system
+git --version
+
+# ====================
+# 2. CONFIGURATION
+# ====================
+# Configure Git settings (user info, preferences, aliases)
+# Without arguments, shows current configuration
+git config
+
+# List all Git configuration settings
+# Shows all configured values (global, local, and system)
+git config --list
+
+# Set your global Git username for all repositories
+# This name will appear as the author in all your commits
+git config --global user.name "MaherMs2001"
+
+# Set your global Git email for all repositories
+# This email will appear as the author email in all your commits
+# Note: Make sure to use the full correct email address
+git config --global user.email "MaherMsSoftware2001@gmail.com"
+
+# ====================
+# 3. REPOSITORY STATUS
+# ====================
+# Show the current state of your working directory and staging area
+# Displays which files are modified, staged, or untracked
+git status
+
+# ====================
+# 4. INITIALIZATION
+# ====================
+# Initialize a new Git repository in current directory
+# Creates a hidden .git folder with all version control data
+git init
+
+# Initialize a new Git repository with a specific branch name
+# Sets the default branch name (instead of the old default 'master')
+git init -b main
+
+# ====================
+# 5. STAGING FILES
+# ====================
+# Stage a specific file for the next commit
+# Adds Project1.py to the staging area (also called index)
+git add Project1.py
+
+# Stage all NEW and MODIFIED files in current directory and subdirectories
+# Adds: new files, modified files, deleted files (in current dir only)
+git add .
+
+# ====================
+# 6. REMOVING FILES
+# ====================
+# Remove Project1.py from Git tracking (staging area) but keep it in working directory
+# The file will remain on your disk but become "untracked"
+git rm --cached Project1.py
+
+# ====================
+# 7. COMMITTING CHANGES
+# ====================
+# Create a new commit with all staged changes and a commit message
+# Takes everything in the staging area and saves it permanently to repository
+git commit -m "That's is my first commit"
+
+# Stage all modified/deleted tracked files and commit with message
+# The -a flag automatically stages changes to tracked files (no need for git add)
+git commit -a -m "That is my third commit"
+
+# ====================
+# 8. VIEWING CHANGES
+# ====================
+# Show changes between working directory and staging area
+# Displays what you've changed but haven't staged yet
+git diff
+
+# Show changes that are currently staged (in the staging area/index)
+# Displays what will be included in the next commit
+git diff --staged
+
+# ====================
+# 9. VIEWING HISTORY
+# ====================
+# Show the commit history of the repository
+# Displays all commits in reverse chronological order (newest first)
+git log
+
+# Display commit history with one commit per line
+# Shows abbreviated commit hash followed by commit message
+git log --pretty=oneline
+
+# Display commit history with ASCII graph visualization
+# Shows branches, merges, and commit relationships visually
+git log --graph
+
+# ====================
+# 10. SSH KEYS
+# ====================
+# Generate a new SSH key pair with the modern OpenSSH format
+# The -o flag uses the new OpenSSH format (more secure than older PEM format)
+ssh-keygen -o
+
+# ====================
+# 11. REMOTE REPOSITORIES
+# ====================
+# Add a remote repository named "origin" pointing to your GitHub repository
+# This connects your local Git repo to a remote server (GitHub)
+git remote add origin https://github.com/MaherMahmoudSafwat/Git-Course
+
+# List all remote repositories with their URLs
+# Shows both fetch (pull) and push URLs for each remote
+git remote -v
+
+# Clone (download) a remote repository to your local machine
+# Creates a complete copy of the repository including all history, branches, and tags
+git clone https://github.com/MaherMahmoudSafwat/Memory-Match-Game-
+
+# ====================
+# 12. PUSHING CHANGES
+# ====================
+# Push your local commits to the remote repository and set upstream tracking
+# First push to connect your local branch to the remote branch
+git push -u origin main
+
+# ====================
+# 13. TAGS
+# ====================
+# List all tags in the repository
+# Tags are references to specific commits (like bookmarks for important points)
+git tag
+
+# Create an annotated tag named V1.0 with a descriptive message
+# Annotated tags store extra metadata (author, date, message) - recommended for releases
+git tag -a V1.0 -m "This is my first release version"
+
+# Push a specific tag (V1.0) to the remote repository named "origin"
+# Tags are NOT pushed automatically with regular git push commands
+git push origin V1.0
+
+# Display detailed information about the tag V1.0
+# Shows tag metadata and the commit it points to
+git show V1.0
+
+# ====================
+# 14. BRANCH MANAGEMENT
+# ====================
+# List all local branches in the repository
+# The current branch is marked with an asterisk (*)
+git branch
+
+# List ALL branches (local + remote tracking branches)
+# Shows every branch that exists in your repository
+git branch --all
+
+# Create a new branch named "Feature1" based on current commit
+# Does NOT switch to the new branch (you remain on current branch)
+git branch Feature1
+
+# Create a new branch named Feature1 AND switch to it immediately
+# Combines: git branch Feature1 + git checkout Feature1
+git checkout -b Feature1
+
+# Create a new branch named Feature3 AND switch to it immediately
+# Modern alternative to: git checkout -b Feature3
+git switch -c Feature3
+
+# Rename the CURRENT branch to "Lite-Version"
+# You must be on the branch you want to rename
+git branch -m Lite-Version
+
+# Delete the Feature3 branch (safe delete)
+# Only deletes if Feature3 has been fully merged into current branch
+git branch -d Feature3
+
+# ====================
+# 15. BRANCH NAVIGATION
+# ====================
+# Switch to the Feature1 branch (modern alternative to git checkout)
+# Changes your working directory to match the Feature1 branch
+git switch Feature1
+
+# Switch to the Feature1 branch (classic command)
+# Changes your working directory to match Feature1's state
+git checkout Feature1
+
+# Switch to the previous branch (last branch you were on)
+# The hyphen (-) is a shortcut for "previous branch"
+git switch -
+
+# ====================
+# 16. MERGING & REBASING
+# ====================
+# Merge the Feature1 branch INTO the current branch
+# Combines changes from Feature1 with current branch
+git merge Feature1
+
+# Reapply current branch's commits on top of Feature1 branch
+# "Moves" your commits to begin after Feature1's latest commit
+git rebase Feature1
+
+# ====================
+# 17. PULLING CHANGES
+# ====================
+# Fetch changes from remote (origin) and merge them into current branch
+# Equivalent to: git fetch origin + git merge origin/main
+git pull origin main
+
+# ====================
+# 18. CHECKOUT SPECIFIC COMMITS
+# ====================
+# Checkout a specific commit by its hash (enters DETACHED HEAD state)
+# Temporarily views the repository as it was at that exact commit
+git checkout a66b1789e361dac9f4c34598954d024fb4486acb
+
+# ====================
+# 19. STASHING CHANGES
+# ====================
+# Temporarily save uncommitted changes (modified and staged files)
+# Allows you to switch branches without committing incomplete work
+git stash
+
+# List all stashed changes with their references
+# Shows all saved stashes in LIFO order (newest first)
+git stash list
+
+# Apply the most recent stash to current working directory
+# Restores stashed changes but keeps the stash in the list
+git stash apply
+
+
